@@ -96,9 +96,9 @@ public class Practice07 extends JFrame implements ActionListener {
 		label_time2.setBounds(150,120,100,30);
 		c.add(label_time2);
 
-		if(now.get(Calendar.HOUR)<12) {
+		if(now.get(Calendar.HOUR_OF_DAY)<12) {
 			label_time2.setText("Good Morning");
-		}else if(now.get(Calendar.HOUR)<18) {
+		}else if(now.get(Calendar.HOUR_OF_DAY)<18) {
 			label_time2.setText("Good Afternoon");
 		}else{
 			label_time2.setText("Good Evening");
