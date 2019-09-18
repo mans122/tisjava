@@ -20,7 +20,6 @@ public class Practice09 extends JFrame {
 		new Practice09();
 	}
 	class MyPanel extends JPanel {
-
 		public MyPanel() {
 			addMouseMotionListener(new MouseMotionListener() {
 				public void mouseMoved(MouseEvent e) {}
@@ -39,7 +38,6 @@ public class Practice09 extends JFrame {
 				public void mouseEntered(MouseEvent e) {}
 				public void mouseClicked(MouseEvent e) {}
 			});
-			
 		}
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
