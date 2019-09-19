@@ -3,13 +3,14 @@ import java.awt.*;
 import java.util.*;
 import java.awt.event.*;
 public class Practice09 extends JFrame {
-	private Vector<Point> vStart = new Vector<Point>();
+	//private Vector<Point> vStart = new Vector<Point>();
+	private ArrayList<Point> vStart = new ArrayList<Point>();
 	//private Vector<Point> vEnd = new Vector<Point>();
 	public Practice09() {
 		setTitle("asd");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MyPanel panel = new MyPanel();
-		panel.setBackground(Color.RED);
+		panel.setBackground(Color.WHITE);
 		panel.setVisible(true);
 		setContentPane(panel);
 		setSize(500,500);
@@ -29,7 +30,7 @@ public class Practice09 extends JFrame {
 				}
 			});
 			addMouseListener(new MouseListener() {
-				public void mouseReleased(MouseEvent e) {				}
+				public void mouseReleased(MouseEvent e) {	}
 				public void mousePressed(MouseEvent e) {
 					vStart.add(null);
 					vStart.add(e.getPoint());
