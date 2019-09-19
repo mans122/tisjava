@@ -1,65 +1,8 @@
 package Ex13_1;
 import java.awt.*;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-class ThreadA extends Thread{
-	public void run() {
-		
-		for(int i=0;i<50;i++) {
-			System.out.println("ThreadA");
-			try {
-				//Thread.sleep(100);				
-			}
-			catch(Exception e) {}}}}
-class ThreadB extends Thread{
-	public void run() {
-		
-		for(int i=0;i<100;i++) {
-			//System.out.println("ThreadB");
-			try {
-				//Thread.sleep(100);
-			}
-			catch(Exception e) {}}}}
-class ThreadC implements Runnable{
-	@Override
-	public void run() {
-		for(int i=0;i<50;i++) {
-			System.out.println("ThreadC");
-		}
-	}
 
-}
-class TimerThread extends Thread{
-	private JLabel timerLabel;
-
-
-	public TimerThread(JLabel timerLabel) {
-		this.timerLabel = timerLabel;
-	}
-
-	@Override
-	public void run() {
-		int n=0;
-		while(n!=50) {
-			n++;
-			//timerLabel.setText(Integer.toString(n));
-			//			Calendar now = Calendar.getInstance();
-			//			SimpleDateFormat format1 = new SimpleDateFormat ("yyyy년MM월dd일 HH:mm:ss");
-			//			Date time = new Date();
-			//			timerLabel.setText(format1.format(time));
-			System.out.println("TimerThread");
-			try {
-				//Thread.sleep(100);
-			}
-			catch(Exception e) {	return;	}
-
-		}
-	}
-}
 public class ThreadTimerEx extends JFrame{
 	public ThreadTimerEx() {
 		setTitle("타이머예제");
@@ -86,7 +29,6 @@ public class ThreadTimerEx extends JFrame{
 		tb.setPriority(10);
 		th.setPriority(3);
 		threadC.setPriority(1);
-
 
 		for (int i = 0; i<50 ;i ++) {System.out.println("MainThread");	}
 
