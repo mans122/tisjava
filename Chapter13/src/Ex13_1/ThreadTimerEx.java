@@ -17,6 +17,7 @@ public class ThreadTimerEx extends JFrame{
 
 		//타이머 스레드 객체 생성. 타이머 값을 출력할 레이블을 생성자에 전달
 		TimerThread th = new TimerThread(timerLabel);
+		
 		ThreadA ta = new ThreadA();
 		ThreadB tb = new ThreadB();
 		ThreadC tc = new ThreadC();
@@ -34,8 +35,6 @@ public class ThreadTimerEx extends JFrame{
 
 		//setSize(300,100);
 		//setVisible(true);
-
-
 	}
 	public static void main(String[] args) {
 		new ThreadTimerEx();
@@ -49,7 +48,5 @@ public class ThreadTimerEx extends JFrame{
 		System.out.println("현재 스레드 ID = "+id);
 		System.out.println("현재 스레드 우선순위값 = "+priority);
 		System.out.println("현재 스레드 상태 = "+s);
-		
 	}
-
 }
