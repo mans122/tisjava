@@ -3,6 +3,7 @@ import java.awt.*;
 import java.util.*;
 import java.awt.event.*;
 public class Practice09 extends JFrame {
+	//Á¡ Âï±â°¡ ¾È‰Î
 	//private Vector<Point> vStart = new Vector<Point>();
 	private ArrayList<Point> vStart = new ArrayList<Point>();
 	//private Vector<Point> vEnd = new Vector<Point>();
