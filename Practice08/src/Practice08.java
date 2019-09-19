@@ -1,7 +1,7 @@
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
-//연습문제8
+//연습문제8 ㅁㅁ
 public class Practice08 extends JFrame{
 	private int index = 1;
 	private JButton btnLeft;
