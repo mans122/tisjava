@@ -23,6 +23,7 @@ public class Practice04 {
 	public static Integer[] bk_num = new Integer[4];
 	public static int sum =0;
 	public static int[] bkp = {0,0,0,0};
+	//360도에서 모자란 만큼 4/4분기에 모자란만큼 더해주기 위해 값을 따로 구함 
 	public static int gap = 0;
 
 	public Practice04() {
