@@ -8,7 +8,8 @@ class MyDialog extends JDialog{
 	private JButton okButton = new JButton("OK");
 	
 	public MyDialog(JFrame frame, String title) {
-		super(frame,title);
+		//3번째 파라미터값에 true를 주면 modal값 true로 생성
+		super(frame,title,true);
 		setLayout(new FlowLayout());
 		add(tf);
 		add(okButton);
