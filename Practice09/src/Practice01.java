@@ -6,11 +6,11 @@ public class Practice01 extends JFrame {
 	public Practice01() {
 		setTitle("paintComponent()예제");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setContentPane(panel);
+		setContentPane(panel);//Mypanel 클래스로 생성한 panel을 메인프레임에 부착
 		setSize(1000,800);
 		setVisible(true);
 	}
-	
+	//MyPanel 클래스 생성
 	class MyPanel extends JPanel{
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
@@ -32,10 +32,10 @@ public class Practice01 extends JFrame {
 			
 			//2번 분기별 매출현황 꺾은선 그래프
 			g.drawString("분기별 매출현황 꺾은선그래프", 80, 250);
-			int width=50;
+			int width=50; // 분기마다 x축으로 50씩 늘리기위해 미리 50의값을가지는 변수 width 선언
 			g.setColor(Color.BLUE);
 			g.drawString("1/4분기", 50, 610);
-			g.drawLine(50, 600, 50+width, 600-150);
+			g.drawLine(50, 600, 50+width, 600-150);	//x값50에서 width만큼 증가시키고, y값 600에서 1/4분기 값만큼 빼줌
 			g.drawString("2/4분기", 100, 460);
 			g.drawLine(50+width, 450, 50+width*2, 600-200);
 			g.drawString("3/4분기", 150, 410);
