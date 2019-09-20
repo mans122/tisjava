@@ -33,8 +33,8 @@ public class ThreadTimerEx extends JFrame{
 
 		for (int i = 0; i<50 ;i ++) {System.out.println("MainThread");	}
 
-		//setSize(300,100);
-		//setVisible(true);
+		setSize(300,100);
+		setVisible(true);
 	}
 	public static void main(String[] args) {
 		new ThreadTimerEx();
