@@ -56,7 +56,7 @@ public class Back extends JFrame {
 		//------------------------------------------------------------------
 		backGround.setFocusable(true);
 		backGround.requestFocus();
-
+		
 		scrollPane = new JScrollPane(backGround);
 		setContentPane(scrollPane);
 	}

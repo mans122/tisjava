@@ -3,6 +3,7 @@ package Ex3;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -40,7 +41,9 @@ public class MyCharacterListener extends Thread implements KeyListener{
 			}
 			break;
 		case KeyEvent.VK_F1:
-			Back.backGround.repaint();
+			EnermyThread.setStop(true);
+			EnermyThread.nowX= -50;
+			Back.enermyLabel.setIcon(new ImageIcon("img/enermy2.png"));
 			System.out.println("f1");
 		}
 	}
