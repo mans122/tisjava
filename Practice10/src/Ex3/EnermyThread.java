@@ -14,11 +14,15 @@ class EnermyThread extends Thread{
 		running = stop;
 	}
 	public void run() {
-		System.out.println(running);
 		while(true) {
 			try {
 				while(running) {
 					try {
+						
+						if(nowX==-50) {
+							Back.enermyLabel.setVisible(true);
+							randomX =((int)(Math.random()*7))+3;
+						}
 						enermyLabel.setLocation(nowX,10);
 						nowX+=randomX;
 						if(nowX>=730){

@@ -2,16 +2,19 @@ package Ex3;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
-
+//
 public class Back extends JFrame {
 	public static JLabel[] bulletLabel = new JLabel[100];
 	public static JLabel shipLabel = new JLabel();
 	public static JLabel enermyLabel = new JLabel();
+	public static JLabel killCount = new JLabel();
+	public static JLabel bulletEa = new JLabel();
+	public static JLabel noBullet = new JLabel();
 	public final static int FLYING_UNIT = 10;
-	public static JScrollPane scrollPane;
 	public static EnermyThread enermyThread = new EnermyThread(enermyLabel);
 	public static JPanel backGround;
-	ImageIcon icon;
+	private static ImageIcon icon;
+	public static int count = 0;
 	public Back() {
 		icon = new ImageIcon("img/bgi.jpg");
 		//배경 Panel 생성후 컨텐츠페인으로 지정      
@@ -34,16 +37,13 @@ public class Back extends JFrame {
 			bulletLabel[i].setIcon(new ImageIcon("img/bullet.png"));
 			backGround.add(bulletLabel[i]);
 		}
-		//bulletLabel[0].setLocation(200,200);
-		//bulletLabel[0].setSize(16, 16);
-		backGround.add(bulletLabel[0]);
-		
+		//backGround.addKeyListener(new MyCharacterListener(bulletLabel[0]));
+		backGround.addKeyListener(new MyCharacterListenerSpace(backGround));
 		//적군 비행기 라벨 ------------------------------------------------------
 		enermyLabel.setIcon(new ImageIcon("img/enermy2.png"));
 		enermyLabel.setLocation(350, 20);
 		enermyLabel.setSize(64, 64);
 		backGround.add(enermyLabel);
-		//EnermyThread enermyThread = new EnermyThread(enermyLabel);
 		enermyThread.start();
 		//-----------------------------------------------------------------
 		
@@ -54,18 +54,36 @@ public class Back extends JFrame {
 		backGround.add(shipLabel);
 		backGround.addKeyListener(new MyCharacterListener(shipLabel));
 		//------------------------------------------------------------------
-		backGround.setFocusable(true);
-		backGround.requestFocus();
 		
-		scrollPane = new JScrollPane(backGround);
-		setContentPane(scrollPane);
+		//잡은 비행기 수----------------------------------------------------
+		killCount.setLocation(680, 10);
+		killCount.setSize(100, 20);
+		backGround.add(killCount);
+		//---------------------------------
+		
+		//총알이 없습니다---------------------------
+		//noBullet.setText("총알이 없습니다");
+		noBullet.setSize(100, 30);
+		noBullet.setVisible(false);
+		backGround.add(noBullet);
+		NoBullet nb = new NoBullet();
+		nb.start();
+		//------------------------------------------------
+		//남은총알개수----------------------------------------
+		bulletEa.setText("남은 총알 :");
+		bulletEa.setSize(80, 20);
+		bulletEa.setLocation(640, 40);
+		bulletEa.setVisible(true);
+		backGround.add(bulletEa);
+		setContentPane(backGround);
 	}
 
 	public static void main(String[] args) {
 		Back frame = new Back();
 		frame.setTitle("게임");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(730, 520);
+		frame.setSize(icon.getIconWidth()+10, icon.getIconHeight()+20);
+		System.out.println((icon.getIconWidth()+","+ icon.getIconHeight()));
 		frame.setResizable(false);
 		frame.setVisible(true);
 	}
