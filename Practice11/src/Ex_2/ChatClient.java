@@ -78,7 +78,7 @@ public class ChatClient extends JFrame implements ActionListener {
 					msg = in.readLine();
 					if(msg.contains("상대방의 닉네임이")) {
 						array = msg.split("'");
-						//serverNick = array[1];
+						serverNick = array[1];
 					}
 				}catch(IOException e) {
 					handleError(e.getMessage());

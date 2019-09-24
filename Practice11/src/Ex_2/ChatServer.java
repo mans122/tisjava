@@ -6,7 +6,12 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import javax.swing.*;
+
+
 public class ChatServer extends JFrame implements ActionListener{
+	public static ImageIcon[] image;
+	private JLabel imageLabel = new JLabel();
+	
 	private BufferedReader in = null;
 	private BufferedWriter out = null;
 	private ServerSocket listener = null;
@@ -24,6 +29,13 @@ public class ChatServer extends JFrame implements ActionListener{
 		Container c = getContentPane();
 		c.setLayout(new BorderLayout());
 		sPanel.setLayout(new BorderLayout());
+		File f1 = new File("img");//원하는 폴더안의 파일을 가져오기위한 폴더 경로 설정
+		ImgFolder.listDirectory(f1);	//ImgFolder 클래스의 listDirectory 메소드로 매개변수 f1을 넣어줌	
+		image = new ImageIcon[ImgFolder.fileNum];
+		for(int i=0;i<ImgFolder.fileNum;i++) {
+			image[i] = new ImageIcon(ImgFolder.fileName.get(i));
+		}
+		
 
 		receiver = new Receiver();
 		receiver.setEditable(false);
@@ -91,6 +103,17 @@ public class ChatServer extends JFrame implements ActionListener{
 		if(e.getSource() == sender) {
 			String msg = sender.getText();
 			try {
+				if(msg.contains("@@")) {
+					int index = msg.indexOf("@@");
+					String getIcon = msg.substring(index+2,index+7);
+					System.out.println(getIcon);
+					for(int i=0;i<ImgFolder.fileNum;i++) {
+						if(ImgFolder.fileName.get(i).contains(getIcon)) {
+							System.out.println(ImgFolder.fileName.get(i));
+						}
+					}
+				}
+				else{
 				out.write(msg+"\n");
 				out.flush();
 
@@ -98,6 +121,7 @@ public class ChatServer extends JFrame implements ActionListener{
 				int pos = receiver.getText().length();
 				receiver.setCaretPosition(pos);
 				sender.setText(null);
+				}
 			}catch(IOException e1) {
 				handleError(e1.getMessage());
 			}
