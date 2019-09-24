@@ -27,11 +27,12 @@ public class ChatClient extends JFrame implements ActionListener {
 
 		sPanel.setLayout(new BorderLayout());
 
+		//보내는곳
 		sender = new JTextField(20);
 		sender.addActionListener(this);
 		sPanel.add(sender,BorderLayout.CENTER);
 
-
+		//닉네임
 		nickname = new JTextField(5);
 		nickname.setText("닉네임");
 		nickname.addActionListener(this);

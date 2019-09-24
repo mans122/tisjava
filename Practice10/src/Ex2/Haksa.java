@@ -11,7 +11,7 @@ public class Haksa extends JFrame {
 		c.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		//20크기 텍스트필드 4개 생성
-		for(int i=0;i<4;i++) {tf_num[i] = new JTextField(20);}
+		for(int i=0;i<4;i++) {tf_num[i] = new JTextField(26);}
 		c.add(new JLabel("학번"));
 		c.add(tf_num[0]);
 		c.add(new JLabel("이름"));
@@ -21,7 +21,7 @@ public class Haksa extends JFrame {
 		c.add(new JLabel("주소"));
 		c.add(tf_num[3]);
 		
-		JTextArea taList=new JTextArea(15,25);
+		JTextArea taList=new JTextArea(15,29);
 		JScrollPane sp = new JScrollPane(taList);
 		c.add(sp);
 		
@@ -44,7 +44,7 @@ public class Haksa extends JFrame {
 		taList.append("학번	이름	학과	주소\n");
 		taList.append("===========================================\n");
 
-		setSize(300,500);
+		setSize(350,500);
 		setVisible(true);
 	}
 	public static void main(String[] args) {
