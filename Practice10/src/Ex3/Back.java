@@ -21,7 +21,7 @@ public class Back extends JFrame {
 		backGround = new JPanel(null) {
 			public void paintComponent(Graphics g) {
 				Dimension d = getSize();
-				System.out.println(d);
+				System.out.println("11");
 				g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);
 				// Approach 3: Fix the image position in the scroll pane
 				// Point p = scrollPane.getViewport().getViewPosition();
