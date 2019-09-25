@@ -53,50 +53,51 @@ public class ChatServer2 extends JFrame implements ActionListener{
 			image[i] = new ImageIcon(ImgFolder.fileName.get(i));
 		}
 
-		cPanel = new JPanel(null) {
+		cPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,0,0)) {
 			public void paintComponent(Graphics g) {
 				for(int i=0;i<receiveCount+1;i++) {
 					rText.add(i,new JLabel());
+					rText.get(i).setPreferredSize(new Dimension(400,15));
 				}
 				for(int i=0;i<sendCount+1;i++) {
 					sText.add(i,new JLabel());
-					//sText.get(i).setPreferredSize(new Dimension(getSize().width,getSize().height));
+					sText.get(i).setPreferredSize(new Dimension(400,15));
 				}
-				cPanel.setLayout(new FlowLayout());
-//				if(sendCount+receiveCount<=7)
-//					{cPanel.setLayout(new GridLayout(7,1,200,0));}
-//				else
-//					{cPanel.setLayout(new GridLayout(sendCount+receiveCount,1,200,0));}
-				
-				c.add(csPanel,BorderLayout.CENTER);
-				//csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
+				this.setPreferredSize(new Dimension(400,15*(1+sendCount+receiveCount)));
+				System.out.println(15*(1+sendCount+receiveCount));
+				csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
+				//this.setLayout(new FlowLayout(FlowLayout.LEFT));
 				this.setOpaque(false);
 				super.paintComponent(g);
 			}
 		};
-		
+
+
 		//받는 메시지 보여주는 창
 		receiver = new Receiver();
 		//receiver.setEditable(false);
-		
-		
+
+
 		//닉네임 출력 창
 		nickname = new JTextField(5);
 		nickname.setText("닉네임");
 		nickname.addActionListener(this);
 		sPanel.add(nickname,BorderLayout.WEST);
 		//-------------------------------------------------------------------------------
-		
+
 		//보내는 메시지 입력창
 		sender = new JTextField(20);
 		sender.addActionListener(this);
 		sPanel.add(sender,BorderLayout.CENTER);
 		c.add(sPanel,BorderLayout.SOUTH);
 		//-------------------------------------------------------------------------------
-		cPanel.setSize(400, 200);
-		csPanel = new JScrollPane(cPanel);
+
+		//스크롤패널에 cPanel추가하고 csPanel추가
+		csPanel = new JScrollPane(cPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		//cPanel.setPreferredSize(new Dimension(400,15*(1+sendCount+receiveCount)));
 		c.add(csPanel,BorderLayout.CENTER);
-		setSize(400, 200);
+		
+		setSize(400, 300);
 		setResizable(false);
 		setVisible(true);
 
@@ -112,20 +113,19 @@ public class ChatServer2 extends JFrame implements ActionListener{
 		listener = new ServerSocket(9999);
 		socket = listener.accept();
 		cPanel.add(rText.get(receiveCount));
-		rText.get(receiveCount).setPreferredSize(new Dimension(getSize().width,getSize().height));
 		rText.get(receiveCount).setText("클라 연결~");
 		receiveCount++;
 		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 	}
-//------------------------------------------------핸들에러------------------------------------------------------
+	//------------------------------------------------핸들에러------------------------------------------------------
 	private static void handleError(String string) {
 		System.out.println(string);
 		System.exit(1);
 	}
-//-----------------------------------------------------------------------------------------------------------
-	
-//------------------------------------------------받은 메시지 보여주는 Receiver------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------
+
+	//------------------------------------------------받은 메시지 보여주는 Receiver------------------------------------------------------
 	private class Receiver extends JFrame implements Runnable{
 		@Override
 		public void run() {
@@ -137,18 +137,17 @@ public class ChatServer2 extends JFrame implements ActionListener{
 						array = msg.split("'");
 						clientNick = array[1];
 					}
+					cPanel.add(rText.get(receiveCount));
+					rText.get(receiveCount).setText("\n"+clientNick+" :"+msg);
+					receiveCount++;
 				}catch(IOException e) {
 					handleError(e.getMessage());
 				}
-				cPanel.add(rText.get(receiveCount));
-				rText.get(receiveCount).setText("\n"+clientNick+" :"+msg);
-				receiveCount++;
-				csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
 			}
 		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
-	
+
 	//------------------------------------------------메시지 보내기------------------------------------------------------
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -163,24 +162,23 @@ public class ChatServer2 extends JFrame implements ActionListener{
 						if(ImgFolder.fileName.get(i).contains(getIcon)) {
 							//System.out.println(ImgFolder.fileName.get(i));
 							//imageLabel.setIcon(new ImageIcon(ImgFolder.fileName.get(i)));
-							System.out.println(ImgFolder.fileName.get(i));
 							cPanel.add(sText.get(sendCount));
-							//sText.get(sendCount).setSize(50, 50);
 							sText.get(sendCount).setIcon(new ImageIcon(ImgFolder.fileName.get(i)));
+							System.out.println(ImgFolder.fileName.get(i));
 							sendCount++;
 							sender.setText(null);
 						}
 					}
 				}
 				else{
-				out.write(msg+"\n");
-				out.flush();
-				cPanel.add(sText.get(sendCount));
-				sText.get(sendCount).setText("\n"+mynick+": "+msg);
-				//sText.get(sendCount).setPreferredSize(new Dimension(300,100));
-				sendCount++;
-				csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
-				sender.setText(null);
+					out.write(msg+"\n");
+					out.flush();
+					cPanel.add(sText.get(sendCount));
+					sText.get(sendCount).setText("\n"+mynick+": "+msg);
+					
+					sendCount++;
+					sender.setText(null);
+					
 				}
 			}catch(IOException e1) {
 				handleError(e1.getMessage());
@@ -191,7 +189,6 @@ public class ChatServer2 extends JFrame implements ActionListener{
 				cPanel.add(sText.get(sendCount));
 				sText.get(sendCount).setText("\n닉네임이 '"+mynick+"'으로 변경되었습니다.");
 				sendCount++;
-				csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
 				out.write("상대방의 닉네임이 \'"+mynick+"\'(으)로 변경되었습니다.\n");
 				out.flush();
 			}catch(Exception e2) {
@@ -199,7 +196,7 @@ public class ChatServer2 extends JFrame implements ActionListener{
 			}
 		}
 	}
-//------------------------------------------------------------------------------------------------------
+	//------------------------------------------------------------------------------------------------------
 	public static void main(String[] args) {
 		new ChatServer2();
 	}
