@@ -24,6 +24,7 @@ public class ChatServer2 extends JFrame implements ActionListener{
 	public static ImageIcon[] image;
 	private static int sendCount = 0;
 	private static int receiveCount = 0;
+	private static int imgCount = 0;
 	private JLabel imageLabel = new JLabel();
 	private BufferedReader in = null;
 	private BufferedWriter out = null;
@@ -63,7 +64,7 @@ public class ChatServer2 extends JFrame implements ActionListener{
 					sText.add(i,new JLabel());
 					sText.get(i).setPreferredSize(new Dimension(400,15));
 				}
-				this.setPreferredSize(new Dimension(400,15*(1+sendCount+receiveCount)));
+				this.setPreferredSize(new Dimension(400,15*(1+sendCount+receiveCount)+(32*imgCount)));
 				System.out.println(15*(1+sendCount+receiveCount));
 				csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
 				//this.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -164,7 +165,9 @@ public class ChatServer2 extends JFrame implements ActionListener{
 							//imageLabel.setIcon(new ImageIcon(ImgFolder.fileName.get(i)));
 							cPanel.add(sText.get(sendCount));
 							sText.get(sendCount).setIcon(new ImageIcon(ImgFolder.fileName.get(i)));
-							System.out.println(ImgFolder.fileName.get(i));
+							sText.get(sendCount).setPreferredSize(new Dimension(32,32));
+							System.out.println(sText.get(sendCount).getIcon().getIconHeight());
+							imgCount++;
 							sendCount++;
 							sender.setText(null);
 						}
