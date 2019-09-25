@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.*;
@@ -51,26 +52,28 @@ public class ChatServer2 extends JFrame implements ActionListener{
 		for(int i=0;i<ImgFolder.fileNum;i++) {
 			image[i] = new ImageIcon(ImgFolder.fileName.get(i));
 		}
-		for(int i=0;i<receiveCount+1;i++) {
-			rText.add(i,new JLabel());
-		}
-		for(int i=0;i<sendCount+1;i++) {
-			sText.add(i,new JLabel());
-		}
-		
+
 		cPanel = new JPanel(null) {
 			public void paintComponent(Graphics g) {
-				if(sendCount+receiveCount<=7)
-					cPanel.setLayout(new GridLayout(7,1,200,0));
-				else
-					cPanel.setLayout(new GridLayout(sendCount+receiveCount,1,200,0));
+				for(int i=0;i<receiveCount+1;i++) {
+					rText.add(i,new JLabel());
+				}
+				for(int i=0;i<sendCount+1;i++) {
+					sText.add(i,new JLabel());
+					//sText.get(i).setPreferredSize(new Dimension(getSize().width,getSize().height));
+				}
+				cPanel.setLayout(new FlowLayout());
+//				if(sendCount+receiveCount<=7)
+//					{cPanel.setLayout(new GridLayout(7,1,200,0));}
+//				else
+//					{cPanel.setLayout(new GridLayout(sendCount+receiveCount,1,200,0));}
+				
 				c.add(csPanel,BorderLayout.CENTER);
-				csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
+				//csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
 				this.setOpaque(false);
 				super.paintComponent(g);
 			}
 		};
-		
 		
 		//받는 메시지 보여주는 창
 		receiver = new Receiver();
@@ -90,10 +93,11 @@ public class ChatServer2 extends JFrame implements ActionListener{
 		sPanel.add(sender,BorderLayout.CENTER);
 		c.add(sPanel,BorderLayout.SOUTH);
 		//-------------------------------------------------------------------------------
-		
+		cPanel.setSize(400, 200);
 		csPanel = new JScrollPane(cPanel);
 		c.add(csPanel,BorderLayout.CENTER);
 		setSize(400, 200);
+		setResizable(false);
 		setVisible(true);
 
 		try {
@@ -108,6 +112,7 @@ public class ChatServer2 extends JFrame implements ActionListener{
 		listener = new ServerSocket(9999);
 		socket = listener.accept();
 		cPanel.add(rText.get(receiveCount));
+		rText.get(receiveCount).setPreferredSize(new Dimension(getSize().width,getSize().height));
 		rText.get(receiveCount).setText("클라 연결~");
 		receiveCount++;
 		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -157,8 +162,12 @@ public class ChatServer2 extends JFrame implements ActionListener{
 					for(int i=0;i<ImgFolder.fileNum;i++) {
 						if(ImgFolder.fileName.get(i).contains(getIcon)) {
 							//System.out.println(ImgFolder.fileName.get(i));
-							imageLabel.setIcon(new ImageIcon(ImgFolder.fileName.get(i)));
+							//imageLabel.setIcon(new ImageIcon(ImgFolder.fileName.get(i)));
 							System.out.println(ImgFolder.fileName.get(i));
+							cPanel.add(sText.get(sendCount));
+							//sText.get(sendCount).setSize(50, 50);
+							sText.get(sendCount).setIcon(new ImageIcon(ImgFolder.fileName.get(i)));
+							sendCount++;
 							sender.setText(null);
 						}
 					}
@@ -168,6 +177,7 @@ public class ChatServer2 extends JFrame implements ActionListener{
 				out.flush();
 				cPanel.add(sText.get(sendCount));
 				sText.get(sendCount).setText("\n"+mynick+": "+msg);
+				//sText.get(sendCount).setPreferredSize(new Dimension(300,100));
 				sendCount++;
 				csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
 				sender.setText(null);

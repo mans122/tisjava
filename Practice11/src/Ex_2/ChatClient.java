@@ -21,6 +21,7 @@ public class ChatClient extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Container c = getContentPane();
 
+		//c.setLayout(new BorderLayout());
 		c.setLayout(new BorderLayout());
 		receiver = new Receiver();
 		receiver.setEditable(false);
