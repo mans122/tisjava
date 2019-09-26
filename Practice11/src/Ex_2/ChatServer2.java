@@ -14,11 +14,16 @@ import java.net.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 
 //BorderLayout에서 Center에 받는메시지 출력창
 //SOUTH에 패널하나 올리고 그위에 TextField2개로 닉네임,보낼메시지 입력
 //CENTER에 
-
+//JLabel 테두리설정
+//BevelBorder border = new BevelBorder(BevelBorder.RAISED); 
+//sText.get(sendCount).setBorder(border); 3차원
+//eborder=new EtchedBorder(EtchedBorder.RAISED);//평면에 끌로 판듯이 외곽선 효과를 내는 것이고 양각의 효과를 준다.
+//label.setBorder(eborder);평면에 끌로 판듯이 외곽선 효과
 //JScrollPanel.getVerticalScrollBar().setValue(JScrollPanel.getVerticalScrollBar().getMaximum());
 public class ChatServer2 extends JFrame implements ActionListener{
 	public static ImageIcon[] image;
@@ -58,15 +63,20 @@ public class ChatServer2 extends JFrame implements ActionListener{
 			public void paintComponent(Graphics g) {
 				for(int i=0;i<receiveCount+1;i++) {
 					rText.add(i,new JLabel());
-					rText.get(i).setPreferredSize(new Dimension(400,15));
+					rText.get(i).setPreferredSize(new Dimension(cPanel.getSize().width-10,15));
 				}
 				for(int i=0;i<sendCount+1;i++) {
 					sText.add(i,new JLabel());
-					sText.get(i).setPreferredSize(new Dimension(400,15));
+					sText.get(i).setHorizontalAlignment(JLabel.RIGHT);
+					sText.get(i).setPreferredSize(new Dimension(cPanel.getSize().width-10,15));
 				}
-				this.setPreferredSize(new Dimension(400,15*(1+sendCount+receiveCount)+(32*imgCount)));
-				System.out.println(15*(1+sendCount+receiveCount));
+				//this.setPreferredSize(new Dimension(380,15*(1+sendCount+receiveCount)+(32*imgCount)));
+				this.setPreferredSize(new Dimension(c.getSize().width-20,15*(1+sendCount+receiveCount)+(17*imgCount)));
+				System.out.println("cPanel : " +this.getPreferredSize().getSize());
+				System.out.println("csPanel : "+ csPanel.getPreferredSize().getSize());
+				System.out.println("c사이즈"+c.getSize());
 				csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
+				
 				//this.setLayout(new FlowLayout(FlowLayout.LEFT));
 				this.setOpaque(false);
 				super.paintComponent(g);
@@ -94,11 +104,11 @@ public class ChatServer2 extends JFrame implements ActionListener{
 		//-------------------------------------------------------------------------------
 
 		//스크롤패널에 cPanel추가하고 csPanel추가
-		csPanel = new JScrollPane(cPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		//csPanel = new JScrollPane(cPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		csPanel = new JScrollPane(cPanel);
 		//cPanel.setPreferredSize(new Dimension(400,15*(1+sendCount+receiveCount)));
 		c.add(csPanel,BorderLayout.CENTER);
-		
-		setSize(400, 300);
+		setSize(400, 500);
 		setResizable(false);
 		setVisible(true);
 
@@ -114,7 +124,8 @@ public class ChatServer2 extends JFrame implements ActionListener{
 		listener = new ServerSocket(9999);
 		socket = listener.accept();
 		cPanel.add(rText.get(receiveCount));
-		rText.get(receiveCount).setText("클라 연결~");
+		rText.get(receiveCount).setHorizontalAlignment(JLabel.CENTER);
+		rText.get(receiveCount).setText("클라이언트와 연결되었습니다.");
 		receiveCount++;
 		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -134,12 +145,14 @@ public class ChatServer2 extends JFrame implements ActionListener{
 			while(true) {
 				try {
 					msg = in.readLine();
-					if(msg.contains("상대방의 닉네임이")) {
-						array = msg.split("'");
-						clientNick = array[1];
+					if(msg.contains("닉네임")) {
+//						array = msg.split("'");
+//						clientNick = array[1];
+						rText.get(receiveCount).setHorizontalAlignment(JLabel.CENTER);
 					}
 					cPanel.add(rText.get(receiveCount));
-					rText.get(receiveCount).setText("\n"+clientNick+" :"+msg);
+					rText.get(receiveCount).setLayout(new FlowLayout(FlowLayout.RIGHT));
+					rText.get(receiveCount).setText("\n"+msg);
 					receiveCount++;
 				}catch(IOException e) {
 					handleError(e.getMessage());
@@ -158,27 +171,27 @@ public class ChatServer2 extends JFrame implements ActionListener{
 				if(msg.contains("@@")) {
 					int index = msg.indexOf("@@");
 					String getIcon = msg.substring(index+2,index+7);
-					//System.out.println(getIcon);
 					for(int i=0;i<ImgFolder.fileNum;i++) {
 						if(ImgFolder.fileName.get(i).contains(getIcon)) {
 							//System.out.println(ImgFolder.fileName.get(i));
 							//imageLabel.setIcon(new ImageIcon(ImgFolder.fileName.get(i)));
 							cPanel.add(sText.get(sendCount));
 							sText.get(sendCount).setIcon(new ImageIcon(ImgFolder.fileName.get(i)));
+							sText.get(sendCount).setHorizontalAlignment(JLabel.RIGHT);
 							sText.get(sendCount).setPreferredSize(new Dimension(32,32));
 							System.out.println(sText.get(sendCount).getIcon().getIconHeight());
 							imgCount++;
 							sendCount++;
+							csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
 							sender.setText(null);
 						}
 					}
 				}
 				else{
-					out.write(msg+"\n");
+					out.write(mynick+" >> "+msg+"\n");
 					out.flush();
 					cPanel.add(sText.get(sendCount));
-					sText.get(sendCount).setText("\n"+mynick+": "+msg);
-					
+					sText.get(sendCount).setText("\n"+msg);
 					sendCount++;
 					sender.setText(null);
 					
@@ -190,6 +203,7 @@ public class ChatServer2 extends JFrame implements ActionListener{
 			mynick = nickname.getText();
 			try {
 				cPanel.add(sText.get(sendCount));
+				sText.get(sendCount).setHorizontalAlignment(JLabel.CENTER);
 				sText.get(sendCount).setText("\n닉네임이 '"+mynick+"'으로 변경되었습니다.");
 				sendCount++;
 				out.write("상대방의 닉네임이 \'"+mynick+"\'(으)로 변경되었습니다.\n");

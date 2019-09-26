@@ -85,7 +85,7 @@ public class ChatClient extends JFrame implements ActionListener {
 				}catch(IOException e) {
 					handleError(e.getMessage());
 				}
-				this.append("\n"+serverNick+" :"+msg);
+				this.append("\n"+msg);
 				int pos = this.getText().length();
 				this.setCaretPosition(pos);
 			}
@@ -97,7 +97,7 @@ public class ChatClient extends JFrame implements ActionListener {
 		if(e.getSource() == sender) {
 			String msg = sender.getText();
 			try {
-				out.write(msg+"\n");
+				out.write(mynick+" >> "+msg+"\n");
 				out.flush();
 
 				receiver.append("\n"+mynick+": "+msg);
