@@ -47,6 +47,8 @@ public class ChatServer2 extends JFrame implements ActionListener{
 	private static ArrayList<JLabel> rText = new ArrayList<>();
 	private static ArrayList<JLabel> sText = new ArrayList<>();
 	public ChatServer2() {
+		ImageIcon icon = new ImageIcon("img/bgi.jpg");
+		
 		setTitle("서버 채팅 창");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Container c = getContentPane();
@@ -58,26 +60,35 @@ public class ChatServer2 extends JFrame implements ActionListener{
 		for(int i=0;i<ImgFolder.fileNum;i++) {
 			image[i] = new ImageIcon(ImgFolder.fileName.get(i));
 		}
-
-		cPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,0,0)) {
+		
+		cPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,0,5)) {
 			public void paintComponent(Graphics g) {
+				Dimension d = getSize();
+				//g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);
+				if((25*(sendCount+receiveCount)+(12*imgCount))>cPanel.getPreferredSize().getSize().height)
+					g.drawImage(icon.getImage(), 0, 25*(1+sendCount+receiveCount)+(12*imgCount), d.width, d.height, null);
+				else
+					g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);
+				System.out.println("d"+(25*(sendCount+receiveCount)+(12*imgCount)));
+				System.out.println("a"+cPanel.getPreferredSize().getSize().height);
 				for(int i=0;i<receiveCount+1;i++) {
 					rText.add(i,new JLabel());
-					rText.get(i).setPreferredSize(new Dimension(cPanel.getSize().width-10,15));
+					rText.get(i).setFont(new Font("궁서", Font.BOLD, 15));
+					rText.get(i).setPreferredSize(new Dimension(cPanel.getSize().width-10,20));
+					System.out.print(rText.get(i).getPreferredSize());
 				}
 				for(int i=0;i<sendCount+1;i++) {
 					sText.add(i,new JLabel());
+					sText.get(i).setFont(new Font("맑은 고딕", Font.BOLD, 15));
 					sText.get(i).setHorizontalAlignment(JLabel.RIGHT);
-					sText.get(i).setPreferredSize(new Dimension(cPanel.getSize().width-10,15));
+					sText.get(i).setPreferredSize(new Dimension(cPanel.getSize().width-10,20));
 				}
-				//this.setPreferredSize(new Dimension(380,15*(1+sendCount+receiveCount)+(32*imgCount)));
-				this.setPreferredSize(new Dimension(c.getSize().width-20,15*(1+sendCount+receiveCount)+(17*imgCount)));
-				System.out.println("cPanel : " +this.getPreferredSize().getSize());
-				System.out.println("csPanel : "+ csPanel.getPreferredSize().getSize());
-				System.out.println("c사이즈"+c.getSize());
+				this.setPreferredSize(new Dimension(c.getSize().width-20,25*(1+sendCount+receiveCount)+(12*imgCount)));
+//				System.out.println("cPanel : " +this.getPreferredSize().getSize());
+//				System.out.println("csPanel : "+ csPanel.getPreferredSize().getSize());
+//				System.out.println("c사이즈"+c.getSize());
 				csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
 				
-				//this.setLayout(new FlowLayout(FlowLayout.LEFT));
 				this.setOpaque(false);
 				super.paintComponent(g);
 			}
@@ -86,7 +97,6 @@ public class ChatServer2 extends JFrame implements ActionListener{
 
 		//받는 메시지 보여주는 창
 		receiver = new Receiver();
-		//receiver.setEditable(false);
 
 
 		//닉네임 출력 창
@@ -106,7 +116,6 @@ public class ChatServer2 extends JFrame implements ActionListener{
 		//스크롤패널에 cPanel추가하고 csPanel추가
 		//csPanel = new JScrollPane(cPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		csPanel = new JScrollPane(cPanel);
-		//cPanel.setPreferredSize(new Dimension(400,15*(1+sendCount+receiveCount)));
 		c.add(csPanel,BorderLayout.CENTER);
 		setSize(400, 500);
 		setResizable(false);
@@ -125,6 +134,7 @@ public class ChatServer2 extends JFrame implements ActionListener{
 		socket = listener.accept();
 		cPanel.add(rText.get(receiveCount));
 		rText.get(receiveCount).setHorizontalAlignment(JLabel.CENTER);
+		rText.get(receiveCount).setForeground(Color.CYAN);
 		rText.get(receiveCount).setText("클라이언트와 연결되었습니다.");
 		receiveCount++;
 		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -146,8 +156,6 @@ public class ChatServer2 extends JFrame implements ActionListener{
 				try {
 					msg = in.readLine();
 					if(msg.contains("닉네임")) {
-//						array = msg.split("'");
-//						clientNick = array[1];
 						rText.get(receiveCount).setHorizontalAlignment(JLabel.CENTER);
 					}
 					cPanel.add(rText.get(receiveCount));
