@@ -21,24 +21,24 @@ public class Back extends JFrame {
 		backGround = new JPanel(null) {
 			public void paintComponent(Graphics g) {
 				Dimension d = getSize();
-				System.out.println("11");
 				g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);
 				// Approach 3: Fix the image position in the scroll pane
 				// Point p = scrollPane.getViewport().getViewPosition();
 				// g.drawImage(icon.getImage(), p.x, p.y, null);
-				this.setFocusable(true);
-				this.requestFocus();
+				//this.setFocusable(true);
+				//this.requestFocus();
 				setOpaque(false); //그림을 표시하게 설정,투명하게 조절
 				super.paintComponent(g);
 			}
 		};
+		backGround.setFocusable(true);
+		backGround.requestFocus();
 		//총알 라벨 ----------------------------------------------------------
 		for(int i=0;i<100;i++) {
 			bulletLabel[i] = new JLabel();
 			bulletLabel[i].setIcon(new ImageIcon("img/bullet.png"));
 			backGround.add(bulletLabel[i]);
 		}
-		//backGround.addKeyListener(new MyCharacterListener(bulletLabel[0]));
 		backGround.addKeyListener(new MyCharacterListenerSpace(backGround));
 		//적군 비행기 라벨 ------------------------------------------------------
 		enermyLabel.setIcon(new ImageIcon("img/enermy2.png"));
@@ -50,7 +50,7 @@ public class Back extends JFrame {
 		
 		//내 비행기 라벨--------------------------------------------------------
 		shipLabel.setIcon(new ImageIcon("img/ship.png"));
-		shipLabel.setLocation(350, 420);
+		shipLabel.setLocation(350, 400);
 		shipLabel.setSize(60, 60);
 		backGround.add(shipLabel);
 		backGround.addKeyListener(new MyCharacterListener(shipLabel));

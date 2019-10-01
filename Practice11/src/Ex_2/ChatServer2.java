@@ -1,3 +1,4 @@
+/*
 package Ex_2;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -30,6 +31,7 @@ public class ChatServer2 extends JFrame implements ActionListener{
 	private static int sendCount = 0;
 	private static int receiveCount = 0;
 	private static int imgCount = 0;
+	private static int i,k;
 	private JLabel imageLabel = new JLabel();
 	private BufferedReader in = null;
 	private BufferedWriter out = null;
@@ -66,28 +68,37 @@ public class ChatServer2 extends JFrame implements ActionListener{
 				Dimension d = getSize();
 				//g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);
 				if((25*(sendCount+receiveCount)+(12*imgCount))>cPanel.getPreferredSize().getSize().height)
-					g.drawImage(icon.getImage(), 0, 25*(1+sendCount+receiveCount)+(12*imgCount), d.width, d.height, null);
-				else
-					g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);
+					{g.drawImage(icon.getImage(), 0, 25*(1+sendCount+receiveCount)+(12*imgCount), d.width, d.height, null);}
+				else {
+					g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);}
 				System.out.println("d"+(25*(sendCount+receiveCount)+(12*imgCount)));
 				System.out.println("a"+cPanel.getPreferredSize().getSize().height);
-				for(int i=0;i<receiveCount+1;i++) {
-					rText.add(i,new JLabel());
-					rText.get(i).setFont(new Font("±Ã¼­", Font.BOLD, 15));
-					rText.get(i).setPreferredSize(new Dimension(cPanel.getSize().width-10,20));
-					System.out.print(rText.get(i).getPreferredSize());
-				}
-				for(int i=0;i<sendCount+1;i++) {
-					sText.add(i,new JLabel());
-					sText.get(i).setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 15));
-					sText.get(i).setHorizontalAlignment(JLabel.RIGHT);
-					sText.get(i).setPreferredSize(new Dimension(cPanel.getSize().width-10,20));
-				}
-				this.setPreferredSize(new Dimension(c.getSize().width-20,25*(1+sendCount+receiveCount)+(12*imgCount)));
+//				for(i=0;i<=receiveCount+1;i++) {
+//					rText.add(i,new JLabel());
+//					rText.get(i).setFont(new Font("±Ã¼­", Font.BOLD, 15));
+//					rText.get(i).setPreferredSize(new Dimension(cPanel.getSize().width-10,20));
+//					System.out.print(rText.get(i).getPreferredSize());
+//				}
+//				for(k=0;i<=sendCount+1;i++) {
+//					sText.add(i,new JLabel());
+//					sText.get(i).setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 15));
+//					sText.get(i).setHorizontalAlignment(JLabel.RIGHT);
+//					sText.get(i).setPreferredSize(new Dimension(cPanel.getSize().width-10,20));
+//				}
+				
+				rText.add(receiveCount,new JLabel());
+				rText.get(receiveCount).setFont(new Font("±Ã¼­", Font.BOLD, 15));
+				rText.get(receiveCount).setPreferredSize(new Dimension(cPanel.getSize().width-10,20));
+				System.out.print(rText.get(i).getPreferredSize());
+				sText.add(sendCount,new JLabel());
+				sText.get(sendCount).setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 15));
+				sText.get(sendCount).setHorizontalAlignment(JLabel.RIGHT);
+				sText.get(sendCount).setPreferredSize(new Dimension(cPanel.getSize().width-10,20));
+				this.setPreferredSize(new Dimension(csPanel.getSize().width-20,25*(1+sendCount+receiveCount)+(12*imgCount)));
 //				System.out.println("cPanel : " +this.getPreferredSize().getSize());
 //				System.out.println("csPanel : "+ csPanel.getPreferredSize().getSize());
 //				System.out.println("c»çÀÌÁî"+c.getSize());
-				csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
+				//csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
 				
 				this.setOpaque(false);
 				super.paintComponent(g);
@@ -153,6 +164,7 @@ public class ChatServer2 extends JFrame implements ActionListener{
 		public void run() {
 			String msg = null;
 			while(true) {
+				csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
 				try {
 					msg = in.readLine();
 					if(msg.contains("´Ð³×ÀÓ")) {
@@ -186,12 +198,11 @@ public class ChatServer2 extends JFrame implements ActionListener{
 							cPanel.add(sText.get(sendCount));
 							sText.get(sendCount).setIcon(new ImageIcon(ImgFolder.fileName.get(i)));
 							sText.get(sendCount).setHorizontalAlignment(JLabel.RIGHT);
-							sText.get(sendCount).setPreferredSize(new Dimension(32,32));
-							System.out.println(sText.get(sendCount).getIcon().getIconHeight());
+							sText.get(sendCount).setPreferredSize(new Dimension(cPanel.getSize().width-10,32));
 							imgCount++;
 							sendCount++;
-							csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
 							sender.setText(null);
+							csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
 						}
 					}
 				}
@@ -202,11 +213,13 @@ public class ChatServer2 extends JFrame implements ActionListener{
 					sText.get(sendCount).setText("\n"+msg);
 					sendCount++;
 					sender.setText(null);
+					csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
 					
 				}
 			}catch(IOException e1) {
 				handleError(e1.getMessage());
 			}
+			csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
 		}else if(e.getSource() == nickname) {
 			mynick = nickname.getText();
 			try {
@@ -216,6 +229,7 @@ public class ChatServer2 extends JFrame implements ActionListener{
 				sendCount++;
 				out.write("»ó´ë¹æÀÇ ´Ð³×ÀÓÀÌ \'"+mynick+"\'(À¸)·Î º¯°æµÇ¾ú½À´Ï´Ù.\n");
 				out.flush();
+				csPanel.getVerticalScrollBar().setValue(csPanel.getVerticalScrollBar().getMaximum());
 			}catch(Exception e2) {
 				handleError(e2.getMessage());
 			}
@@ -226,3 +240,4 @@ public class ChatServer2 extends JFrame implements ActionListener{
 		new ChatServer2();
 	}
 }
+*/
