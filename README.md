@@ -1,4 +1,3 @@
-참고할만한 사이트<br>
 --SASS--<br>
 https://sass-lang.com/
 <br><br>
