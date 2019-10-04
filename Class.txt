@@ -1,0 +1,13 @@
+클래스
+1. 객체생성기
+2. 사용자정의 데이터형
+
+Class a;
+타입 변수명;
+a는 레퍼런스변수이고, a가 가리키는 곳에 Ciecle타입 데이터가 존재한다.
+
+Circle a; = 사용자가 정의한 Circle이란 클래스의 변수 a 선언
+
+parent class <-> child class
+super class <-> sub class
+base class <-> derived class

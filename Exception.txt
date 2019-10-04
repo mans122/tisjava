@@ -1,0 +1,21 @@
+Exception클래스
+=>모든 예외클래스는 Exception클래스를 상속받아서 만듬
+=>구체적인 Exception명을 모를경우 Exception클래스를 사용하면됨.
+
+- ArithmeticException : 정수를 0으로나눌때
+- NullpointException : null 레퍼런스 참조할때
+- ClaacastException : 변환할 수 없는 타입으로 객체 변환할때
+- OutOfMemoryError : 메모리부족
+- ArrayIndexOutOfBoundsException : 배열범위 벗어난 접근
+- IllegalArgumentException : 잘못된 인자 전달 시
+- IOException :입출력 동작 실패 또는 인터럽트 발생
+- NumberFormatException : 문자열이 나타내는 숫자와 일치하지 않는 타입의 숫자로 변환 시
+- InputMismatchException : Scanner클래스의 nextInt()를 문자등으로 입력한 경우
+
+예외처리가 많이 사용되는 부분
+1. 입출력
+- 파일입출력
+- 네트워크입출력
+- DB입출력
+
+2. Thread

@@ -1,0 +1,16 @@
+Protocol
+
+IP(Internet Protocol)
+:인터넷에서 사용
+
+TCP(Transmission Control Protocol)
+:데이터 전송 프로토콜	
+
+HTTP(HyperText Transfer Protocol)
+:HyperText를 전송하는 프로토콜
+
+FTP(File Transfer Protocol)
+:파일전송 프로토콜	
+
+SMTP(Simple Mail Tansfer Protocol)
+:메일전송 프로토콜

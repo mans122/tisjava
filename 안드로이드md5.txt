@@ -1,0 +1,22 @@
+ /*public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        
+        String hash=getMD5Hash("1234");
+        Toast.makeText(this, hash, Toast.LENGTH_SHORT).show();
+    }
+   */ 
+    public static String getMD5Hash(String s) {
+        MessageDigest m = null;
+        String hash = null;
+    
+        try {
+         m = MessageDigest.getInstance("SH1");
+         m.update(s.getBytes(),0,s.length());
+         hash = new BigInteger(1, m.digest()).toString(16);
+        } catch (NoSuchAlgorithmException e) {
+         e.printStackTrace();
+        }
+    
+        return hash;
+   } 

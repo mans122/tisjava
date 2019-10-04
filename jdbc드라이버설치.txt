@@ -1,0 +1,39 @@
+odjbc6.jar 오라클 jdbc 드라이버 설치
+
+1. Global설치
+=> 모든 프로젝트에 적용 가능
+	\C:\Program Files\Java\jdk1.8.0_221\jre\lib\ext 폴더에 넣기
+	or C:\Program Files\Java\jre1.8.0_221\lib\ext 폴더에 넣기
+
+2. Local설치
+=> 특정 프로젝트에만 적용 가능
+
+프로젝트 폴더 드라이버 jar파일 넣고 => 프로젝트 우클릭 => properties 
+=> Java Build Path => Add Jars / Add External Jars
+
+--MySql 코드--
+try{
+	Class.forName("com.mysql.jdbc.Driver");
+	Connection conn = DriverManager.getConnection("서버주소","계정이름","비번");
+}
+catch (Exception e){
+	e.printStackTrace();
+}
+
+--Oracle 코드--
+	Connection conn = null;
+	Statement stmt = null;
+	ResultSet rs = null;
+	String url = "jdbc:oracle:thin:@localhost:1521:myoracle";
+	String uid = "ora_user";
+	String pass = "hong";
+	//String sql = "select * from members";
+	//url ="jdbc:oracle:thin:@localhost:1521:myoracle";
+        try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");// jdbc driver load
+			conn = DriverManager.getConnection(url,id,pw);// 연결
+			System.out.println("연결완료");
+	} catch (Exception e) {			
+			e.printStackTrace();
+			System.out.println("연결실패");
+	}
