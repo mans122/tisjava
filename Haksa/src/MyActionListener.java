@@ -137,7 +137,6 @@ public class MyActionListener implements ActionListener {
 			}
 			break;
 		}
-		//검색버튼 별로 그 조건에 맞는 결과만 출력
 		if(e.getSource() == Haksa.btnSearch[0]){
 			try {
 				Haksa.taList.setText("");
@@ -151,8 +150,7 @@ public class MyActionListener implements ActionListener {
 				rs = stmt.executeQuery("select * from student where id="+id+" order by id");
 
 				while(rs.next()) {
-					//DB에서 값을 받아와서 taList에 추가해줌, 구분을위해 공백도 따로 입력해줌
-					Haksa.taList.append(rs.getString("id")); //칼럼 이름대신 칼럼 인덱스도 사용 가능
+					Haksa.taList.append(rs.getString("id")); 
 					Haksa.taList.append("	");
 					Haksa.taList.append(rs.getString("name"));
 					Haksa.taList.append("	");
