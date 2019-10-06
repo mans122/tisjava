@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 @SuppressWarnings("serial")
 public class Haksa extends JFrame {
@@ -10,7 +12,7 @@ public class Haksa extends JFrame {
 	public static JButton[] btnSearch = new JButton[4];
 	public Haksa() {
 		setTitle("학사관리");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Container c = getContentPane();
 		c.setLayout(new FlowLayout(FlowLayout.LEFT,10,3));
 		
@@ -74,11 +76,19 @@ public class Haksa extends JFrame {
 		c.add(btnList);
 		c.add(btnUpdate);
 		c.add(btnDelete);
-
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				setVisible(false);
+				dispose();
+				Login.frame.setEnabled(true);
+			}
+		});
 		//텍스트필드 수정못하게 설정
 		taList.setEditable(false);
-
 		setSize(350,480);
+		Dimension frameSize = this.getSize();
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation((screenSize.width-frameSize.width)/2,(screenSize.height-frameSize.height)/2);
 		setVisible(true);
 		setResizable(false);
 	}
