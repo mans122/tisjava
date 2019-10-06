@@ -1,3 +1,4 @@
+package Haksa2;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -13,7 +14,7 @@ public class Haksa2 extends JFrame {
 	public static JButton[] btnSearch = new JButton[4];
 	public Haksa2() {
 		setTitle("학사관리");
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		c = getContentPane();
 		c.setLayout(new FlowLayout(FlowLayout.LEFT,10,3));
 		
@@ -53,8 +54,8 @@ public class Haksa2 extends JFrame {
 		JButton btnList = new JButton("목록");
 		JButton btnUpdate = new JButton("수정");
 		JButton btnDelete = new JButton("삭제");
-		MyActionListener ma = new MyActionListener();//리스너 생성
-		SearchActionListener sa = new SearchActionListener();
+		MyActionListener2 ma = new MyActionListener2();//리스너 생성
+		SearchActionListener2 sa = new SearchActionListener2();
 		//버튼을 리스너에 등록
 		btnSearch[0].addActionListener(sa);
 		btnSearch[1].addActionListener(sa);
@@ -84,14 +85,17 @@ public class Haksa2 extends JFrame {
 			public void windowClosing(WindowEvent e) {
 				setVisible(false);
 				dispose();
-				Login.frame.setEnabled(true);
+				Login2.frame.setEnabled(true);
 			}
 		});
 		setSize(1000,600);
+		Dimension frameSize = this.getSize();
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation((screenSize.width-frameSize.width)/2,(screenSize.height-frameSize.height)/2);
 		setVisible(true);
 		setResizable(false);
 	}
 	public static void main(String[] args) {
-		new Haksa2();
+		//new Haksa2();
 	}
 }

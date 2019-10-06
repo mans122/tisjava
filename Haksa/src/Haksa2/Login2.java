@@ -1,3 +1,4 @@
+package Haksa2;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -13,8 +14,12 @@ public class Login2 extends JFrame{
 	public static JTextField loginField;
 	public static JTextField pwdField;
 	public static JScrollPane scrollPane;
+	static Main win;
 	ImageIcon icon;
-	public Login2() {
+	
+	public Login2(Main win) {
+		System.out.println("Login2");
+		Login2.win = win;
 		icon = new ImageIcon("img/back1.jpg");
 
 		back = new JPanel(null) {
@@ -61,7 +66,7 @@ public class Login2 extends JFrame{
 		//System.out.print(signUp.getPreferredSize().getSize());
 		signUp.setLocation(580, 265);
 		
-		LoginActionListener la = new LoginActionListener();
+		LoginActionListener2 la = new LoginActionListener2();
 		loginButton.addActionListener(la);
 		signUp.addActionListener(la);
 		
@@ -78,7 +83,7 @@ public class Login2 extends JFrame{
 
 	}
 	public static void main(String[] args) {
-		frame = new Login2();
+		frame = new Login2(win);
 		frame.setTitle("학사관리 로그인");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1000, 600);
