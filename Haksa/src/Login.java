@@ -76,43 +76,14 @@ public class Login extends JFrame{
 		back.add(pwdLabel);
 		back.add(pwdField);
 		back.add(signUp);
-		
-		
-//		this.setTitle("학사관리 로그인");
-//		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		this.setSize(1000, 600);
-//		Dimension frameSize = this.getSize();
-//		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//		this.setLocation((screenSize.width-frameSize.width)/2,(screenSize.height-frameSize.height)/2);
-//		this.setResizable(false);
-//		this.setVisible(true);
 
 		scrollPane = new JScrollPane(back);
 		setContentPane(scrollPane);
-
-	}
-	class MyActionListener2 implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-		
 	}
 	public void setMain(MainProcess main) {
 		this.main = main;
 	}
 	public static void main(String[] args) {
-//		frame = new Login();
-//		frame.setTitle("학사관리 로그인");
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frame.setSize(1000, 600);
-//		Dimension frameSize = frame.getSize();
-//		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//		frame.setLocation((screenSize.width-frameSize.width)/2,(screenSize.height-frameSize.height)/2);
-//		frame.setResizable(false);
-//		frame.setVisible(true);
 	}
 
 }

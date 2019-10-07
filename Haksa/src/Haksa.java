@@ -10,6 +10,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -19,11 +20,9 @@ import javax.swing.table.DefaultTableModel;
 public class Haksa extends JFrame {
 	static DefaultTableModel model = null;
 	static JTable table=null;
-	
+	static MainProcess main;
 	//학번~주소를 입력받을 TextField 4개 선언
 	public static JTextField[] tf_num = new JTextField[4];
-	//목록을 출력할 TextArea를 taList라는 이름으로 생성 후 크기 지정,
-	//public static JTextArea taList=new JTextArea(16,29);
 	public static JButton[] btnSearch = new JButton[4];
 	public Haksa() {
 		setTitle("학사관리");
@@ -118,15 +117,14 @@ public class Haksa extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				try {
-				setVisible(false);
-				dispose();
-				Login.frame.setEnabled(true);
-				Login.frame.setFocusable(true);}
-				catch(Exception we) {}
+					JOptionPane.showMessageDialog(null,"로그인 화면으로 돌아갑니다.","알림",JOptionPane.INFORMATION_MESSAGE);
+					main.showFrameLogin(); // 메인창 메소드를 이용해 띄우기
+				}
+				catch(Exception we) {
+					we.printStackTrace();
+				}
 			}
 		});
-		//텍스트필드 수정못하게 설정
-		//taList.setEditable(false);
 		setSize(350,480);
 		Dimension frameSize = this.getSize();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -134,9 +132,9 @@ public class Haksa extends JFrame {
 		setVisible(true);
 		setResizable(false);
 	}
-	
-	
+	public void setMain(MainProcess main) {
+		this.main = main;
+	}
 	public static void main(String[] args) {
-		//new Haksa();
 	}
 }
