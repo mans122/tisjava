@@ -138,15 +138,15 @@ public class Haksa extends JFrame {
 			public void windowClosing(WindowEvent e) {
 				try {
 					conn.close();
-					JOptionPane.showMessageDialog(null,"로그인 화면으로 돌아갑니다.","알림",JOptionPane.INFORMATION_MESSAGE);
-					main.showFrameLogin(); // 메인창 메소드를 이용해 띄우기
+					//JOptionPane.showMessageDialog(null,"로그인 화면으로 돌아갑니다.","알림",JOptionPane.INFORMATION_MESSAGE);
+					//main.showFrameLogin(); // 메인창 메소드를 이용해 띄우기
 				}
 				catch(Exception we) {
 					we.printStackTrace();
 				}
 			}
 		});
-		setSize(350,480);
+		setSize(1000,600);
 		Dimension frameSize = this.getSize();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation((screenSize.width-frameSize.width)/2,(screenSize.height-frameSize.height)/2);

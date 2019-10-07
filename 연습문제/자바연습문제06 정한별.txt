@@ -1,0 +1,158 @@
+1,2번문제
+import java.util.*; 
+
+public class Practice06 {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		ArrayList<String> book = new ArrayList<>();
+		
+		//1번문제		
+		System.out.println("책제목, 저자 , 출판사, 가격을 입력하세요");
+		for(int i=0; i<4;i++) {
+			book.add(s.nextLine());
+		}
+					
+		//2번문제
+		HashMap<String,String> bookInfo = new HashMap<>();
+		bookInfo.put("책제목",book.get(0));
+		bookInfo.put("저자",book.get(1));
+		bookInfo.put("출판사",book.get(2));
+		bookInfo.put("가격",book.get(3));
+		
+		
+		Set<String> keys = bookInfo.keySet();
+		Iterator<String> it = keys.iterator();
+		while(it.hasNext()) {
+			String name = it.next();
+			bookInfo.get(name);
+			System.out.println(bookInfo.get(name));
+		}
+		s.close();
+	}
+}
+
+
+//3번문제
+//ArrayList<Book> data = new ArrayList<Book>();
+import java.util.*;
+class Bookp {
+	String bookName,writer,pub;
+	int price;
+	public Bookp() {}
+	public Bookp(String bookName,String writer, String pub, int price) {
+		this.bookName = bookName;
+		this.writer = writer;
+		this.pub = pub;
+		this.price =price;
+	}
+	@Override
+	public String toString() {
+		return "책제목" + bookName + ", 저자=" + writer + ", 출판사=" + pub + ", 가격=" + price + "]";
+	}
+	
+}
+
+public class Practice6hd {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		ArrayList<Bookp> data = new ArrayList<Bookp>();
+		Bookp bookInfo = new Bookp();
+		//for(int i=0;i<3;i++) {
+		System.out.println("책제목, 저자 , 출판사, 가격을 입력하세요");
+		bookInfo = new Bookp(s.nextLine(),s.nextLine(),s.nextLine(),s.nextInt());
+		s.nextLine();
+		data.add(bookInfo);
+		//}
+		//for(int i=0;i<3;i++) {
+		//data.get(i).toString();
+		System.out.println(data.get(0).toString());
+		//}
+
+		s.close();
+	}
+}
+
+
+//4번문제
+import java.io.*;
+public class Practice06_4 {
+	public static void main(String[] args) throws IOException {
+//		PrintStream ps= null;
+		FileWriter error = null;
+/*
+		try {
+			ps = new PrintStream("C:\\\\log\\\\20190305153010.log");
+			Exception e = new Exception();
+			throw e;
+			
+		}catch(Exception e) {
+			System.out.println("오류발생!!\n c:\\log\\20190305153010.log에 기록합니다. ");
+			e.printStackTrace(ps);
+		}
+*/		
+		try {
+			Exception e = new Exception();
+			System.out.println(1/0);
+			throw e;
+			
+		}catch(Exception e) {
+			System.out.println("오류발생!!\n c:\\log\\20190305153010.log에 기록합니다. ");
+			error = new FileWriter("C:\\log\\20190305153010.log");
+			//error.write(e.getMessage()); 	// "/ by zero" 출력
+			error.write(e.toString());		// "java.lang.ArithmeticException : / by zero" 출력
+			error.close();
+		}
+	}
+
+}
+//5번문제
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+class Book2 {
+	ArrayList<String> bookInfo = new ArrayList<>();
+	public Book2() {}
+	public Book2(String bookName,String writer, String pub, String price) {
+		this.bookInfo.add(bookName);
+		this.bookInfo.add(writer);
+		this.bookInfo.add(pub);
+		this.bookInfo.add(price);
+		for(int i=0;i<4;i++) {
+			System.out.print(bookInfo.get(i)+" ");
+		}
+	}
+}
+
+public class Practice06_5 {
+	public static void main(String[] args) throws Exception {
+		//String bookName,writer,pub,price;
+		Scanner s = new Scanner(System.in);
+		Book2 book = new Book2();
+		FileWriter fout = null;
+		FileReader fin = null;
+		System.out.println("책제목, 저자 , 출판사, 가격을 입력하세요");
+		book = new Book2(s.nextLine(),s.nextLine(),s.nextLine(),s.nextLine());
+		//bookName = s.nextLine();
+		//writer = s.nextLine();
+		//pub = s.nextLine();
+		//price = s.nextLine();
+		//book = new Book2(bookName,writer,pub,price);
+
+		for(int i=0;i<4;i++) {
+			System.out.println(book.bookInfo.get(i));
+		}
+		fout = new FileWriter("c:\\Temp\\data.txt");
+		fout.write(book.bookInfo.toString());
+		fout.close();
+		
+		fin = new FileReader("c:\\Temp\\data.txt");
+		int c;
+		while((c=fin.read()) != -1) {
+			System.out.print((char) c);
+		}
+		fin.close();
+		s.close();
+	}
+}

@@ -35,15 +35,14 @@ public class BookRent extends JFrame{
 			stmt=conn.createStatement();
 			
 			rs = stmt.executeQuery("select DISTINCT dept from student");
-			int i=0;
+			int i=1;
+			deptName.add(0,"전체");
 			while(rs.next()) {
-				
 				deptName.add(i,rs.getString("dept"));
 				System.out.println(deptName.get(i));
 				i++;
 			}
 			deptNum = deptName.size();
-			System.out.println(deptNum);
 			
 		}catch(Exception e){
 			e.printStackTrace();
@@ -60,7 +59,12 @@ public class BookRent extends JFrame{
 		add(l_dept);
 		
 		//String[] dept = new String[deptNum];
-		String[] dept={"전체","컴퓨터시스템","멀티미디어","컴퓨터공학"};
+		String[] dept = new String[deptNum];
+		dept[0]=deptName.get(0);
+		for(int i=1;i<deptNum;i++) 
+			dept[i]=deptName.get(i);
+		
+		//String[] dept={"전체","컴퓨터시스템","멀티미디어","컴퓨터공학"};
 		JComboBox cb_dept=new JComboBox(dept);
 		cb_dept.setBounds(45, 10, 100, 20);
 		add(cb_dept);
@@ -75,10 +79,14 @@ public class BookRent extends JFrame{
 						+" and br.bookNo=b.no";
 
 				if(deptIndex==0){ // 전체
-					// Select문 실행
 					query += " order by br.no";
 					bookList();
-				}else if(deptIndex==1){ // 컴퓨터시스템     
+				}else {
+					query += " and s.dept='"+dept[deptIndex]+"' ";
+					query += " order by br.no";
+					bookList();
+				}
+				/*else if(deptIndex==1){ // 컴퓨터시스템     
 					query += " and s.dept='컴퓨터시스템' ";
 					query += " order by br.no";
 					bookList();
@@ -90,7 +98,7 @@ public class BookRent extends JFrame{
 					query += " and s.dept='컴퓨터공학' ";
 					query += " order by br.no";
 					bookList();
-				}
+				}*/
 			}});
 
 		String colName[]={"학번","이름","도서명","대출일"};

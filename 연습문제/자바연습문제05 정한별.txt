@@ -1,0 +1,121 @@
+0. 연습문제4 의 마우스클래스를 interface
+로 변경하기
+
+1. 전화번호(010-1234-5678)에서 국번(010)을 추출하시오.
+
+2. 전화번호(010-1234-5678)에서 '-'을 제거하시오.
+=>01012345678 로 변경하기.
+
+3. 상품코드(E20160001)에서 상품카테고리('E')를 추출하시오.
+
+4. 상품코드(E20160001)에서 년도('2016')를 추출하시오.
+
+5. 주소록 csv데이터에서 데이터를 분리하시오.
+홍길동,010-1111-2222,hkd@hkd.com
+
+6. csv데이터에 다음과 같은 학번이 저장되어 있을 때.
+EL201800001,CH201800021,EN12231
+EL-전자공학과
+CH-화학공학과
+EN-영어영문학과
+
+각 학번의 학과명을 출력하시오.
+
+7. 아이디에 !,@,#,$,%,^가 포함된 경우
+'아이디에 !,@,#,$,%,^가 포함되면 안됩니다.'
+메시지 출력하기. charAt()참고.
+
+
+import java.util.Scanner;
+
+//0번문제
+interface Mouse{
+	abstract public void mouse();
+	abstract public void mouseRight();
+	abstract public void mouseLeft();
+	abstract public void mouseMove();
+}
+class WheelMouse implements Mouse{
+	public WheelMouse() {}
+	public void scrollWheel() {}
+	@Override
+	public void mouseMove() {}
+	@Override
+	public void mouse() {}
+	@Override
+	public void mouseRight() {}
+	@Override
+	public void mouseLeft() {}
+	
+	
+}
+class LaserMouse extends WheelMouse{
+	public LaserMouse() {	}
+	@Override
+	public void mouseMove() {}
+}
+public class Practice05 {
+	public static void main(String[] args) {
+		WheelMouse wm = new WheelMouse();
+		LaserMouse lm = new LaserMouse();
+
+		WheelMouse[] wm2 = new WheelMouse[3];
+		wm2[0] = new WheelMouse();
+		wm2[1] = new WheelMouse();
+		wm2[2] = new WheelMouse();
+		//1번문제
+		String phoneNum = new String("010-1234-5678");
+		System.out.println(phoneNum.substring(0,phoneNum.indexOf("-")));
+		//2번문제
+		System.out.println(phoneNum.replace("-",""));
+		String[] s = phoneNum.split("-");
+		for(int i=0;i<s.length;i++) {
+			System.out.print(s[i]);
+		}
+		System.out.println();
+
+		//3번문제
+		String pNum = new String("E20160001");
+		System.out.println(pNum.charAt(0));
+		System.out.println(pNum.substring(0,1));
+
+		//4번문제
+		System.out.println(pNum.substring(1,5));
+
+		//5번문제
+		String info = new String("홍길동,010-1111-2222,hkd@hkd.com");
+		String[] newInfo = info.split(",");
+		for(int i=0;i<newInfo.length;i++) {
+			System.out.println(newInfo[i]);
+		}
+
+		//6번문제
+		String data = "EL201800001,CH201800021,EN12231";
+		String[] dep = data.split(","); 
+		for(int i=0;i<dep.length;i++) {
+			if(dep[i].contains("EL")==true) {
+				System.out.println(dep[i]+": 전자공학과");
+			}
+			else if(dep[i].contains("CH")==true) {
+				System.out.println(dep[i]+": 화학공학과");
+			}
+			else if(dep[i].contains("EN")==true) {
+				System.out.println(dep[i]+": 영어영문학과");
+			}
+		}
+
+		//7번문제
+		Scanner sc = new Scanner(System.in);
+		System.out.println("아이디를 입력하세요");
+		String id = new String(sc.next());
+
+		for(int i=0;i<id.length();i++) {
+			char c = id.charAt(i);
+			if(c == '!' || c == '@' || c == '#' || c == '$' || c == '%' || c == '^') {
+				System.out.println("아이디에 !,@,#,$,%,^가 포함되면 안됩니다.");
+			}		
+		}
+		
+	}
+
+}

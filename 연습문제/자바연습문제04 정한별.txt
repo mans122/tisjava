@@ -1,0 +1,84 @@
+1.마우스 클래스를 생성하시오.
+왼쪽버튼,오른쪽버튼,mouseMove()
+
+2.휠마우스 클래스를 마우스 클래스를 상속받아서 생성
+ 스크롤휠 추가
+
+3. 레이저 마우스 클래스를 휠마우스 클래스를 상속받아
+광원(레이저) 추가
+
+4. 1~3번의 인스턴스를 생성하시오.
+
+5. 크기가 3인 객체배열에 휠마우스 3개를 생성하시오
+
+//1번문제
+class Mouse{
+	String leftButton,rightButton,optical;
+	public void mouseMove() {}
+}
+//2번문제
+class WheelMouse extends Mouse{
+	public WheelMouse() {}
+	public void scrollWheel() {}
+}
+//3번문제
+class LaserMouse extends WheelMouse{
+	public LaserMouse() {
+		this.optical = "Laser";
+	}
+}
+//4번문제
+public class Practice04 {
+	public static void main(String[] args) {
+		Mouse m = new Mouse();
+		WheelMouse wm = new WheelMouse();
+		LaserMouse lm = new LaserMouse();
+		//5번문제
+		WheelMouse[] wm2 = new WheelMouse[3];
+		wm2[0] = new WheelMouse();
+		wm2[1] = new WheelMouse();
+		wm2[2] = new WheelMouse();
+	}
+
+}
+
+
+
+6. 1번 mouseMove()를
+추상메서드로 변경하여 추상클래스를 만드시오.
+
+package Practice04_2;
+
+abstract class Mouse{
+	public Mouse() {}
+	String leftButton,rightButton,optical;
+	abstract public void mouseMove();
+}
+class WheelMouse extends Mouse{
+	public WheelMouse() {
+		this.optical = "Ball";
+	}
+	@Override
+	public void mouseMove() {}
+	public void scrollWheel() {}
+}
+class LaserMouse extends WheelMouse{
+	public LaserMouse() {
+		this.optical = "Laser";
+	}
+	@Override
+	public void mouseMove() {}
+}
+public class Practice04_2 {
+	public static void main(String[] args) {
+		WheelMouse wm = new WheelMouse();
+		LaserMouse lm = new LaserMouse();
+		
+		WheelMouse[] wm2 = new WheelMouse[3];
+		w2[0] = new WheelMouse();
+		w2[1] = new WheelMouse();
+		w2[2] = new WheelMouse();
+		
+	}
+
+}

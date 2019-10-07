@@ -1,0 +1,49 @@
+1. Member클래스를 만드시오.
+멤버변수 : name, address, job, age
+멤버함수 : showInfo() - 전체 데이터 출력
+
+2. 1번에서 만든 Member클래스를 사용해서
+'홍길동', '이순신' 인스턴스를 생성해보시오.
+
+3. 1번클래스를 이용해서, 이름,주소,직업,나이를 
+키보드로 입력받아 정보를 출력하시오. 
+- scanner 사용
+
+
+
+import java.util.Scanner;
+
+class Member{
+	String name,address,job;
+	int age;
+	public Member() {}
+	public Member(String name,String address, String job,int age) {
+		this.name = name;
+		this.address = address;
+		this.job = job;
+		this.age = age;
+	}
+	void show() {System.out.println(name+","+address+","+job+","+age);}
+}
+public class Practice03 {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		Member 홍길동 = new Member();
+		Member 이순신 = new Member();
+		int num=0;
+		System.out.println("입력할 개수 :");
+		num = s.nextInt();
+		Member[] info = new Member[num];
+
+		for(int i=0;i<info.length;i++) {
+			System.out.println("이름,주소,직업,나이를 입력하세요");
+			info[i] = new Member(s.next(),s.next(),s.next(),s.nextInt());
+		}
+		for(int i=0;i<num;i++) {
+			System.out.println(info[i].name+","+info[i].address+","+info[i].job+","+info[i].age);
+		}
+
+		s.close();
+	}
+
+}
