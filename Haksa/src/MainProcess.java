@@ -25,7 +25,6 @@ public class MainProcess{
 		main.login.setVisible(true);
 	}
 	
-	// �뀒�뒪�듃�봽�젅�엫李�
 	public void showFrameTest(){
 		login.dispose(); // 로그인창 닫기
 		this.haksa = new Haksa(); // 테스트프레임 오픈

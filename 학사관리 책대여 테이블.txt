@@ -1,0 +1,49 @@
+create table student(
+id char(7) primary key,
+name varchar(10) not null,
+dept varchar(20) not null,
+address varchar(100) null
+);
+
+
+insert into student values('1091011','김철수','컴퓨터시스템',null);
+insert into student values('0792012','최고봉','멀티미디어',null);
+insert into student values('0494013','이기자','컴퓨터공학',null);
+insert into student values('0494513','박기자','컴퓨터공학',null);
+insert into student values('4456754','안철수','컴퓨터시스템',null);
+commit;
+ 
+
+create table books(
+  no char(6) primary key, -- 책번호
+  title varchar(50) not null, -- 책이름
+  author varchar(50) not null -- 저자
+);
+
+
+insert into books values('000001','오라클기본','이황');
+insert into books values('000002','자바정복','율곡');
+insert into books values('000003','HTML5','강감찬');
+
+ 
+
+create table bookRent
+( no char(10) primary key, -- 대여번호
+  id char(10) not null, -- 학번
+  bookNo char(6) not null, -- 책번호
+  rDate char(8) not null -- 대여일
+  
+);
+
+commit;
+select * from bookRent;
+insert into bookRent values('2017071301','2018001','000001','20170713');
+insert into bookRent values('2017071302','2018002','000003','20170713');
+insert into bookRent values('2017071303','2018003','000003','20170713');
+insert into bookRent values('2017071304','0792012','000001','20170713');
+insert into bookRent values('2017071305','0792012','000003','20170713');
+insert into bookRent values('2017071306','0494513','000002','20170713');
+insert into bookRent values('2017071307','4456754','000002','20170713');
+insert into bookRent values('2017071308','1091011','000003','20170713');
+insert into bookRent values('2017071309','0494513','000002','20170713');
+commit;

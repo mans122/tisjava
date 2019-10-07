@@ -23,7 +23,6 @@ public class Login extends JFrame{
 
 		back = new JPanel(null) {
 			public void paintComponent(Graphics g) {
-				//g.drawImage(icon.getImage(), 0, 0, null);
 				Dimension d = getSize();
 				g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);
 				setOpaque(false); //그림을 표시하게 설정,투명하게 조절
@@ -62,7 +61,6 @@ public class Login extends JFrame{
 		signUp.setFont(new Font("Serif",Font.BOLD,15));
 		//signUp.setSize(pwdButton.getPreferredSize().getSize());
 		signUp.setSize(100, 32);
-		//System.out.print(signUp.getPreferredSize().getSize());
 		signUp.setLocation(580, 265);
 		
 		LoginActionListener la = new LoginActionListener();

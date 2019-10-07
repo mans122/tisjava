@@ -38,9 +38,7 @@ public class SearchActionListener implements ActionListener{
 		String name = Haksa.tf_num[1].getText();
 		String dept = Haksa.tf_num[2].getText();
 		String address = Haksa.tf_num[3].getText();
-
 		ResultSet rs = null;
-		
 		boolean isNumber = false;
 		if(id.length()!=0)
 		{
