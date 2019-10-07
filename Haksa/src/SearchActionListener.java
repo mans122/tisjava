@@ -33,7 +33,7 @@ public class SearchActionListener implements ActionListener{
 		String dept = Haksa.tf_num[2].getText();
 		String address = Haksa.tf_num[3].getText();
 		
-		String url = "jdbc:oracle:thin:@localhost:1521:orcl";
+		String url = "jdbc:oracle:thin:@localhost:1521:myoracle";
 		String uid = "ora_user";
 		String pass = "hong";
 		

@@ -20,7 +20,7 @@ public class MyActionListener implements ActionListener {
 		Statement stmt=null;
 		ResultSet rs = null;
 		//Áý¿¡¼± SID orcl
-		String url = "jdbc:oracle:thin:@localhost:1521:orcl";
+		String url = "jdbc:oracle:thin:@localhost:1521:myoracle";
 		String uid = "ora_user";
 		String pass = "hong";
 		

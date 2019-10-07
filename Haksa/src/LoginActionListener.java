@@ -12,7 +12,7 @@ public class LoginActionListener implements ActionListener{
 		Statement stmt=null;
 		ResultSet rs = null;
 		String cmd = e.getActionCommand();
-		String url = "jdbc:oracle:thin:@localhost:1521:orcl";
+		String url = "jdbc:oracle:thin:@localhost:1521:myoracle";
 		String uid = "ora_user";
 		String pass = "hong";
 		String id = Login.loginField.getText();
