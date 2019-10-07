@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class Login extends JFrame{
+	public static MainProcess main;
+	private static Haksa haksa;
 	public static JPanel back;
 	public static Login frame;
 	public static JTextField loginField;
@@ -74,6 +76,16 @@ public class Login extends JFrame{
 		back.add(pwdLabel);
 		back.add(pwdField);
 		back.add(signUp);
+		
+		
+//		this.setTitle("학사관리 로그인");
+//		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		this.setSize(1000, 600);
+//		Dimension frameSize = this.getSize();
+//		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//		this.setLocation((screenSize.width-frameSize.width)/2,(screenSize.height-frameSize.height)/2);
+//		this.setResizable(false);
+//		this.setVisible(true);
 
 		scrollPane = new JScrollPane(back);
 		setContentPane(scrollPane);
@@ -88,16 +100,19 @@ public class Login extends JFrame{
 		}
 		
 	}
+	public void setMain(MainProcess main) {
+		this.main = main;
+	}
 	public static void main(String[] args) {
-		frame = new Login();
-		frame.setTitle("학사관리 로그인");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(1000, 600);
-		Dimension frameSize = frame.getSize();
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setLocation((screenSize.width-frameSize.width)/2,(screenSize.height-frameSize.height)/2);
-		frame.setResizable(false);
-		frame.setVisible(true);
+//		frame = new Login();
+//		frame.setTitle("학사관리 로그인");
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.setSize(1000, 600);
+//		Dimension frameSize = frame.getSize();
+//		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//		frame.setLocation((screenSize.width-frameSize.width)/2,(screenSize.height-frameSize.height)/2);
+//		frame.setResizable(false);
+//		frame.setVisible(true);
 	}
 
 }

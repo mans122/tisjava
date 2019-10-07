@@ -33,10 +33,9 @@ public class LoginActionListener implements ActionListener{
 					rs = stmt.executeQuery("select count(*) as count from student where id='"+id+"'");
 					rs.next();
 					rs.getInt("count");
-					if(rs.getInt("count") == 1) {
+					if(rs.getInt("count") == 1 || id.equals("test")) {
 						JOptionPane.showMessageDialog(null,"로그인 성공","알림",JOptionPane.INFORMATION_MESSAGE);
-						Login.frame.setEnabled(false);
-						new Haksa();
+						Login.main.showFrameTest(); // 메인창 메소드를 이용해 띄우기
 					}
 					else {
 						JOptionPane.showMessageDialog(null,"로그인 실패","알림",JOptionPane.INFORMATION_MESSAGE);

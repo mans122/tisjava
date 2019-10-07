@@ -1,14 +1,29 @@
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
 @SuppressWarnings("serial")
 public class Haksa extends JFrame {
+	static DefaultTableModel model = null;
+	static JTable table=null;
+	
 	//학번~주소를 입력받을 TextField 4개 선언
 	public static JTextField[] tf_num = new JTextField[4];
 	//목록을 출력할 TextArea를 taList라는 이름으로 생성 후 크기 지정,
-	public static JTextArea taList=new JTextArea(16,29);
+	//public static JTextArea taList=new JTextArea(16,29);
 	public static JButton[] btnSearch = new JButton[4];
 	public Haksa() {
 		setTitle("학사관리");
@@ -42,10 +57,34 @@ public class Haksa extends JFrame {
 		c.add(tf_num[3]);
 		c.add(btnSearch[3]);
 		
-		
+		//text area대신 table
+		String colName[]={"학번","이름","학과"}; // 표에 출력할 칼럼명
+		model=new DefaultTableModel(colName,0); // 표의 데이터
+		table = new JTable(model); // 테이블에 모델(데이터) 바인딩
+		table.setPreferredScrollableViewportSize(new Dimension(320,280));//테이블 사이즈
+		c.add(new JScrollPane(table));
+
+		table.addMouseListener(new MouseListener() {
+			public void mouseClicked(MouseEvent e) {
+				table = (JTable)e.getComponent();
+				model=(DefaultTableModel)table.getModel();
+				//model.getValueAt의 값이 object라 String으로 변환해준다
+				String id = (String)model.getValueAt(table.getSelectedRow(), 0); //선택한 값의 id를 구한것
+				String name = (String)model.getValueAt(table.getSelectedRow(), 1);
+				String dept = (String)model.getValueAt(table.getSelectedRow(), 2);
+				
+				tf_num[0].setText(id);
+				tf_num[1].setText(name);
+				tf_num[2].setText(dept);
+			}
+			public void mouseReleased(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {}
+			public void mouseEntered(MouseEvent e) {}
+		});
 		//택스트필드를 스크롤패널에 넣어 sp를 만든 후 컨테이너에 등록
-		JScrollPane sp = new JScrollPane(taList);
-		c.add(sp);
+		//JScrollPane sp = new JScrollPane(taList);
+		//c.add(sp);
 		
 		//버튼생성
 		JButton btnInsert = new JButton("등록");
@@ -87,7 +126,7 @@ public class Haksa extends JFrame {
 			}
 		});
 		//텍스트필드 수정못하게 설정
-		taList.setEditable(false);
+		//taList.setEditable(false);
 		setSize(350,480);
 		Dimension frameSize = this.getSize();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -95,7 +134,9 @@ public class Haksa extends JFrame {
 		setVisible(true);
 		setResizable(false);
 	}
+	
+	
 	public static void main(String[] args) {
-		new Haksa();
+		//new Haksa();
 	}
 }
