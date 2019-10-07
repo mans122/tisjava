@@ -78,9 +78,12 @@ public class Haksa extends JFrame {
 		c.add(btnDelete);
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
+				try {
 				setVisible(false);
 				dispose();
 				Login.frame.setEnabled(true);
+				Login.frame.setFocusable(true);}
+				catch(Exception we) {}
 			}
 		});
 		//텍스트필드 수정못하게 설정

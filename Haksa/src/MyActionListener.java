@@ -58,18 +58,32 @@ public class MyActionListener implements ActionListener {
 						stmt=conn.createStatement();
 						//입력받은 값 삽입하는 코드 sql문법에 맞춰 변수를 적절히 섞어준다.
 						stmt.executeQuery("insert into student values('"+id+"','"+name+"','"+dept+"','"+address+"')");
-
+						JOptionPane.showMessageDialog(null,"등록되었습니다.","알림",JOptionPane.INFORMATION_MESSAGE);
+						rs = stmt.executeQuery("select * from student order by id");
+						SearchActionListener.tableShow(rs);
+						//등록이 완료된 텍스트필드를 비워주기위한 코드
+						for(int i=0;i<4;i++) {
+							Haksa.tf_num[i].setText("");
+						}
+						rs.close();
 						conn.close();
 					}
+					//SQL에서 에러가 발생하면 알림창 생성
 					catch(SQLException sqlE) {
 						JOptionPane.showMessageDialog(null,"이미 존재하는 학번입니다.","경고",JOptionPane.WARNING_MESSAGE);
 					}
 					catch(Exception inputE) {
 						inputE.printStackTrace();
 					}
-					//등록이 완료된 텍스트필드를 비워주기위한 코드
-					for(int i=0;i<4;i++) {
-						Haksa.tf_num[i].setText("");
+					//권장되는 코드
+					finally {
+							try{
+								if(stmt!=null) {stmt.close();}
+								if(rs!=null) {	rs.close();}
+								if(conn!=null) {conn.close();}
+							}catch(Exception ee) {
+								ee.printStackTrace();
+							}
 					}
 				}
 				//id가 길이가 7자,정수형이 아닐때 정수형이 아니면 출력
@@ -88,16 +102,16 @@ public class MyActionListener implements ActionListener {
 //--------------------------------------------------------------			
 		case "목록":
 			try {
-				//목록을 누를때마다 새로 입력하기위해 setText에 아무값도 입력하지않고 초기화함
-				Haksa.taList.setText("");
-				Haksa.taList.append("============================================\n");
-				Haksa.taList.append("  학번	이름	학과	주소\n");
-				Haksa.taList.append("============================================\n");
-
 				Class.forName("oracle.jdbc.driver.OracleDriver");
 				conn=DriverManager.getConnection(url,uid,pass);
 				stmt=conn.createStatement();
 				rs = stmt.executeQuery("select * from student order by id");
+				
+				//목록을 누를때마다 새로 입력하기위해 setText에 아무값도 입력하지않고 초기화함
+				Haksa.taList.setText("");
+				Haksa.taList.append("============================================\n");
+				Haksa.taList.append("     학번	  이름	    학과	  주소\n");
+				Haksa.taList.append("============================================\n");
 				
 				while(rs.next()) {
 					//DB에서 값을 받아와서 taList에 추가해줌, 구분을위해 공백도 따로 입력해줌
@@ -122,20 +136,42 @@ public class MyActionListener implements ActionListener {
 				Class.forName("oracle.jdbc.driver.OracleDriver");
 				conn=DriverManager.getConnection(url,uid,pass);
 				stmt=conn.createStatement();
-				//id의 길이가 0이 아닐때 길이가 0이 아닌것들을 update해줌
+				//학번의 길이가 0이 아닐경우
 				if(id.length()!=0) {
-					if(name.length()!=0) {
-						stmt.executeQuery("update student set name='"+name+"' where id = '"+id+"'");	}
-					if(dept.length()!=0) {
-						stmt.executeQuery("update student set dept='"+dept+"' where id = '"+id+"'");	}
-					if(address.length()!=0) {
-						stmt.executeQuery("update student set address='"+address+"' where id = '"+id+"'");	}
-					JOptionPane.showMessageDialog(null,"수정이 완료되었습니다.","알림",JOptionPane.INFORMATION_MESSAGE);
+					//해당학번으로 조회를해서 rowcount에 조회된 행 수를 조회
+					rs = stmt.executeQuery("select * from student where id = '"+id+"'");
+					rs.next();
+					//int rowcount = rs.getRow();
+					
+					//해당학번이 존재하면 검색결과가 1줄 출력되고 getRow()에 의해 rowcount에 1 이들어감
+					if(rs.getRow() == 1) {
+						//이름,학과,주소를 적었으면 수정
+						if(name.length()!=0) {
+							stmt.executeQuery("update student set name='"+name+"' where id = '"+id+"'");	}
+						if(dept.length()!=0) {
+							stmt.executeQuery("update student set dept='"+dept+"' where id = '"+id+"'");	}
+						if(address.length()!=0) {
+							stmt.executeQuery("update student set address='"+address+"' where id = '"+id+"'");	}
+						JOptionPane.showMessageDialog(null,"수정이 완료되었습니다.","알림",JOptionPane.INFORMATION_MESSAGE);
+						for(int i=0;i<4;i++) {
+							Haksa.tf_num[i].setText("");
+						}
+						rs = stmt.executeQuery("select * from student where id ='"+id+"'");
+						SearchActionListener.tableShow(rs);
+					}
+					//rowcount 가 0이면 조회되는 학번이 없다는말임
+					else {
+						JOptionPane.showMessageDialog(null,"해당 학번이 존재하지 않습니다.","알림",JOptionPane.INFORMATION_MESSAGE);
+						break;
+					}
+				//수정버튼을 눌렀을때 학번에 아무것도 안써있으면 경고출력
 				}else {
 					JOptionPane.showMessageDialog(null,"수정할 학번을 입력해주세요","경고",JOptionPane.WARNING_MESSAGE);
 					break;
 				}
+				rs.close();
 				conn.close();
+				break;
 			}
 			catch(Exception inputE) {
 				inputE.printStackTrace();
@@ -146,6 +182,7 @@ public class MyActionListener implements ActionListener {
 			break;
 //--------------------------------------------------------------			
 		case "삭제":
+			
 			if(JOptionPane.showConfirmDialog(null, "정말삭제하시겠습니까?", "삭제", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
 				if(id.length()!=0) {
 					try {
@@ -153,7 +190,12 @@ public class MyActionListener implements ActionListener {
 						conn=DriverManager.getConnection(url,uid,pass);
 						stmt=conn.createStatement();
 						stmt.executeQuery("delete from student where id = '"+id+"'");
-
+						rs = stmt.executeQuery("select * from student order by id");
+						SearchActionListener.tableShow(rs);
+						for(int i=0;i<4;i++) {
+							Haksa.tf_num[i].setText("");
+						}
+						rs.close();
 						conn.close();
 					}
 					catch(Exception deleteE) {
@@ -163,9 +205,18 @@ public class MyActionListener implements ActionListener {
 				else {
 					JOptionPane.showMessageDialog(null,"삭제할 학번을 입력해주세요","경고",JOptionPane.WARNING_MESSAGE);
 				}
+//				try {
+//				rs = stmt.executeQuery("select * from student where id ='"+id+"'");
+//				SearchActionListener.tableShow(rs);
+//				}
+//				catch(Exception aa) {
+//					aa.printStackTrace();
+//				}
 			}
+			
 			break;
 		}
 	}
 }
+
 

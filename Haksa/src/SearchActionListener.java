@@ -5,7 +5,8 @@ import java.sql.*;
 import javax.swing.JOptionPane;
 
 public class SearchActionListener implements ActionListener{
-	void tableShow(ResultSet ws) {
+	//검색한 결과를 rs에 넣어준 후, 그 결과값을 ws로 받아서 결과값을 talist에 출력해주는 메서드
+	static void tableShow(ResultSet ws) {
 		try {
 			Haksa.taList.setText("");
 			Haksa.taList.append("============================================\n");
@@ -32,11 +33,11 @@ public class SearchActionListener implements ActionListener{
 		String name = Haksa.tf_num[1].getText();
 		String dept = Haksa.tf_num[2].getText();
 		String address = Haksa.tf_num[3].getText();
-		
+
 		String url = "jdbc:oracle:thin:@localhost:1521:myoracle";
 		String uid = "ora_user";
 		String pass = "hong";
-		
+
 		Connection conn=null;
 		ResultSet rs = null;
 		Statement stmt=null;
@@ -69,7 +70,14 @@ public class SearchActionListener implements ActionListener{
 				else {
 					rs = stmt.executeQuery("select * from student where id ='"+id+"'");
 					tableShow(rs);
-					Haksa.tf_num[0].setText("");
+					//textarea에 보여주던가 텍스트필드 채워놓던가
+					rs = stmt.executeQuery("select * from student where id ='"+id+"'");
+					while(rs.next()) {
+						Haksa.tf_num[0].setText(rs.getString("id")); 
+						Haksa.tf_num[1].setText(rs.getString("name"));
+						Haksa.tf_num[2].setText(rs.getString("dept"));
+						Haksa.tf_num[3].setText(rs.getString("address"));
+					}
 				}
 			}
 			//이름으로 검색
