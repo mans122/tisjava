@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class Haksa extends JFrame {
@@ -44,43 +45,49 @@ public class Haksa extends JFrame {
 			aa.printStackTrace();
 		}
 		setTitle("학사관리");
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Container c = getContentPane();
-		c.setLayout(new FlowLayout(FlowLayout.LEFT,10,3));
+		c.setLayout(null);
 		
-		btnSearch[0] = new JButton("검색");
-		btnSearch[1] = new JButton("검색");
-		btnSearch[2] = new JButton("검색");
-		btnSearch[3] = new JButton("검색");
-		
-		btnSearch[0].setPreferredSize(new Dimension(60,22));
-		btnSearch[1].setPreferredSize(new Dimension(60,22));
-		btnSearch[2].setPreferredSize(new Dimension(60,22));
-		btnSearch[3].setPreferredSize(new Dimension(60,22));
-		//텍스트필드 생성 후 라벨,텍스트필드 패널에 등록
+		JLabel[] a = new JLabel[4];
+		a[0] = new JLabel("학번");
+		a[1] = new JLabel("이름");
+		a[2] = new JLabel("학과");
+		a[3] = new JLabel("주소");
+		//텍스트필드,검색버튼
 		for(int i=0;i<4;i++) {
-			tf_num[i] = new JTextField(19);
+			a[i].setSize(new Dimension(30,30));
+			a[i].setLocation(10, 10+(i*35));
+			c.add(a[i]);
+			
+			tf_num[i] = new JTextField();
+			tf_num[i].setLocation(45,12+(i*35));
+			tf_num[i].setSize(200, 25);
+			c.add(tf_num[i]);
+			
+			btnSearch[i] = new JButton("검색");
+			btnSearch[i].setSize(60, 25);
+			btnSearch[i].setLocation(250, 12+(i*35));
+			c.add(btnSearch[i]);
 			}
-		c.add(new JLabel("학번"));
-		c.add(tf_num[0]);
-		c.add(btnSearch[0]);
-		c.add(new JLabel("이름"));
-		c.add(tf_num[1]);
-		c.add(btnSearch[1]);
-		c.add(new JLabel("학과"));
-		c.add(tf_num[2]);
-		c.add(btnSearch[2]);
-		c.add(new JLabel("주소"));
-		c.add(tf_num[3]);
-		c.add(btnSearch[3]);
-		
+		//JTable 셀 내용 정렬
+		DefaultTableCellRenderer celAlignCenter = new DefaultTableCellRenderer();
+		celAlignCenter.setHorizontalAlignment(JLabel.CENTER);
+		DefaultTableCellRenderer celAlignRight = new DefaultTableCellRenderer();
+		celAlignRight.setHorizontalAlignment(JLabel.RIGHT);
 		//text area대신 table
 		String colName[]={"학번","이름","학과","주소"}; // 표에 출력할 칼럼명
 		model=new DefaultTableModel(colName,0); // 표의 데이터
 		table = new JTable(model); // 테이블에 모델(데이터) 바인딩
-		table.setPreferredScrollableViewportSize(new Dimension(320,280));//테이블 사이즈
-		c.add(new JScrollPane(table));
-
+		table.getColumnModel().getColumn(0).setPreferredWidth(70);
+		table.getColumnModel().getColumn(1).setPreferredWidth(70);
+		table.getColumnModel().getColumn(2).setPreferredWidth(70);
+		table.getColumnModel().getColumn(3).setPreferredWidth(200);
+		//table.setPreferredScrollableViewportSize(new Dimension(320,280));//테이블 사이즈
+		JScrollPane jp = new JScrollPane(table);
+		jp.setSize(new Dimension(510,370));
+		jp.setLocation(10, 160);
+		c.add(jp);
 		table.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent e) {
 				table = (JTable)e.getComponent();
@@ -110,6 +117,21 @@ public class Haksa extends JFrame {
 		JButton btnList = new JButton("목록");
 		JButton btnUpdate = new JButton("수정");
 		JButton btnDelete = new JButton("삭제");
+		//버튼들 크기조절
+		
+		btnInsert.setSize(80, 30);
+		btnInsert.setLocation(10, 535);
+		
+		btnList.setSize(80, 30);
+		btnList.setLocation(110, 535);
+		
+		btnUpdate.setSize(80, 30);
+		btnUpdate.setLocation(210, 535);
+		
+		btnDelete.setSize(80, 30);
+		btnDelete.setLocation(310, 535);
+		
+		
 		MyActionListener ma = new MyActionListener();//리스너 생성
 		SearchActionListener sa = new SearchActionListener();
 		//버튼을 리스너에 등록
@@ -122,13 +144,6 @@ public class Haksa extends JFrame {
 		btnUpdate.addActionListener(ma);
 		btnDelete.addActionListener(ma);
 		
-		
-		//버튼들 크기조절
-		btnInsert.setPreferredSize(new Dimension(73,30));
-		btnList.setPreferredSize(new Dimension(73,30));
-		btnUpdate.setPreferredSize(new Dimension(73,30));
-		btnDelete.setPreferredSize(new Dimension(73,30));
-		
 		//버튼을 패널에 등록
 		c.add(btnInsert);
 		c.add(btnList);
@@ -138,6 +153,7 @@ public class Haksa extends JFrame {
 			public void windowClosing(WindowEvent e) {
 				try {
 					conn.close();
+					stmt.close();
 					//JOptionPane.showMessageDialog(null,"로그인 화면으로 돌아갑니다.","알림",JOptionPane.INFORMATION_MESSAGE);
 					//main.showFrameLogin(); // 메인창 메소드를 이용해 띄우기
 				}
@@ -146,7 +162,7 @@ public class Haksa extends JFrame {
 				}
 			}
 		});
-		setSize(1000,600);
+		setSize(535,600);
 		Dimension frameSize = this.getSize();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation((screenSize.width-frameSize.width)/2,(screenSize.height-frameSize.height)/2);
@@ -157,5 +173,6 @@ public class Haksa extends JFrame {
 		this.main = main;
 	}
 	public static void main(String[] args) {
+		new Haksa();
 	}
 }

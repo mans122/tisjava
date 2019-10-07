@@ -5,8 +5,6 @@ import javax.swing.JOptionPane;
 public class MyActionListener implements ActionListener {
 	public static void list(){
 		try{
-			System.out.println("연결되었습니다.....");
-			
 			// Select문 실행
 			ResultSet rs=Haksa.stmt.executeQuery("select * from student");
 
@@ -66,9 +64,8 @@ public class MyActionListener implements ActionListener {
 			if (value != 1){ // id,name,dept 값이 비어있지 않을 경우
 				if(id.length()==7 && isNumber == true ) { // id의 값이 길이가 7이고,Int형일 경우
 					try {
-						Haksa.stmt.executeQuery("insert into student values('"+id+"','"+name+"','"+dept+"','"+address+"')");
+						Haksa.stmt.executeUpdate("insert into student values('"+id+"','"+name+"','"+dept+"','"+address+"')");
 						JOptionPane.showMessageDialog(null,"등록되었습니다.","알림",JOptionPane.INFORMATION_MESSAGE);
-						ResultSet ws=Haksa.stmt.executeQuery("select * from student");
 						list();
 						//등록이 완료된 텍스트필드를 비워주기위한 코드
 						for(int i=0;i<4;i++) {
@@ -78,6 +75,7 @@ public class MyActionListener implements ActionListener {
 					//SQL에서 에러가 발생하면 알림창 생성
 					catch(SQLException sqlE) {
 						JOptionPane.showMessageDialog(null,"이미 존재하는 학번입니다.","경고",JOptionPane.WARNING_MESSAGE);
+						sqlE.printStackTrace();
 					}
 					catch(Exception inputE) {
 						inputE.printStackTrace();
@@ -85,7 +83,7 @@ public class MyActionListener implements ActionListener {
 					//권장되는 코드
 					finally {
 						try{
-							if(Haksa.stmt!=null) {Haksa.stmt.close();}
+							//if(Haksa.stmt!=null) {Haksa.stmt.close();}
 							if(Haksa.rs!=null) {	Haksa.rs.close();}
 						}catch(Exception ee) {
 							ee.printStackTrace();
@@ -94,16 +92,14 @@ public class MyActionListener implements ActionListener {
 				}
 				//id가 길이가 7자,정수형이 아닐때 정수형이 아니면 출력
 				else if(isNumber == false) {
-					JOptionPane.showMessageDialog(null,"ID는 숫자만 입력해주세요","경고",JOptionPane.WARNING_MESSAGE);
-				}
+					JOptionPane.showMessageDialog(null,"ID는 숫자만 입력해주세요","경고",JOptionPane.WARNING_MESSAGE);}
 				//id가 정수형이지만, 7자리가 아닐경우
 				else {
-					JOptionPane.showMessageDialog(null,"ID는 7자리로 입력해주세요","경고",JOptionPane.WARNING_MESSAGE);
-				}
+					JOptionPane.showMessageDialog(null,"ID는 7자리로 입력해주세요","경고",JOptionPane.WARNING_MESSAGE);}
 			}
 			else {//비었으면 메시지 출력
-				JOptionPane.showMessageDialog(null,"값이 입력되지 않았습니다.","경고",JOptionPane.WARNING_MESSAGE);
-			}
+				JOptionPane.showMessageDialog(null,"값이 입력되지 않았습니다.","경고",JOptionPane.WARNING_MESSAGE);}
+			
 			break;
 			//--------------------------------------------------------------			
 		case "목록":

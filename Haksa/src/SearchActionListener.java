@@ -21,10 +21,11 @@ public class SearchActionListener implements ActionListener{
 			//JTable 초기화
 			Haksa.model.setNumRows(0);
 			while(ws.next()){
-				String[] row=new String[3];//컬럼의 갯수가 3
+				String[] row=new String[4];//컬럼의 갯수가 3
 				row[0]=ws.getString("id");
 				row[1]=ws.getString("name");
 				row[2]=ws.getString("dept");
+				row[3]=ws.getString("address");
 				Haksa.model.addRow(row);
 			}
 			ws.close();
