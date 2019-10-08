@@ -4,7 +4,7 @@ import java.sql.*;
 
 import javax.swing.JOptionPane;
 
-public class SearchActionListener implements ActionListener{
+public class StudentSearchActionListener implements ActionListener{
 	static Connection conn=null;
 	static Statement stmt=null;
 	static String url = "jdbc:oracle:thin:@localhost:1521:myoracle";
@@ -43,7 +43,7 @@ public class SearchActionListener implements ActionListener{
 		boolean isNumber = false;
 		if(id.length()!=0)
 		{
-			if (MyActionListener.isStringInt(id))
+			if (StudentActionListener.isStringInt(id))
 				isNumber=true;
 			else
 				isNumber=false;

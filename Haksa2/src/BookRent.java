@@ -12,7 +12,6 @@ import javax.swing.table.DefaultTableModel;
 
 public class BookRent extends JPanel{
 	ArrayList<String> deptName = new ArrayList<>();
-	Connection conn;//연결객체
 	Statement stmt;
 	DefaultTableModel model;
 	JTable table;
@@ -25,16 +24,8 @@ public class BookRent extends JPanel{
 				+" and br.bookNo=b.no"; 
 		// DB연결
 		ResultSet rs = null;    // select한 결과를 저장하는 객체
-
 		try{
-			//Class.forName("oracle.jdbc.driver.OracleDriver");// jdbc driver load
-//			Class.forName("com.mysql.jdbc.Driver");
-			//conn = DriverManager.getConnection(Haksa.url,Haksa.uid,Haksa.pass);// 연결
-			conn = Haksa.conn;
-			stmt=conn.createStatement();
-			
-			
-			rs = stmt.executeQuery("select DISTINCT dept from student");
+			rs = DBManager.stmt.executeQuery("select DISTINCT dept from student");
 			int i=1;
 			deptName.add(0,"전체");
 			while(rs.next()) {
@@ -47,22 +38,17 @@ public class BookRent extends JPanel{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
-		
-
 		setLayout(null);//레이아웃설정. 레이아웃 사용 안함.
 
 		JLabel l_dept=new JLabel("학과");
 		l_dept.setBounds(10, 10, 30, 20);
 		add(l_dept);
 		
-		//String[] dept = new String[deptNum];
 		String[] dept = new String[deptNum];
 		dept[0]=deptName.get(0);
 		for(int i=1;i<deptNum;i++) 
-			dept[i]=deptName.get(i);
+			{dept[i]=deptName.get(i);}
 		
-		//String[] dept={"전체","컴퓨터시스템","멀티미디어","컴퓨터공학"};
 		JComboBox cb_dept=new JComboBox(dept);
 		cb_dept.setBounds(45, 10, 100, 20);
 		
@@ -85,19 +71,6 @@ public class BookRent extends JPanel{
 					System.out.println(query);
 					bookList();
 				}
-				/*else if(deptIndex==1){ // 컴퓨터시스템     
-					query += " and s.dept='컴퓨터시스템' ";
-					query += " order by br.no";
-					bookList();
-				}else if(deptIndex==2){ // 멀티미디어
-					query += " and s.dept='멀티미디어' ";
-					query += " order by br.no";
-					bookList();
-				}else if(deptIndex==3){ // 컴퓨터공학
-					query += " and s.dept='컴퓨터공학' ";
-					query += " order by br.no";
-					bookList();
-				}*/
 			}});
 		
 		String colName[]={"학번","이름","도서명","대출일"};
@@ -109,8 +82,6 @@ public class BookRent extends JPanel{
 		sp.setBounds(10, 40, 470, 300);
 		add(sp); 
 
-		//종료이벤트 처리.윈도우가 종료될 때 DB연결을 close함.
-
 		//setResizable(false);//화면크기고정
 		setSize(500,400);
 		setVisible(true);
@@ -120,7 +91,7 @@ public class BookRent extends JPanel{
 	public void bookList(){
 		try{
 			// Select문 실행     
-			ResultSet rs=stmt.executeQuery(query);
+			ResultSet rs= DBManager.stmt.executeQuery(query);
 			model.setNumRows(0);
 			
 			while(rs.next()){
@@ -141,6 +112,6 @@ public class BookRent extends JPanel{
 	}
 
 	public static void main(String[] args) {
-		//new BookRent();
+		new BookRent();
 	}
 }

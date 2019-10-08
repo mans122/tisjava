@@ -7,13 +7,6 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 public class Student extends JPanel {
-	public static Connection conn=null;
-	public static Statement stmt=null;
-	public static ResultSet rs = null;
-	String url = "jdbc:oracle:thin:@localhost:1521:myoracle";
-	String uid = "ora_user";
-	String pass = "hong";
-	
 	static DefaultTableModel model = null;
 	static JTable table=null;
 	
@@ -100,8 +93,8 @@ public class Student extends JPanel {
 		btnLogout.setSize(100,30);
 		btnLogout.setLocation(370, 400);
 		
-		MyActionListener ma = new MyActionListener();//리스너 생성
-		SearchActionListener sa = new SearchActionListener();
+		StudentActionListener ma = new StudentActionListener();//리스너 생성
+		StudentSearchActionListener sa = new StudentSearchActionListener();
 		//버튼을 리스너에 등록
 		btnSearch[0].addActionListener(sa);
 		btnSearch[1].addActionListener(sa);

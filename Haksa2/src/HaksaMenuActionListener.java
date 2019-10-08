@@ -13,7 +13,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-	public class MenuActionListener implements ActionListener{
+	public class HaksaMenuActionListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String cmd = e.getActionCommand();
@@ -35,9 +35,16 @@ import javax.swing.JMenuItem;
 				Haksa.panel.add(new BookRent());
 				Haksa.panel.setLayout(null);
 				break;
+			case "대출현황":
+				Haksa.panel.removeAll();
+				Haksa.panel.revalidate();
+				Haksa.panel.repaint();
+				Haksa.panel.add(new BookGraph());
+				Haksa.panel.setLayout(null);
+				//Haksa.panel.setLayout(new BorderLayout());
+				break;
 			}
 		}
-		
 	public static void main(String[] args) {
 	}
 
