@@ -14,6 +14,9 @@ import java.sql.Statement;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -85,7 +88,7 @@ public class Haksa extends JFrame {
 		table.getColumnModel().getColumn(3).setPreferredWidth(200);
 		//table.setPreferredScrollableViewportSize(new Dimension(320,280));//테이블 사이즈
 		JScrollPane jp = new JScrollPane(table);
-		jp.setSize(new Dimension(510,370));
+		jp.setSize(new Dimension(510,330));
 		jp.setLocation(10, 160);
 		c.add(jp);
 		table.addMouseListener(new MouseListener() {
@@ -117,20 +120,19 @@ public class Haksa extends JFrame {
 		JButton btnList = new JButton("목록");
 		JButton btnUpdate = new JButton("수정");
 		JButton btnDelete = new JButton("삭제");
+		JButton btnLogout = new JButton("로그아웃");
 		//버튼들 크기조절
 		
 		btnInsert.setSize(80, 30);
-		btnInsert.setLocation(10, 535);
-		
+		btnInsert.setLocation(10, 500);
 		btnList.setSize(80, 30);
-		btnList.setLocation(110, 535);
-		
+		btnList.setLocation(110, 500);
 		btnUpdate.setSize(80, 30);
-		btnUpdate.setLocation(210, 535);
-		
+		btnUpdate.setLocation(210, 500);
 		btnDelete.setSize(80, 30);
-		btnDelete.setLocation(310, 535);
-		
+		btnDelete.setLocation(310, 500);
+		btnLogout.setSize(110,30);
+		btnLogout.setLocation(410, 500);
 		
 		MyActionListener ma = new MyActionListener();//리스너 생성
 		SearchActionListener sa = new SearchActionListener();
@@ -143,12 +145,14 @@ public class Haksa extends JFrame {
 		btnList.addActionListener(ma);
 		btnUpdate.addActionListener(ma);
 		btnDelete.addActionListener(ma);
+		btnLogout.addActionListener(ma);
 		
 		//버튼을 패널에 등록
 		c.add(btnInsert);
 		c.add(btnList);
 		c.add(btnUpdate);
 		c.add(btnDelete);
+		c.add(btnLogout);
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				try {
@@ -162,12 +166,35 @@ public class Haksa extends JFrame {
 				}
 			}
 		});
+		createMenu();
 		setSize(535,600);
 		Dimension frameSize = this.getSize();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation((screenSize.width-frameSize.width)/2,(screenSize.height-frameSize.height)/2);
 		setVisible(true);
 		setResizable(false);
+	}
+	void createMenu() {
+		JMenuBar mb = new JMenuBar();
+		
+		JMenu Menu1 = new JMenu("학생관리");
+		JMenu Menu2 = new JMenu("도서관리");
+		JMenuItem itemLoad = new JMenuItem("학생정보");
+		JMenuItem itemExit = new JMenuItem("Exit");
+		JMenuItem item2 = new JMenuItem("대출목록");
+		Menu1.add(itemLoad);
+		Menu1.addSeparator();
+		Menu1.add(itemExit);
+		Menu2.add(item2);
+		mb.add(Menu1);
+		mb.add(Menu2);
+		MenuActionListener listener = new MenuActionListener();
+		
+		itemLoad.addActionListener(listener);
+		itemExit.addActionListener(listener);
+		item2.addActionListener(listener);
+		
+		setJMenuBar(mb);
 	}
 	public void setMain(MainProcess main) {
 		this.main = main;

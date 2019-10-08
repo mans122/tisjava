@@ -25,10 +25,9 @@ public class BookRent extends JFrame{
 				+" and br.bookNo=b.no"; 
 		// DB연결
 		ResultSet rs = null;    // select한 결과를 저장하는 객체
-		String url = null;      // 서버 url
+		String url = "jdbc:oracle:thin:@localhost:1521:myoracle";      // 서버 url
 		String uid = "ora_user";       // ID
 		String pw = "hong";     // PW         
-		url ="jdbc:oracle:thin:@localhost:1521:myoracle";
 		try{
 			Class.forName("oracle.jdbc.driver.OracleDriver");// jdbc driver load
 			conn = DriverManager.getConnection(url,uid,pw);// 연결  
@@ -67,23 +66,24 @@ public class BookRent extends JFrame{
 		//String[] dept={"전체","컴퓨터시스템","멀티미디어","컴퓨터공학"};
 		JComboBox cb_dept=new JComboBox(dept);
 		cb_dept.setBounds(45, 10, 100, 20);
+		
 		add(cb_dept);
 		cb_dept.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				JComboBox cb=(JComboBox)e.getSource();     
 				int deptIndex=cb.getSelectedIndex();
-				
+				//동적쿼리를 만들기 위한 기본적인 틀
 				query="select s.id, s.name, b.title, br.rDate"
 						+" from student s, books b, bookRent br"
 						+" where br.id=s.id"
 						+" and br.bookNo=b.no";
-
 				if(deptIndex==0){ // 전체
 					query += " order by br.no";
+					System.out.println(query);
 					bookList();
-				}else {
-					query += " and s.dept='"+dept[deptIndex]+"' ";
-					query += " order by br.no";
+				}else { //Index 에 맞는 dept이름으로 필터링
+					query += " and s.dept='"+dept[deptIndex]+"' order by br.no";
+					System.out.println(query);
 					bookList();
 				}
 				/*else if(deptIndex==1){ // 컴퓨터시스템     
@@ -100,18 +100,16 @@ public class BookRent extends JFrame{
 					bookList();
 				}*/
 			}});
-
+		
 		String colName[]={"학번","이름","도서명","대출일"};
 		model=new DefaultTableModel(colName,0);
 		table = new JTable(model);
-		table.setPreferredScrollableViewportSize(new Dimension(470,200));
+		table.setPreferredScrollableViewportSize(new Dimension(480,200));
 		add(table);
 		JScrollPane sp=new JScrollPane(table);
-		sp.setBounds(10, 40, 460, 250);
+		sp.setBounds(10, 40, 470, 300);
 		setResizable(false);
 		add(sp); 
-
-
 
 		//종료이벤트 처리.윈도우가 종료될 때 DB연결을 close함.
 		addWindowListener(new WindowAdapter(){
@@ -127,7 +125,7 @@ public class BookRent extends JFrame{
 		});
 
 		//setResizable(false);//화면크기고정
-		setSize(490, 400);//화면크기
+		setSize(500, 400);//화면크기
 		setVisible(true);
 		bookList();
 	}
@@ -137,7 +135,7 @@ public class BookRent extends JFrame{
 			// Select문 실행     
 			ResultSet rs=stmt.executeQuery(query);
 			model.setNumRows(0);
-
+			
 			while(rs.next()){
 				String[] row=new String[4];//컬럼의 갯수가 4
 				row[0]=rs.getString("id");
@@ -155,9 +153,7 @@ public class BookRent extends JFrame{
 		}
 	}
 
-
 	public static void main(String[] args) {
 		new BookRent();
-
 	}
 }

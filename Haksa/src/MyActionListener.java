@@ -110,7 +110,7 @@ public class MyActionListener implements ActionListener {
 			try {
 				if(id.length()!=0) {
 					//해당학번으로 조회를해서 rowcount에 조회된 행 수를 조회
-					ResultSet ws = Haksa.stmt.executeQuery("select * from student where id = '"+id+"'");
+					//ResultSet ws = Haksa.stmt.executeQuery("select * from student where id = '"+id+"'");
 					Haksa.rs = Haksa.stmt.executeQuery("select * from student where id = '"+id+"'");
 					Haksa.rs.next();
 
@@ -118,11 +118,11 @@ public class MyActionListener implements ActionListener {
 					if(Haksa.rs.getRow() == 1) {
 						//이름,학과,주소를 적었으면 수정
 						if(name.length()!=0) {
-							Haksa.stmt.executeQuery("update student set name='"+name+"' where id = '"+id+"'");	}
+							Haksa.stmt.executeUpdate("update student set name='"+name+"' where id = '"+id+"'");	}
 						if(dept.length()!=0) {
-							Haksa.stmt.executeQuery("update student set dept='"+dept+"' where id = '"+id+"'");	}
+							Haksa.stmt.executeUpdate("update student set dept='"+dept+"' where id = '"+id+"'");	}
 						if(address.length()!=0) {
-							Haksa.stmt.executeQuery("update student set address='"+address+"' where id = '"+id+"'");	}
+							Haksa.stmt.executeUpdate("update student set address='"+address+"' where id = '"+id+"'");	}
 						JOptionPane.showMessageDialog(null,"수정이 완료되었습니다.","알림",JOptionPane.INFORMATION_MESSAGE);
 						for(int i=0;i<4;i++) {
 							Haksa.tf_num[i].setText("");
@@ -153,7 +153,7 @@ public class MyActionListener implements ActionListener {
 			if(JOptionPane.showConfirmDialog(null, "정말삭제하시겠습니까?", "삭제", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
 				if(id.length()!=0) {
 					try {
-						Haksa.stmt.executeQuery("delete from student where id = '"+id+"'");
+						Haksa.stmt.executeUpdate("delete from student where id = '"+id+"'");
 						list();
 						for(int i=0;i<4;i++) {
 							Haksa.tf_num[i].setText("");

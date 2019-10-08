@@ -15,7 +15,7 @@ public class Login extends JFrame{
 	public static JPanel back;
 	public static Login frame;
 	public static JTextField loginField;
-	public static JTextField pwdField;
+	public static JPasswordField pwdField;
 	public static JScrollPane scrollPane;
 	ImageIcon icon;
 	public Login() {
@@ -52,7 +52,8 @@ public class Login extends JFrame{
 		pwdLabel.setLocation(350, 230);
 		pwdLabel.setSize(pwdLabel.getPreferredSize().getSize());
 		
-		pwdField = new JTextField();
+		pwdField = new JPasswordField();
+		pwdField.setEchoChar('*');
 		pwdField.setLocation(350,265);
 		pwdField.setSize(200,30);
 		
