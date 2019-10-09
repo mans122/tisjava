@@ -12,7 +12,6 @@ import javax.swing.table.DefaultTableModel;
 
 public class BookRent extends JPanel{
 	ArrayList<String> deptName = new ArrayList<>();
-	Statement stmt;
 	DefaultTableModel model;
 	JTable table;
 	String query;
@@ -30,16 +29,15 @@ public class BookRent extends JPanel{
 			deptName.add(0,"전체");
 			while(rs.next()) {
 				deptName.add(i,rs.getString("dept"));
-				System.out.println(deptName.get(i));
 				i++;
 			}
 			deptNum = deptName.size();
-			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		setLayout(null);//레이아웃설정. 레이아웃 사용 안함.
 
+		// 학과별 필터링 콤보박스
 		JLabel l_dept=new JLabel("학과");
 		l_dept.setBounds(10, 10, 30, 20);
 		add(l_dept);
@@ -64,11 +62,9 @@ public class BookRent extends JPanel{
 						+" and br.bookNo=b.no";
 				if(deptIndex==0){ // 전체
 					query += " order by br.no";
-					System.out.println(query);
 					bookList();
 				}else { //Index 에 맞는 dept이름으로 필터링
 					query += " and s.dept='"+dept[deptIndex]+"' order by br.no";
-					System.out.println(query);
 					bookList();
 				}
 			}});
@@ -79,11 +75,11 @@ public class BookRent extends JPanel{
 		table.setPreferredScrollableViewportSize(new Dimension(480,200));
 		add(table);
 		JScrollPane sp=new JScrollPane(table);
-		sp.setBounds(10, 40, 470, 300);
+		sp.setBounds(10, 40, 470, 390);
 		add(sp); 
 
 		//setResizable(false);//화면크기고정
-		setSize(500,400);
+		setSize(500,500);
 		setVisible(true);
 		bookList();
 	}
@@ -103,7 +99,6 @@ public class BookRent extends JPanel{
 				model.addRow(row);
 			}
 			rs.close();
-
 		}
 		catch(Exception e1){
 			//e.getStackTrace();
@@ -112,6 +107,6 @@ public class BookRent extends JPanel{
 	}
 
 	public static void main(String[] args) {
-		new BookRent();
+		//new BookRent();
 	}
 }

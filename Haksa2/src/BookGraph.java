@@ -1,107 +1,197 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import javax.swing.*;
+//360에 모자른 값을 채워줘야함
 public class BookGraph extends JPanel {
+	static ArrayList<String> deptName = new ArrayList<>();
+	static ArrayList<Integer> deptCount = new ArrayList<>();
+	static int sum=0;
+
+	static ArrayList<String> studentId = new ArrayList<>();
+	static ArrayList<String> studentName = new ArrayList<>();
+	static ArrayList<Integer> studentCount = new ArrayList<>();
+	static int sum2=0;
+
+	static ArrayList<String> bookName = new ArrayList<>();
+	static ArrayList<Integer> bookCount = new ArrayList<>();
+	static int sum3=0;
+	
+	static ArrayList<String> date = new ArrayList<>();
+	static ArrayList<Integer> dateCount = new ArrayList<>();
+	static int sum4=0;
+	static Color[] deptColor;
+	static Color[] studentColor;
+	static Color[] bookColor;
+	ResultSet rs = null;
+	JRadioButton  deptRb = new JRadioButton("학과별");
+	JRadioButton  studentRb = new JRadioButton("학생별");
+	JRadioButton  bookRb = new JRadioButton("도서별");
+	JRadioButton  dateRb = new JRadioButton("월별");
 	CenterPanel cp = new CenterPanel(); // CenterPanel클래스로 만든 메인프레임 가운데 붙일 패널 cp생성
 	NorthPanel np= new NorthPanel();	//NotrhPanel클래스로 만든 위에붙일 패널 np 생성
-	static JLabel[] bk = new JLabel[4];//분기를 표시해줄 JLabel bk 4개 배열로 생성
-	static JTextField[] tf_num = new JTextField[4];//분기별 값을 입력받을 JTextField tf_num을 배열로 4개 생성
-	static Integer[] bk_num = new Integer[4]; //tf_num에 들어온 값을 정수형으로 변환해서 받을 정수형변수 bk_nume 을 배열로 4개생성
-	static int sum =0;//들어온 분기값들의 합을 구해줄 sum 선언
-	static int[] bkp = {0,0,0,0};//파이차트에서 분기별 각도를 구하기위해 bkp에 분기별 퍼센트를구해 각도를 저장함
-	static int gap = 0;//360도에서 모자란 만큼 4/4분기에 더해주기 위해 값을 따로 구함 
-
+	String query;
 	public BookGraph() {
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 프레임의 x버튼을 활성화하여 닫기버튼이 실행가능해짐
-		//JPanel p1 = new JPanel(new BorderLayout());
-		//p1.setLayout(new BorderLayout()); //메인에 올라간 p1판넬의 레이아웃을 BorderLayout으로 지정
+		DBManager db = new DBManager();
+		db.Connection();
+		try{
+			//학과별로 분류하기위한 내용
+			rs = DBManager.stmt.executeQuery("select dept, count(*) as count" 
+					+" from (select s.dept, br.rdate"
+					+" from student s, books b, bookRent br"
+					+" where br.id=s.id"
+					+" and br.bookNo=b.no)"
+					+" group by dept ");
+			int i=0;
+			//학과별로 BookRent 테이블에서 검색해서 나오는 학과,학과별 총합을 구해줌
+			while(rs.next()) {
+				deptName.add(i,rs.getString("dept"));
+				deptCount.add(i,rs.getInt("count"));
+				sum+=deptCount.get(i);
+				i++;
+			}
+			//학생별 값 구해서 넣어주는코드,대여하는 학생이 수백 수천일수도 있으므로 상위 5명만 구해준다.
+			rs = DBManager.stmt.executeQuery("select id,name, count(*) count"
+					+" from(select br.id id,name,b.no no,b.title title, br.rdate from student s, books b, bookRent br where br.id=s.id and br.bookNo=b.no)"
+					+" group by id,name order by count desc");
+			int i2 = 0;
+			while(rs.next()) {
+				if(i2>4) {
+					break;
+				}
+				studentId.add(i2,rs.getString("id"));
+				studentName.add(i2,rs.getString("name"));
+				studentCount.add(i2,rs.getInt("count"));
+				sum2+=studentCount.get(i2);
+				i2++;
+			}
+			//도서별 상위 5종류만 구해준다.
+			rs = DBManager.stmt.executeQuery("select title, count(*) count"
+					+" from(select br.id id,name,b.no no,b.title title, br.rdate from student s, books b, bookRent br where br.id=s.id and br.bookNo=b.no)"
+					+" group by title order by count desc");
+			int i3 = 0;
+			while(rs.next()) {
+				if(i3>4) {
+					break;
+				}
+				bookName.add(i3,rs.getString("title"));
+				bookCount.add(i3,rs.getInt("count"));
+				sum3+=bookCount.get(i3);
+				i3++;
+			}
+			//선택할떄마다 색이 바뀌지 않게 미리 색을 리스트에 넣어둔다.
+			deptColor = new Color[deptName.size()];
+			for(i=0;i<deptName.size();i++) {deptColor[i] =  new Color((int)(Math.random()*255.0),(int)(Math.random()*255.0),(int)(Math.random()*255.0));}
+			studentColor =new Color[studentName.size()];
+			for(i=0;i<studentName.size();i++) {	studentColor[i] =  new Color((int)(Math.random()*255.0),(int)(Math.random()*255.0),(int)(Math.random()*255.0));}
+			bookColor =new Color[studentName.size()];
+			for(i=0;i<bookName.size();i++) {bookColor[i] =  new Color((int)(Math.random()*255.0),(int)(Math.random()*255.0),(int)(Math.random()*255.0));			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		setLayout(new BorderLayout());
 		np.setLayout(new FlowLayout());//np패널은 FlowLayout으로 정렬
 		add(cp,BorderLayout.CENTER); //CENTER에 cp패널 올림
 		add(np,BorderLayout.NORTH);//NORTH에 np패널 올림
-		//setContentPane(p1);
-		setSize(600, 500); // 프레임 사이즈 지정
+		setSize(650, 500); // 프레임 사이즈 지정
 		setVisible(true); // 프레임을 보이게 함
 	}	
 	//BorderLayout.NORTH 패널 생성 및 들어갈 내용 작성
 	class NorthPanel extends JPanel{
-		JButton input = new JButton("입력");
 		public NorthPanel() {
-			for(int i=0;i<4;i++) {
-				bk[i] = new JLabel((i+1)+"/4분기");
-				tf_num[i] = new JTextField(5);
-			}
+			this.setLayout(new FlowLayout(FlowLayout.CENTER,50,0));
 			MyActionListener ma = new MyActionListener();
-			input.addActionListener(ma);
+			ButtonGroup bg = new ButtonGroup();
 
-			//패널에 bk,tf_num 등록
-			this.setBackground(Color.LIGHT_GRAY);
-			for(int i=0;i<4;i++) {
-				this.add(bk[i]);
-				this.add(tf_num[i]);
-			}
-			this.add(input); //input버튼 등록
+			bg.add(studentRb);
+			bg.add(deptRb);
+			bg.add(bookRb);
+			add(deptRb);
+			add(studentRb);
+			add(bookRb);
+
+			deptRb.addItemListener(ma);
+			studentRb.addItemListener(ma);
+			bookRb.addItemListener(ma);
+
 		}
 	}
 	//CenterPanel 클래스 작성
 	class CenterPanel extends JPanel{
+		ArrayList<Integer> deptGak = new ArrayList<>();
+		ArrayList<Integer> studentGak = new ArrayList<>();
+		ArrayList<Integer> bookGak = new ArrayList<>();
 		public void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			System.out.println(sum); // 입력한 값의 합이 잘 저장되었는지 확인하기위해 작성
-			g.setFont(new Font("Gothic",Font.ITALIC,15));
-			g.drawString("분기별 매출현황 파이차트", 400, 120);
-			g.setColor(Color.BLUE);
-			g.drawString("1/4분기", 480, 150);
-			g.fillRect(450, 140, 20, 10);
-			g.fillArc(100, 50, 300, 300, 0, bkp[0]);//최초 각도 0에서 1/4분기까지 가야함.
+			if(deptRb.isSelected()) {
+				super.paintComponent(g);
+				deptGak.add(0,0);
+				g.setFont(new Font("Gothic",Font.ITALIC,20));
+				g.setColor(Color.BLACK);
+				g.drawString("학과별 대출 비율", 400, 110);
+				for(int k=0;k<deptName.size();k++	) {
+					//color = new Color((int)(Math.random()*255.0),(int)(Math.random()*255.0),(int)(Math.random()*255.0));
+					g.setFont(new Font("Gothic",Font.ITALIC,15));
+					//g.setColor(color);
+					g.setColor(deptColor[k]);
+					g.drawString(deptName.get(k), 450, 140+(20*k));
+					g.fillRect(420, 130+(20*k), 20, 10);
+					g.fillArc(50, 50, 300, 300, deptGak.get(k),(360/sum)*deptCount.get(k));
+					deptGak.add(k+1,deptGak.get(k)+(360/sum)*deptCount.get(k));
+					System.out.println((360/sum)*deptCount.get(k));
+					System.out.println(deptGak.get(k)+(360/sum)*deptCount.get(k));
+				}
+			}
 
-			g.setColor(Color.RED);
-			g.drawString("2/4분기", 480, 170);
-			g.fillRect(450, 160, 20, 10);
-			g.fillArc(100, 50, 300, 300, bkp[0],bkp[1]); //1/4분기 다음부터 2/4분기가 생성되야함
+			if(studentRb.isSelected()) {
+				super.paintComponent(g);
+				studentGak.add(0,0);
+				g.setFont(new Font("Gothic",Font.ITALIC,20));
+				g.setColor(Color.BLACK);
+				g.drawString("상위 5명 대출비율", 400, 110);
+				for(int k=0;k<studentName.size();k++	) {
+					g.setFont(new Font("Gothic",Font.ITALIC,15));
+					g.setColor(studentColor[k]);
+					g.drawString(studentName.get(k), 450, 140+(20*k));
+					g.drawString(studentId.get(k), 510, 140+(20*k));
+					g.fillRect(420, 130+(20*k), 20, 10);
+					g.fillArc(50, 50, 300, 300, studentGak.get(k),(360/sum2)*studentCount.get(k));
+					studentGak.add(k+1,studentGak.get(k)+(360/sum2)*studentCount.get(k));
+					System.out.println((360/sum2)*studentCount.get(k));
+					System.out.println(studentGak.get(k)+(360/sum2)*studentCount.get(k));
+				}
+			}
 
-			g.setColor(Color.BLACK);
-			g.drawString("3/4분기", 480, 190);
-			g.fillRect(450, 180, 20, 10);
-			g.fillArc(100, 50, 300, 300, bkp[0]+ bkp[1],bkp[2]);//3/4분기의 시작은 1,2분기가 더해진 값 다음부터 생성되야함
-
-			g.setColor(Color.MAGENTA);
-			g.drawString("4/4분기", 480, 210);
-			g.fillRect(450, 200, 20, 10);
-			g.fillArc(100, 50, 300, 300, bkp[0]+ bkp[1]+ bkp[2],bkp[3]+gap);
-			//4분기는 1,2,3분기 다 더해진다음 시작되야 하고, 소수점버리고 정수형으로 받다보니 1~4분기 합이 360이 안되는경우가 생김,360에서 모자란 값을 gap으로 구해서 더해줌
+			if(bookRb.isSelected()) {
+				super.paintComponent(g);
+				bookGak.add(0,0);
+				g.setFont(new Font("Gothic",Font.ITALIC,20));
+				g.setColor(Color.BLACK);
+				g.drawString("상위 5권 대출비율", 400, 110);
+				for(int k=0;k<bookName.size();k++	) {
+					g.setFont(new Font("Gothic",Font.ITALIC,15));
+					g.setColor(bookColor[k]);
+					g.drawString(bookName.get(k), 450, 140+(20*k));
+					g.fillRect(420, 130+(20*k), 20, 10);
+					g.fillArc(50, 50, 300, 300, bookGak.get(k),(360/sum3)*bookCount.get(k));
+					bookGak.add(k+1,bookGak.get(k)+(360/sum3)*bookCount.get(k));
+				}
+			}
+			
+			
 		}
 	}
 
-	class MyActionListener implements ActionListener{
+	class MyActionListener implements ItemListener{
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			for(int i=0;i<4;i++) {
-				bk_num[i] = Integer.parseInt(tf_num[i].getText());
-				sum+=bk_num[i];
-			}
-			for(int i=0;i<4;i++) {
-				bkp[i] = (360*bk_num[i])/sum;
-				bkp[i] = Math.round(bkp[i]);
-				gap += bkp[i];
-				System.out.println(bkp[i]);
-			}
-			gap = 360-gap;
-			System.out.println("gap :" + gap);
+		public void itemStateChanged(ItemEvent e) {
 			cp.repaint();
 		}
 	}
 
 	public static void main(String args[]) {
-		//new BookGraph();
+		new BookGraph();
 	}
 }

@@ -113,11 +113,13 @@ public class Student extends JPanel {
 		add(btnDelete);
 		add(btnLogout);
 		
-		setSize(535,600);
-//		Dimension frameSize = this.getSize();
-//		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//		this.setLocation((screenSize.width-frameSize.width)/2,(screenSize.height-frameSize.height)/2);
+		
+		setSize(500,500);
+		//Dimension frameSize = this.getSize();
+		//Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		//this.setLocation((screenSize.width-frameSize.width)/2,(screenSize.height-frameSize.height)/2);
 		setVisible(true);
 	}
-	
+	public static void main(String[] args) {
+	}
 }

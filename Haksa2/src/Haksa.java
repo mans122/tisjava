@@ -1,10 +1,12 @@
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.ResultSet;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -12,17 +14,19 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 public class Haksa extends JFrame{
+	static JFrame f = new JFrame();
+	public static Dimension d = new Dimension(500,500);
 	public static MainProcess main;
 	DBManager db = null;
 	ResultSet rs = null;
 	static JPanel panel = null;
 	public Haksa() {
 		db = new DBManager();
-		Container c = getContentPane();
+		f.setPreferredSize(d);
+		Container c = f.getContentPane();
 		this.setTitle("切荤包府");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		panel = new JPanel(
-				);
+		panel = new JPanel();
 		JMenuBar mb = new JMenuBar();
 		
 		JMenu Menu1 = new JMenu("切积包府");
@@ -45,7 +49,7 @@ public class Haksa extends JFrame{
 		item2.addActionListener(listener);
 		item3.addActionListener(listener);
 		
-		setJMenuBar(mb);
+		f.setJMenuBar(mb);
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				try {
@@ -57,13 +61,12 @@ public class Haksa extends JFrame{
 			}
 		});
 		c.add(panel);
-		setSize(500,500);
-		
-		Dimension frameSize = this.getSize();
+		//Dimension frameSize = this.getSize();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation((screenSize.width-frameSize.width)/2,(screenSize.height-frameSize.height)/2);
-		setVisible(true);
-		
+		f.setLocation((screenSize.width-f.getPreferredSize().width)/2,(screenSize.height-f.getPreferredSize().height)/2);
+		f.pack();
+		f.setResizable(false);
+		f.setVisible(true);
 	}
 	public void setMain(MainProcess main) {
 		this.main = main;

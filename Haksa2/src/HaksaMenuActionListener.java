@@ -19,11 +19,15 @@ import javax.swing.JMenuItem;
 			String cmd = e.getActionCommand();
 			switch(cmd) {
 			case "학생정보":
+				System.out.println("학생정보");
 				Haksa.panel.removeAll();
 				Haksa.panel.revalidate();
 				Haksa.panel.repaint();
 				Haksa.panel.add(new Student());
 				Haksa.panel.setLayout(null);
+				Haksa.f.setPreferredSize(new Dimension(500,500));
+				Haksa.f.setResizable(false);
+				Haksa.f.pack();
 				break;
 			case "Exit":
 				System.exit(0);
@@ -34,13 +38,18 @@ import javax.swing.JMenuItem;
 				Haksa.panel.repaint();
 				Haksa.panel.add(new BookRent());
 				Haksa.panel.setLayout(null);
+				Haksa.f.setPreferredSize(new Dimension(500,500));
+				Haksa.f.setResizable(false);
+				Haksa.f.pack();
 				break;
 			case "대출현황":
 				Haksa.panel.removeAll();
 				Haksa.panel.revalidate();
 				Haksa.panel.repaint();
 				Haksa.panel.add(new BookGraph());
+				Haksa.f.setPreferredSize(new Dimension(620,500));
 				Haksa.panel.setLayout(null);
+				Haksa.f.pack();
 				//Haksa.panel.setLayout(new BorderLayout());
 				break;
 			}

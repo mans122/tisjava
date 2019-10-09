@@ -17,10 +17,11 @@ public class LoginActionListener implements ActionListener{
 			}
 			else {
 				try {
-					rs = db.stmt.executeQuery("select count(*) as count from student where id='"+id+"'");
+					rs = DBManager.stmt.executeQuery("select count(*) as count from student where id='"+id+"'");
 					rs.next();
 					rs.getInt("count");
-					if(rs.getInt("count") == 1 || id.equals("test")) {
+					System.out.print(id);
+					if(id.equals("test") || rs.getInt("count") == 1) {
 						JOptionPane.showMessageDialog(null,"로그인 성공","알림",JOptionPane.INFORMATION_MESSAGE);
 						Login.main.showFrameTest(); // 메인창 메소드를 이용해 띄우기
 					}
@@ -32,7 +33,6 @@ public class LoginActionListener implements ActionListener{
 					e1.printStackTrace();
 				}
 			}
-			
 			Login.loginField.setText("");
 			break;
 
