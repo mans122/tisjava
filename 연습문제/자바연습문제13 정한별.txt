@@ -1,0 +1,58 @@
+1. DBManager클래스를 생성해서 cnnection과 close하기
+
+- conn객체를 생성해서 리턴하는 메서드 구현
+
+- 다른 클래스(Student, BookRent)에서 1번에서 리턴된 conn객체 사용
+
+
+import java.sql.*;
+
+public class DBManager {
+	public static Connection conn= null;
+	public static Statement stmt = null;
+	String url = "jdbc:mysql://localhost:3306/sampledb?useSSL=false";
+	String uid = "hkd";
+	String pass = "1234";
+	
+	public DBManager() {}
+	public void Connection() {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			DBManager.conn=DriverManager.getConnection(url,uid,pass);
+			stmt=conn.createStatement();
+			System.out.print("연결완료~");
+		}catch(Exception e1){
+			e1.printStackTrace();
+		}
+	}
+	
+	public void Close() {
+		try {
+			DBManager.conn.close();
+			stmt.close();
+			System.out.println("연결종료~");
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
+	}
+}
+
+//DB 연결해주는 부분
+DBManager db = null;
+db = new DBManager();
+db.Connection();
+
+//프로그램 종료할때 연결 끊어줌
+this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				try {
+					db.Close();
+				}
+				catch(Exception we) {
+					we.printStackTrace();
+				}
+			}
+		});
