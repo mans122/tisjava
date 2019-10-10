@@ -15,17 +15,16 @@ import javax.swing.JPanel;
 
 public class Haksa extends JFrame{
 	static JFrame f = new JFrame();
-	public static Dimension d = new Dimension(500,500);
 	public static MainProcess main;
 	DBManager db = null;
 	ResultSet rs = null;
 	static JPanel panel = null;
 	public Haksa() {
 		db = new DBManager();
-		f.setPreferredSize(d);
+		f.setTitle("切荤包府");
+		f.setPreferredSize(new Dimension(500,500));
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Container c = f.getContentPane();
-		this.setTitle("切荤包府");
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		panel = new JPanel();
 		JMenuBar mb = new JMenuBar();
 		
@@ -61,7 +60,6 @@ public class Haksa extends JFrame{
 			}
 		});
 		c.add(panel);
-		//Dimension frameSize = this.getSize();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		f.setLocation((screenSize.width-f.getPreferredSize().width)/2,(screenSize.height-f.getPreferredSize().height)/2);
 		f.pack();
@@ -72,7 +70,7 @@ public class Haksa extends JFrame{
 		this.main = main;
 	}
 	public static void main(String[] args) {
-		new Haksa();
+		//new Haksa();
 	}
 }
 
