@@ -38,7 +38,8 @@ public class BookGraph extends JPanel {
 	NorthPanel np= new NorthPanel();	//NotrhPanel클래스로 만든 위에붙일 패널 np 생성
 	String query;
 	public BookGraph() {
-		if(isFirst==0) {
+		if(isFirst==0) {//만약 다른 메뉴로 들어갔다 다시 BookGraph를 호출했을때  쿼리를 다시돌리고 값을 
+			//다시저장하면 꼬이는경우가 발생 BookGraph메서드 마지막에 isFirst 값을 증가시켜 다음에 또 찾아올경우 이부분을 넘어가도록
 			try{
 				//학과별로 분류하기위한 내용
 				rs = DBManager.stmt.executeQuery("select dept, count(*) as count" 
@@ -48,6 +49,8 @@ public class BookGraph extends JPanel {
 						+" and br.bookNo=b.no)"
 						+" group by dept order by count desc");
 				int i=0;
+				//====================================================
+				
 				//학과별로 BookRent 테이블에서 검색해서 나오는 학과,학과별 총합을 구해줌
 				while(rs.next()) {
 					deptName.add(i,rs.getString("dept"));
@@ -55,6 +58,7 @@ public class BookGraph extends JPanel {
 					sum+=deptCount.get(i);
 					i++;
 				}
+				//====================================================
 				//학생별 값 구해서 넣어주는코드,대여하는 학생이 수백 수천일수도 있으므로 상위 5명만 구해준다.
 				rs = DBManager.stmt.executeQuery("select id,name, count(*) count"
 						+" from(select br.id id,name,b.no no,b.title title, br.rdate from student s, books b, bookRent br where br.id=s.id and br.bookNo=b.no)"
@@ -119,22 +123,23 @@ public class BookGraph extends JPanel {
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-			isFirst++;
+			isFirst++;//if부분을 종료하기전 isFirst를 증가시켜 다음에 또 호출시 넘어가도록
 		}
-		setLayout(new BorderLayout());
+		setLayout(new BorderLayout()); // 패널 정렬을 BorderLayout으로
 		np.setLayout(new FlowLayout());//np패널은 FlowLayout으로 정렬
 		add(cp,BorderLayout.CENTER); //CENTER에 cp패널 올림
 		add(np,BorderLayout.NORTH);//NORTH에 np패널 올림
 		setSize(650, 500); // 프레임 사이즈 지정
 		setVisible(true); // 프레임을 보이게 함
 	}	
+	
 	//BorderLayout.NORTH 패널 생성 및 들어갈 내용 작성
 	class NorthPanel extends JPanel{
 		public NorthPanel() {
-			this.setLayout(new FlowLayout(FlowLayout.CENTER,50,0));
+			//this.setLayout(new FlowLayout(FlowLayout.CENTER,50,0));
 			MyActionListener ma = new MyActionListener();
 			ButtonGroup bg = new ButtonGroup();
-
+			//라디오 버튼을 생성하고 버튼그룹 bg에 모두 올려서 이쁘게 정렬
 			bg.add(studentRb);
 			bg.add(deptRb);
 			bg.add(bookRb);
@@ -143,7 +148,8 @@ public class BookGraph extends JPanel {
 			add(studentRb);
 			add(bookRb);
 			add(dateRb);
-
+			
+			//모두 아이템리스너에 올려줌
 			deptRb.addItemListener(ma);
 			studentRb.addItemListener(ma);
 			bookRb.addItemListener(ma);
@@ -151,6 +157,7 @@ public class BookGraph extends JPanel {
 
 		}
 	}
+//NorthPanel 끝 ==========================================================================================================
 	//CenterPanel 클래스 작성
 	class CenterPanel extends JPanel{
 		ArrayList<Integer> deptGak = new ArrayList<>();
@@ -159,6 +166,7 @@ public class BookGraph extends JPanel {
 		ArrayList<Integer> dateGak = new ArrayList<>();
 		public void paintComponent(Graphics g) {
 			//학과별 차트 생성코드
+			//선택한 버튼에 대한 실행문을 여기서 작성
 			if(deptRb.isSelected()) {//라디오버튼 deptRb가 선택됬을 경우
 				super.paintComponent(g);
 				deptGak.add(0,0);//처음 시작각은 0도부터이기에 0번 인덱스에 0을 넣음
@@ -166,17 +174,17 @@ public class BookGraph extends JPanel {
 				g.setColor(Color.BLACK);
 				g.drawString("학과별 대출 비율", 400, 110);
 				int deptGap=360;//과별 카운트의 각도 계산값의 합이 360으로 딱 떨어지지 않을수가 있음. 그래프가 이쁘게 안그려지므로 그때 모자란 수치를 더해주기위해 gap값을 구해주기위한 변수
-				for(int k=0;k<deptName.size();k++	) {//
-					deptGap-=(int)Math.round(((float)deptCount.get(k)/sum)*360);
+				for(int k=0;k<deptName.size();k++	) {//deptName의 크기 = 학과 개수만큼 반복
+					deptGap-=(int)Math.round(((float)deptCount.get(k)/sum)*360);//360에서 k번째 학과이름의 count값을 빼줌
 					g.setFont(new Font("Gothic",Font.ITALIC,15));
-					g.setColor(deptColor[k]);
-					g.drawString(deptName.get(k)+" - "+deptCount.get(k)+"권", 450, 140+(20*k));
-					g.fillRect(420, 130+(20*k), 20, 10);
-					if(k==deptName.size()-1)
+					g.setColor(deptColor[k]);//미리저장해둔 랜덤색 사용
+					g.drawString(deptName.get(k)+" - "+deptCount.get(k)+"권", 450, 140+(20*k));//어떤색이 어떤학과를 나타내는지 표시해주고 몇권을 빌려갔는지 표시
+					g.fillRect(420, 130+(20*k), 20, 10); //작은 네모색칸임 무슨색인지 잘보여주기위한것
+					if(k==deptName.size()-1)//마지막 학과를 그릴때 deptGap을 더해주기위한 코드
 						g.fillArc(50, 50, 300, 300, deptGak.get(k),(int)Math.round((double)deptCount.get(k)/sum*360)+deptGap);
-					else
+					else//마지막학과가 아니면 그냥 그림
 						g.fillArc(50, 50, 300, 300, deptGak.get(k),(int)Math.round((double)deptCount.get(k)/sum*360));
-					deptGak.add(k+1,deptGak.get(k)+(int)Math.round((double)deptCount.get(k)/sum*360));
+					deptGak.add(k+1,deptGak.get(k)+(int)Math.round((double)deptCount.get(k)/sum*360));//k+1번째 각도의 시작은 k번째 각도가 끝난곳 부터임
 				}
 			}
 			//==================================================================================================
@@ -251,11 +259,11 @@ public class BookGraph extends JPanel {
 			//==================================================================================================
 		}
 	}
-
+//CenterPanel 끝======================================================================================================
 	class MyActionListener implements ItemListener{
 		@Override
 		public void itemStateChanged(ItemEvent e) {
-			cp.repaint();
+			cp.repaint();//아이템 리스너에 등록한 버튼들이 뭐가됐든 눌리면 cp.repaint()실행
 		}
 	}
 

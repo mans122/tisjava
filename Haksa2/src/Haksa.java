@@ -34,9 +34,12 @@ public class Haksa extends JFrame{
 		JMenuItem itemExit = new JMenuItem("Exit");
 		JMenuItem item2 = new JMenuItem("대출목록");
 		JMenuItem item3 = new JMenuItem("대출현황");
+		JMenuItem item4 = new JMenuItem("대출 및 반납");
 		Menu1.add(itemLoad);
 		Menu1.addSeparator();
 		Menu1.add(itemExit);
+		Menu2.add(item4);
+		Menu2.addSeparator();
 		Menu2.add(item2);
 		Menu2.add(item3);
 		mb.add(Menu1);
@@ -47,6 +50,7 @@ public class Haksa extends JFrame{
 		itemExit.addActionListener(listener);
 		item2.addActionListener(listener);
 		item3.addActionListener(listener);
+		item4.addActionListener(listener);
 		
 		f.setJMenuBar(mb);
 		this.addWindowListener(new WindowAdapter() {
@@ -70,8 +74,7 @@ public class Haksa extends JFrame{
 		this.main = main;
 	}
 	public static void main(String[] args) {
-		//new Haksa();
+		new Haksa();
 	}
 }
 
-// 그룹별  대출현황을 groupby를 통해 차트로 표현

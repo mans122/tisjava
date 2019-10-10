@@ -40,7 +40,6 @@ public class Login extends JFrame{
 		
 		JButton loginButton = new JButton("로그인");
 		loginButton.setFont(new Font("Serif",Font.BOLD,15));
-		//loginButton.setSize(loginButton.getPreferredSize().getSize());
 		loginButton.setSize(100, 32);
 		loginButton.setLocation(140, 200);
 		
@@ -58,7 +57,6 @@ public class Login extends JFrame{
 		//회원가입 버튼
 		JButton signUp = new JButton("회원가입");
 		signUp.setFont(new Font("Serif",Font.BOLD,15));
-		//signUp.setSize(pwdButton.getPreferredSize().getSize());
 		signUp.setSize(100, 32);
 		signUp.setLocation(250, 200);
 		
@@ -82,7 +80,6 @@ public class Login extends JFrame{
 		this.main = main;
 	}
 	public static void main(String[] args) {
-		new Login();
 	}
 
 }

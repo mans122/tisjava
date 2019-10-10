@@ -20,7 +20,6 @@ public class LoginActionListener implements ActionListener{
 					rs = DBManager.stmt.executeQuery("select count(*) as count from student where id='"+id+"'");
 					rs.next();
 					rs.getInt("count");
-					System.out.print(id);
 					if(id.equals("test") || rs.getInt("count") == 1) {
 						JOptionPane.showMessageDialog(null,"로그인 성공","알림",JOptionPane.INFORMATION_MESSAGE);
 						Login.main.showFrameTest(); // 메인창 메소드를 이용해 띄우기

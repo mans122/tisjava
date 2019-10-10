@@ -78,7 +78,6 @@ public class BookRent extends JPanel{
 		sp.setBounds(10, 40, 470, 390);
 		add(sp); 
 
-		//setResizable(false);//화면크기고정
 		setSize(500,500);
 		setVisible(true);
 		bookList();
@@ -101,12 +100,10 @@ public class BookRent extends JPanel{
 			rs.close();
 		}
 		catch(Exception e1){
-			//e.getStackTrace();
 			System.out.println(e1.getMessage());
 		}
 	}
 
 	public static void main(String[] args) {
-		//new BookRent();
 	}
 }

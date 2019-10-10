@@ -73,6 +73,9 @@ public class StudentActionListener implements ActionListener {
 			break;
 			//--------------------------------------------------------------			
 		case "목록":
+			for(int i=0;i<4;i++) {
+				Student.tf_num[i].setText("");
+			}
 				list();
 			break;
 			//--------------------------------------------------------------
@@ -80,7 +83,6 @@ public class StudentActionListener implements ActionListener {
 			try {
 				if(id.length()!=0) {
 					//해당학번으로 조회를해서 rowcount에 조회된 행 수를 조회
-					//ResultSet ws = Haksa.stmt.executeQuery("select * from student where id = '"+id+"'");
 					rs = hdb.stmt.executeQuery("select * from student where id = '"+id+"'");
 					rs.next();
 
