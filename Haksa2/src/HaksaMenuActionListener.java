@@ -50,7 +50,7 @@ import javax.swing.JMenuItem;
 				Haksa.panel.setLayout(null);
 				Haksa.f.pack();
 				break;
-			case "´ëÃâ ¹× ¹İ³³":
+			case "¹Ì¹İ³³":
 				Haksa.panel.removeAll();
 				Haksa.panel.revalidate();
 				Haksa.panel.repaint();

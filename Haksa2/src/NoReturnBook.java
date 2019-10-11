@@ -3,9 +3,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -18,10 +20,10 @@ where bn is null and bs.no = aa.bookno order by aa.no;
 
  */
 public class NoReturnBook extends JPanel {
+	public static JTextField[] tf_nrb = new JTextField[4];
 	DefaultTableModel model = null;
 	JTable table=null;
 	public NoReturnBook() {
-		System.out.println("미반납 책");
 		setLayout(null);
 		String colName[]={"대여날짜","학번","책번호","책이름"}; // 표에 출력할 칼럼명
 		model=new DefaultTableModel(colName,0); // 표의 데이터
@@ -31,8 +33,8 @@ public class NoReturnBook extends JPanel {
 		table.getColumnModel().getColumn(2).setPreferredWidth(70);
 		table.getColumnModel().getColumn(3).setPreferredWidth(200);
 		JScrollPane jp = new JScrollPane(table);
-		jp.setSize(new Dimension(460,250));
-		jp.setLocation(10, 140);
+		jp.setSize(new Dimension(470,220));
+		jp.setLocation(10, 200);
 		add(jp);
 		table.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent e) {
@@ -57,24 +59,57 @@ public class NoReturnBook extends JPanel {
 		});
 		try{
 			// Select문 실행
-			ResultSet rs=DBManager.stmt.executeQuery("select * from student order by id");
+			ResultSet rs=DBManager.stmt.executeQuery("select substr(aa.no,1,4) year,substr(aa.no,5,2) month,substr(aa.no,7,2) day,aa.id ,aa.bookno bkn,bs.title" + 
+					" from  books bs, " + 
+					" (select DISTINCT b.no no,b.id id, b.bookno bookno, a.bn bn from bookRent b," + 
+					" (select br.id id, br.bookno bn  from bookRent br,bookReturn rb where br.id=rb.id and br.bookno = rb.bookno) a" + 
+					" where b.id = a.id(+) and b.bookno = a.bn(+)) aa" + 
+					" where bn is null and bs.no = aa.bookno order by aa.no");
 
 			//JTable 초기화
-			Student.model.setNumRows(0);
+			model.setNumRows(0);
 			while(rs.next()){
 				String[] row=new String[4];
-				row[0]=rs.getString("year"+"년"+"month"+"월"+"day"+"일");
+				//row[0]=rs.getString("year"+"년"+"month"+"월"+"day"+"일");
+				row[0]=rs.getString("year")+rs.getString("month")+rs.getString("day");
 				row[1]=rs.getString("id");
-				row[2]=rs.getString("bookno");
+				row[2]=rs.getString("bkn");
 				row[3]=rs.getString("title");
-				Student.model.addRow(row);
+				model.addRow(row);
 			}
 			rs.close();
 		}
 		catch(Exception e1){
 			System.out.println(e1.getMessage());
+			e1.printStackTrace();
 		}
-	
+		JLabel inPut = new JLabel("대출");
+		JLabel outPut = new JLabel("반납");
+		inPut.setSize(100, 50);
+		outPut.setSize(100, 50);
+		
+		inPut.setLocation(110, 0);
+		outPut.setLocation(360, 0);
+		JLabel[] a = new JLabel[4];
+		a[0] = new JLabel("대여날짜");
+		a[1] = new JLabel("학번");
+		a[2] = new JLabel("책번호");
+		a[3] = new JLabel("sss");
+		
+		for(int i=0;i<4;i++) {
+			a[i].setSize(new Dimension(60,30));
+			a[i].setLocation(10, 50+(i*27));
+			add(a[i]);
+			
+			tf_nrb[i] = new JTextField();
+			tf_nrb[i].setLocation(75,52+(i*27));
+			tf_nrb[i].setSize(150, 22);
+			add(tf_nrb[i]);
+		}
+		add(inPut);
+		add(outPut);
+		
+		
 		setSize(500,500);
 		setVisible(true);
 	}

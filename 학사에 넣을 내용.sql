@@ -46,7 +46,7 @@ insert into bookReturn values('2019101004','0792012','000003','20191010');
 
 
 --반납 안된 책들
-select substr(aa.no,1,4) year,substr(aa.no,5,2) month,substr(aa.no,7,2) day,aa.bookno bn,bs.title
+select substr(aa.no,1,4) year,substr(aa.no,5,2) month,substr(aa.no,7,2) day,aa.id, aa.bookno bn,bs.title
 from  books bs,   
     (select DISTINCT b.no no,b.id id,b.bookno bookno,a.bn bn from bookRent b,
     (select br.id id, br.bookno bn  from bookRent br,bookReturn rb where br.id=rb.id and br.bookno = rb.bookno) a
@@ -62,7 +62,10 @@ from  books bs,
     where b.id = a.id(+) and b.bookno = a.bn(+)) aa
 where bn is null and bs.no = aa.bookno order by aa.no;
 
-
+select DISTINCT b.no no,b.id id,b.bookno bookno,a.bn bn from bookRent b,
+    (select br.id id, br.bookno bn  from bookRent br,bookReturn rb where br.id=rb.id and br.bookno = rb.bookno) a
+    where b.id = a.id(+) and b.bookno = a.bn(+);
+    
     select DISTINCT *
     from bookRent b,
     (select br.id id, br.bookno bn  from bookRent br,bookReturn rb where br.id=rb.id and br.bookno = rb.bookno) a
@@ -74,3 +77,11 @@ where bn is null and bs.no = aa.bookno order by aa.no;
     (select br.id id, br.bookno bn  from bookRent br,bookReturn rb where br.id=rb.id and br.bookno = rb.bookno) a
     where b.id = a.id(+)
     and b.bookno = a.bn(+);
+
+select * from bookRent;
+
+select * from bookReturn;
+
+
+
+insert into bookReturn values ('2019101101','2018001','000001','20191011');
