@@ -82,6 +82,28 @@ select * from bookRent;
 
 select * from bookReturn;
 
+create table bookRent
+( no char(10) primary key, -- 대여번호
+  id char(10) not null, -- 학번
+  bookNo char(6) not null, -- 책번호
+  rDate char(8) not null -- 대여일
+  
+);
+
+create table bookRent2(
+    rentNo char(11) primary key,
+    return char(1) default 'N',
+    id char(7) not null,
+    bookNo char(6) not null,
+    rDate char(8) not null,
+    returnDate char(8) null,
+    delayDate char(5) null
+);
+
+insert into bookRent2 values('20191011001',default,'1111111','000001','20191011',null,null);
+
+select * from bookRent2;
+
+select * from books;
 
 
-insert into bookReturn values ('2019101101','2018001','000001','20191011');

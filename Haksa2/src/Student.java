@@ -9,7 +9,7 @@ import javax.swing.table.*;
 public class Student extends JPanel {
 	static DefaultTableModel model = null;
 	static JTable table=null;
-	
+	static JLabel id = new JLabel();
 	//학번~주소를 입력받을 TextField 4개 선언
 	public static JTextField[] tf_num = new JTextField[4];
 	public static JButton[] btnSearch = new JButton[4];
@@ -51,7 +51,7 @@ public class Student extends JPanel {
 		table.getColumnModel().getColumn(3).setPreferredWidth(200);
 		//table.setPreferredScrollableViewportSize(new Dimension(320,280));//테이블 사이즈
 		JScrollPane jp = new JScrollPane(table);
-		jp.setSize(new Dimension(460,250));
+		jp.setSize(new Dimension(465,250));
 		jp.setLocation(10, 140);
 		add(jp);
 		table.addMouseListener(new MouseListener() {
@@ -106,7 +106,10 @@ public class Student extends JPanel {
 		btnDelete.addActionListener(ma);
 		btnLogout.addActionListener(ma);
 		
+		id.setSize(150, 60);
+		id.setLocation(350, 0);
 		//버튼을 패널에 등록
+		add(id);
 		add(btnInsert);
 		add(btnList);
 		add(btnUpdate);

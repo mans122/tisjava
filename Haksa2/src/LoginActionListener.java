@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 
 import javax.swing.JOptionPane;
 public class LoginActionListener implements ActionListener{
+	public static String loginId;
 	public void actionPerformed(ActionEvent e) {
 		ResultSet rs = null;
 		String cmd = e.getActionCommand();
@@ -21,6 +22,9 @@ public class LoginActionListener implements ActionListener{
 					rs.next();
 					rs.getInt("count");
 					if(id.equals("test") || rs.getInt("count") == 1) {
+						loginId = id;
+						System.out.println("로그인된 아이디 : "+id);
+						Student.id.setText(loginId+"님 접속중");
 						JOptionPane.showMessageDialog(null,"로그인 성공","알림",JOptionPane.INFORMATION_MESSAGE);
 						Login.main.showFrameTest(); // 메인창 메소드를 이용해 띄우기
 					}

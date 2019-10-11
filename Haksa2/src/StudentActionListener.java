@@ -140,6 +140,12 @@ public class StudentActionListener implements ActionListener {
 				}
 			}
 			break;
+		case "로그아웃":
+			JOptionPane.showMessageDialog(null,"로그아웃합니다","알림",JOptionPane.INFORMATION_MESSAGE);
+			//MainProcess.haksa.dispose();
+			Haksa.f.setVisible(false);
+			Haksa.main.showFrameLogin();
+			break;
 		}
 	}
 	public static void list(){

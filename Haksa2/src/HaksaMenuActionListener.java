@@ -18,6 +18,16 @@ import javax.swing.JMenuItem;
 		public void actionPerformed(ActionEvent e) {
 			String cmd = e.getActionCommand();
 			switch(cmd) {
+			case "대출 및 반납":
+				Haksa.panel.removeAll();
+				Haksa.panel.revalidate();
+				Haksa.panel.repaint();
+				Haksa.panel.add(new NoReturnBook());
+				Haksa.f.setPreferredSize(new Dimension(500,500));
+				Haksa.panel.setLayout(null);
+				Haksa.f.pack();
+				break;
+			
 			case "학생정보":
 				Haksa.panel.removeAll();
 				Haksa.panel.revalidate();
@@ -50,14 +60,10 @@ import javax.swing.JMenuItem;
 				Haksa.panel.setLayout(null);
 				Haksa.f.pack();
 				break;
-			case "미반납":
-				Haksa.panel.removeAll();
-				Haksa.panel.revalidate();
-				Haksa.panel.repaint();
-				Haksa.panel.add(new NoReturnBook());
-				Haksa.f.setPreferredSize(new Dimension(500,500));
-				Haksa.panel.setLayout(null);
-				Haksa.f.pack();
+
+			case "도서 추가":
+				System.out.println("도서 추가");
+				new BookAdd();
 				break;
 			}
 		}

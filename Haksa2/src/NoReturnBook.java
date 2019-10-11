@@ -33,7 +33,7 @@ public class NoReturnBook extends JPanel {
 		table.getColumnModel().getColumn(2).setPreferredWidth(70);
 		table.getColumnModel().getColumn(3).setPreferredWidth(200);
 		JScrollPane jp = new JScrollPane(table);
-		jp.setSize(new Dimension(470,220));
+		jp.setSize(new Dimension(475,230));
 		jp.setLocation(10, 200);
 		add(jp);
 		table.addMouseListener(new MouseListener() {
