@@ -92,18 +92,19 @@ create table bookRent
 
 create table bookRent2(
     rentNo char(11) primary key,
-    return char(1) default 'N',
-    id char(7) not null,
     bookNo char(6) not null,
+    id char(7) not null,
     rDate char(8) not null,
-    returnDate char(8) null,
-    delayDate char(5) null
+    returnDate char(8) null
 );
 
-insert into bookRent2 values('20191011001',default,'1111111','000001','20191011',null,null);
+insert into bookRent2 values('20191013001','000001','1111111','20191013',null);
+
+select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate
+from books b,
+(select rentno,bookno,id,rdate,returndate from bookRent2) br
+where b.no = br.bookno;
 
 select * from bookRent2;
-
-select * from books;
-
+commit;
 

@@ -22,7 +22,7 @@ public class BookAdd extends JFrame {
 		JFrame f = new JFrame();
 		f.setTitle("도서 추가");
 		f.setLayout(null);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JLabel title = new JLabel("도서 추가");
 		title.setFont(new Font("Gothic",Font.BOLD,30));
 		title.setBounds(80,0, 200, 40);
@@ -126,7 +126,7 @@ public class BookAdd extends JFrame {
 	public void bookList(){
 		try{
 			// Select문 실행     
-			ResultSet rs= DBManager.stmt.executeQuery("select * from books");
+			ResultSet rs= DBManager.stmt.executeQuery("select * from books order by no");
 			model.setNumRows(0);
 			
 			while(rs.next()){
