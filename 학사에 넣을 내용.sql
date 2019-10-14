@@ -101,7 +101,8 @@ create table bookRent2(
 insert into bookRent2 values('20191013001','000001','1111111','20191013',null);
 insert into bookRent2 values('20191014001','000003','1354651','20191014',null);
 insert into bookRent2 values('20191010001','000001','1354651','20191010',null);
-insert into bookRent2 values('20191015001','000003','1111111','20191015',null);
+insert into bookRent2 values('20190910001','000003','4456754','20190910',null);
+insert into bookRent2 values('20180710001','000002','1091011','20190910',null);
 commit;
 select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate
 from books b,
@@ -134,3 +135,38 @@ select s.id, s.name, b.title, br.rDate
 				 and br.bookNo=b.no;
                  
 select br.rentno rn,b.title title, br.bookno bn, s.id id, s.name name, s.dept dept, br.rdate rd from student s, books2 b, bookrent2 br where br.id = s.id and br.bookno = b.no and dept='»ýÈ°Ã¼À°' order by rn;
+select *from bookRent2;
+
+delete from bookrent2 where rentno='20191015001';
+					select br.rentno rn,b.title title, br.bookno bn, s.id id, s.name name, s.dept dept, br.rdate rd, br.returndate
+							 from student s, books2 b, bookrent2 br where br.id = s.id and br.bookno = b.no and br.returndate is null;
+                             
+select *	 from student s, books2 b, bookrent2 br where br.id = s.id and br.bookno = b.no;
+
+select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate
+            from books b, (select * from bookRent2) br where b.no = br.bookno order by rentno;
+            
+select br.rentno rn,b.title title, br.bookno bn, s.id id, s.name name, s.dept dept, br.rdate rd 
+						 from student s, books2 b, bookrent2 br where br.id = s.id and br.bookno = b.no;
+            
+select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate 
+                         from books b, (select * from bookRent2) br where b.no = br.bookno and br.returndate is null order by rn;
+                         
+select br.rentno rn,b.title title, br.bookno bn, s.id id, s.name name, s.dept dept, br.rdate rd, br.returndate
+ from student s, books2 b, bookrent2 br where br.id = s.id and br.bookno = b.no and br.returndate is null order by rn;
+ 
+ 
+ --bookgraph
+ select year, month, count(*) count from(select substr(br.rdate,0,4) year,substr(br.rdate,5,2) month from student s, books b, bookRent br where br.id=s.id and br.bookNo=b.no)
+						 group by year,month order by count desc;
+                         
+select dept, count(*) as count from (select s.dept, br.rdate from student s, books2 b, bookRent2 br
+						 where br.id=s.id and br.bookNo=b.no) group by dept order by count desc;                         
+                         
+select title, count(*) count from(select br.id id,name,b.no no,b.title title, br.rdate from student s,
+						 books2 b, bookRent2 br where br.id=s.id and br.bookNo=b.no) group by title order by count desc;
+                         
+select year, month, count(*) count from(select substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from student s, books2 b, bookRent2 br where br.id=s.id(+) and br.bookNo=b.no)
+						 group by year,month order by count desc;
+                         
+select * from bookrent2;

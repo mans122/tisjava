@@ -4,8 +4,7 @@ import java.awt.event.ItemListener;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import javax.swing.*;
-//360에 모자른 값을 채워줘야함
-//Math.round
+
 public class BookGraph extends JPanel {
 	static ArrayList<String> deptName = new ArrayList<>();
 	static ArrayList<Integer> deptCount = new ArrayList<>();
@@ -42,12 +41,8 @@ public class BookGraph extends JPanel {
 			//다시저장하면 꼬이는경우가 발생 BookGraph메서드 마지막에 isFirst 값을 증가시켜 다음에 또 찾아올경우 이부분을 넘어가도록
 			try{
 				//학과별로 분류하기위한 내용
-				rs = DBManager.stmt.executeQuery("select dept, count(*) as count" 
-						+" from (select s.dept, br.rdate"
-						+" from student s, books b, bookRent br"
-						+" where br.id=s.id"
-						+" and br.bookNo=b.no)"
-						+" group by dept order by count desc");
+				rs = DBManager.stmt.executeQuery("select dept, count(*) as count from (select s.dept, br.rdate from student s, books2 b, bookRent2 br"
+						+" where br.id=s.id and br.bookNo=b.no) group by dept order by count desc");
 				int i=0;
 				//====================================================
 				
@@ -61,7 +56,7 @@ public class BookGraph extends JPanel {
 				//====================================================
 				//학생별 값 구해서 넣어주는코드,대여하는 학생이 수백 수천일수도 있으므로 상위 5명만 구해준다.
 				rs = DBManager.stmt.executeQuery("select id,name, count(*) count"
-						+" from(select br.id id,name,b.no no,b.title title, br.rdate from student s, books b, bookRent br where br.id=s.id and br.bookNo=b.no)"
+						+" from(select br.id id,name,b.no no,b.title title, br.rdate from student s, books2 b, bookRent2 br where br.id=s.id and br.bookNo=b.no)"
 						+" group by id,name order by count desc");
 				int i2 = 0;
 				while(rs.next()) {
@@ -77,9 +72,8 @@ public class BookGraph extends JPanel {
 				//=======================================================================================================================
 
 				//도서별 상위 5종류만 구해준다.
-				rs = DBManager.stmt.executeQuery("select title, count(*) count"
-						+" from(select br.id id,name,b.no no,b.title title, br.rdate from student s, books b, bookRent br where br.id=s.id and br.bookNo=b.no)"
-						+" group by title order by count desc");
+				rs = DBManager.stmt.executeQuery("select title, count(*) count from(select br.id id,name,b.no no,b.title title, br.rdate from student s,"
+						+" books2 b, bookRent2 br where br.id=s.id and br.bookNo=b.no) group by title order by count desc");
 				int i3 = 0;
 				while(rs.next()) {
 					if(i3>4) {
@@ -93,9 +87,8 @@ public class BookGraph extends JPanel {
 				//=======================================================================================================================
 
 				//대여기록이 많은 년월을 구해준다.
-				rs = DBManager.stmt.executeQuery("select year, month, count(*) count"
-						+" from(select substr(br.rdate,0,4) year,substr(br.rdate,5,2) month from student s, books b, bookRent br where br.id=s.id and br.bookNo=b.no)"
-						+" group by year,month order by count desc");
+				rs = DBManager.stmt.executeQuery("select year, month, count(*) count from(select substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from student s, books2 b, bookRent2 br where br.id=s.id(+) and br.bookNo=b.no)" + 
+						" group by year,month order by count desc");
 				int i4 = 0;
 				while(rs.next()) {
 					if(i4>4) {
@@ -104,7 +97,7 @@ public class BookGraph extends JPanel {
 					dateYear.add(i4,rs.getString("year"));
 					dateMonth.add(i4,rs.getString("month"));
 					dateCount.add(i4,rs.getInt("count"));
-					sum4+=bookCount.get(i4);
+					sum4+=dateCount.get(i4);
 					i4++;
 				}
 
@@ -243,7 +236,7 @@ public class BookGraph extends JPanel {
 				g.setFont(new Font("Gothic",Font.ITALIC,20));
 				g.setColor(Color.BLACK);
 				g.drawString("상위 5개월 대출비율", 400, 110);
-				for(int k=0;k<bookName.size();k++	) {
+				for(int k=0;k<dateYear.size();k++	) {
 					dateGap-=(int)Math.round(((float)dateCount.get(k)/sum4)*360);
 					g.setFont(new Font("Gothic",Font.ITALIC,15));
 					g.setColor(dateColor[k]);
@@ -268,6 +261,5 @@ public class BookGraph extends JPanel {
 	}
 
 	public static void main(String args[]) {
-		//new BookGraph();
 	}
 }

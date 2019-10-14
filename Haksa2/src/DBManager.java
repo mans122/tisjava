@@ -6,7 +6,7 @@ public class DBManager {
 //	String url = "jdbc:mysql://localhost:3306/sampledb?useSSL=false";
 //	String uid = "hkd";
 //	String pass = "1234";
-	String url = "jdbc:oracle:thin:@localhost:1521:myoracle";
+	String url = "jdbc:oracle:thin:@localhost:1521:orcl";
 	String uid = "ora_user";
 	String pass = "hong";
 	public DBManager() {}

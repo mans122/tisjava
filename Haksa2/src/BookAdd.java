@@ -97,7 +97,7 @@ public class BookAdd extends JFrame {
 		f.add(bookName);
 		f.add(bookNo);
 		f.add(title);
-		f.setSize(600, 310);
+		f.setSize(600, 320);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		f.setLocation((screenSize.width-f.getPreferredSize().width)/2,(screenSize.height-f.getPreferredSize().height)/2);
 		f.setVisible(true);
