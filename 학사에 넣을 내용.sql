@@ -89,7 +89,7 @@ create table bookRent
   rDate char(8) not null -- 대여일
   
 );
-
+drop table bookrent2;
 create table bookRent2(
     rentNo char(11) primary key,
     bookNo char(6) not null,
@@ -99,12 +99,38 @@ create table bookRent2(
 );
 
 insert into bookRent2 values('20191013001','000001','1111111','20191013',null);
-
+insert into bookRent2 values('20191014001','000003','1354651','20191014',null);
+insert into bookRent2 values('20191010001','000001','1354651','20191010',null);
+insert into bookRent2 values('20191015001','000003','1111111','20191015',null);
+commit;
 select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate
 from books b,
 (select rentno,bookno,id,rdate,returndate from bookRent2) br
 where b.no = br.bookno;
 
 select * from bookRent2;
+update bookrent2 set returndate='20191014' where rentno='20191013001';
 commit;
 
+select * from books;
+create table books2(
+    no char(6) PRIMARY key,
+    title varchar2(50) not null,
+    writer varchar2(20) not null,
+    author varchar2(50) null
+);
+
+insert into books2(no,title,writer) select * from books;
+select * from books2;
+--미반납한 사람 찾는 쿼리
+select * from bookrent2 where returndate is not null;
+
+delete from bookrent2 where rentno='20191015001';
+commit;
+
+select s.id, s.name, b.title, br.rDate
+				 from student s, books b, bookRent br
+				 where br.id=s.id
+				 and br.bookNo=b.no;
+                 
+select br.rentno rn,b.title title, br.bookno bn, s.id id, s.name name, s.dept dept, br.rdate rd from student s, books2 b, bookrent2 br where br.id = s.id and br.bookno = b.no and dept='생활체육' order by rn;

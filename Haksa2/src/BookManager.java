@@ -6,24 +6,35 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-
+//학과별 대여목록 볼 수 있도록
 
 public class BookManager extends JPanel {
-	public static JTextField[] tf_nrb = new JTextField[6];
+	public static JTextField[] tf_nrb = new JTextField[7];
 	DefaultTableModel model = null;
+	String rentNo = null;
 	JTable table=null;
+	String lastRentNo = null;
 	String today=null;
+	static Integer rnCount = null;
+	//체크박스에 필요한 변수
+	ArrayList<String> deptName = new ArrayList<>();
+	int deptNum=0;
+	String query = null;
 	public BookManager() {
-		//SimpleDateFormat format1 = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
+//		query="select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate" + 
+//				" from books b, (select * from bookRent2) br where b.no = br.bookno order by rentno";
 		SimpleDateFormat format1 = new SimpleDateFormat ("YYYYMMdd");
 		Date time = new Date();
 		today = format1.format(time);
@@ -32,7 +43,6 @@ public class BookManager extends JPanel {
 		
 		model=new DefaultTableModel(colName,0); // 표의 데이터
 		table = new JTable(model); // 테이블에 모델(데이터) 바인딩
-//		table.getColumnModel().getColumn(0).setPreferredWidth(70);
 		JScrollPane jp = new JScrollPane(table);
 		jp.setSize(new Dimension(575,230));
 		jp.setLocation(10, 50);
@@ -42,9 +52,10 @@ public class BookManager extends JPanel {
 				table = (JTable)e.getComponent();
 				model=(DefaultTableModel)table.getModel();
 				//model.getValueAt의 값이 object라 String으로 변환해준다
-				String[] value=new String[6];
-				for(int i=0;i<6;i++) {
-					value[i] = (String)model.getValueAt(table.getSelectedRow(), i+1);
+				rentNo = (String)model.getValueAt(table.getSelectedRow(),0);
+				String[] value=new String[7];
+				for(int i=0;i<7;i++) {
+					value[i] = (String)model.getValueAt(table.getSelectedRow(), i);
 					tf_nrb[i].setText(value[i]);
 				}
 			}
@@ -52,66 +63,44 @@ public class BookManager extends JPanel {
 			public void mousePressed(MouseEvent e) {}
 			public void mouseExited(MouseEvent e) {}
 			public void mouseEntered(MouseEvent e) {}
-			
 		});
-		try{
-			// Select문 실행
-			ResultSet rs = DBManager.stmt.executeQuery("select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate"
-			+" from books b, (select * from bookRent2) br where b.no = br.bookno");
-			//JTable 초기화
-			model.setNumRows(0);
-			while(rs.next()){
-				String[] row=new String[7];
-				//row[0]=rs.getString("year"+"년"+"month"+"월"+"day"+"일");
-				row[0]=rs.getString("rn");
-				row[1]=rs.getString("title");
-				row[2]=rs.getString("no"); 
-				row[3]=rs.getString("author");
-				row[4]=rs.getString("id");
-				row[5]=rs.getString("rdate");
-				row[6]=rs.getString("redate");
-				model.addRow(row);
-			}
-			rs.close();
-		}
-		catch(Exception e1){
-			System.out.println(e1.getMessage());
-			e1.printStackTrace();
-		}
-		
+
+		show();
+		JLabel rentInfo = new JLabel("대여정보");
 		JLabel bookInfo = new JLabel("도서정보");
-		JLabel rentInfo = new JLabel("대출정보");
-		bookInfo.setFont(new Font("Gothic",Font.BOLD,25));
-		bookInfo.setSize(100, 50);
 		rentInfo.setFont(new Font("Gothic",Font.BOLD,25));
 		rentInfo.setSize(100, 50);
-		
+		bookInfo.setFont(new Font("Gothic",Font.BOLD,25));
+		bookInfo.setSize(100, 50);
 		bookInfo.setLocation(10, 280);
 		rentInfo.setLocation(10,0);
-		JLabel[] a = new JLabel[6];
-		a[0] = new JLabel("도서번호");
-		a[1] = new JLabel("도서명");
-		a[2] = new JLabel("출판사");
-		a[3] = new JLabel("대여회원");
-		a[4] = new JLabel("대여날짜");
-		a[5] = new JLabel("반납날짜");
+		JLabel[] a = new JLabel[7];
+		a[0] = new JLabel("대여번호");
+		a[1] = new JLabel("도 서 명");
+		a[2] = new JLabel("도서번호");
+		a[3] = new JLabel("출 판 사");
+		a[4] = new JLabel("대여회원");
+		a[5] = new JLabel("대여날짜");
+		a[6] = new JLabel("반납날짜");
 		int k=0;
-		for(int i=0;i<6;i++) {
-			if(i==3)
-				k=1;
+		for(int i=0;i<7;i++) {
+			if(i==3 || i==6)
+				k++;
 			
 			a[i].setSize(new Dimension(60,30));
-			a[i].setLocation(10+(k*210), 330+(i*33)-(k*99));
+			a[i].setLocation(10+(k*190), 330+(i*33)-(k*99));
 			add(a[i]);
 			
 			tf_nrb[i] = new JTextField();
-			tf_nrb[i].setLocation(75+(k*210),332+(i*33)-(k*99));
+			tf_nrb[i].setLocation(75+(k*190),334+(i*33)-(k*99));
 			tf_nrb[i].setSize(100, 22);
 			add(tf_nrb[i]);
 		}
-		tf_nrb[4].setText(today);
-		tf_nrb[4].setEnabled(false);
-		String buttonName[] = {"도서등록","도서수정","도서삭제","도서대여","도서반납"};
+		tf_nrb[5].setText(today);
+		tf_nrb[0].setEnabled(false);
+		tf_nrb[5].setEnabled(false);
+		tf_nrb[6].setEnabled(false);
+		String buttonName[] = {"도서등록","도서수정","도서관리","도서대여","도서반납"};
 		JButton[] book = new JButton[5];
 		MyActionListener ma = new MyActionListener();
 		
@@ -123,9 +112,66 @@ public class BookManager extends JPanel {
 			book[i].addActionListener(ma);
 			add(book[i]);
 		}
+		//==========================================================================
+		//학과별정렬 체크박스 만드는 부분
+		query="select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate" + 
+				" from books b, (select * from bookRent2) br where b.no = br.bookno order by rentno"; 
+		
+		ResultSet rs = null;    // select한 결과를 저장하는 객체
+		try{
+			rs = DBManager.stmt.executeQuery("select DISTINCT dept from student");
+			int i=1;
+			deptName.add(0,"전체");
+			while(rs.next()) {
+				deptName.add(i,rs.getString("dept"));
+				i++;
+			}
+			deptNum = deptName.size();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		JLabel l_dept=new JLabel("학과");
+		l_dept.setBounds(130, 20, 30, 20);
+		add(l_dept);
+		
+		String[] dept = new String[deptNum];
+		dept[0]=deptName.get(0);
+		for(int i=1;i<deptNum;i++) 
+			{dept[i]=deptName.get(i);}
+		
+		JComboBox cb_dept=new JComboBox(dept);
+		cb_dept.setBounds(165, 20, 100, 20);
+		
+		add(cb_dept);
+		cb_dept.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				JComboBox cb=(JComboBox)e.getSource();     
+				int deptIndex=cb.getSelectedIndex();
+				//동적쿼리를 만들기 위한 기본적인 틀
+				query="select br.rentno rn,b.title title, br.bookno bn, s.id id, s.name name, s.dept dept, br.rdate rd" + 
+						" from student s, books2 b, bookrent2 br where br.id = s.id and br.bookno = b.no";
+				if(deptIndex==0){ // 전체
+					//query += " order by br.rentno";
+					System.out.println("전체");
+					show();
+				}else { //Index 에 맞는 dept이름으로 필터링
+					query += " and dept='"+dept[deptIndex]+"' order by rn";
+					System.out.println("여기까진 성공");
+					showDept();
+				}
+			}});
+		
+//		String colName[]={"학번","이름","도서명","대출일"};
+//		model=new DefaultTableModel(colName,0);
+//		table = new JTable(model);
+//		table.setPreferredScrollableViewportSize(new Dimension(480,200));
+//		add(table);
+//		JScrollPane sp=new JScrollPane(table);
+//		sp.setBounds(10, 40, 470, 390);
+//		add(sp); 
+		//===========================================================================
 		add(bookInfo);
 		add(rentInfo);
-		
 		setSize(700,500);
 		setVisible(true);
 	}
@@ -133,20 +179,64 @@ public class BookManager extends JPanel {
 	class MyActionListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String rn = tf_nrb[0].getText();
-			String title = tf_nrb[1].getText();
-			String no = tf_nrb[2].getText();
-			String author = tf_nrb[3].getText();
+			String rentNo = null;
+			String bookNo = tf_nrb[2].getText();
 			String id = tf_nrb[4].getText();
 			String rdate = tf_nrb[5].getText();
-			String redate = tf_nrb[6].getText();
 			String cmd = e.getActionCommand();
 			switch(cmd) {
-			case "도서반납":
-				tf_nrb[5].setText(today);
-				tf_nrb[5].setEnabled(false);
+			case "도서관리":
+				new BookAdd();
+				break;
+			case "도서대여":
 				try {
-					ResultSet rs = DBManager.stmt.executeQuery("update bookrent2 set returndate='"+redate+"' wherer rentno='"+no+"'");
+					ResultSet rs = DBManager.stmt.executeQuery("select max(rentno) as bn from bookRent2");
+					rs.next();
+					lastRentNo = rs.getString("bn");
+					String lastDay = lastRentNo.substring(0,8);
+					if(lastDay.equals(today)) {
+						String a = lastRentNo.substring(8,11);
+						rnCount = Integer.parseInt(a);
+						String c = String.format("%03d", rnCount+1);
+						try {
+							ResultSet ws = DBManager.stmt.executeQuery("insert into bookrent2 values('"+(today+c)+"','"+bookNo+"','"+id+"','"+rdate+"',null)");
+							JOptionPane.showMessageDialog(null,"대여가 완료됬습니다..","알림",JOptionPane.INFORMATION_MESSAGE);
+							ws.close();
+						}
+						catch(Exception p) {
+							p.printStackTrace();
+							JOptionPane.showMessageDialog(null,"오류가 발생","알림",JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+					//마지막대출이 오늘 이전일 경우
+					else {
+						String d = String.format("%03d", 1);
+						System.out.println(d);
+						try {
+							ResultSet ws = DBManager.stmt.executeQuery("insert into bookrent2 values('"+(today+d)+"','"+bookNo+"','"+id+"','"+rdate+"',null)");
+							JOptionPane.showMessageDialog(null,"대여가 완료됬습니다..","알림",JOptionPane.INFORMATION_MESSAGE);
+							ws.close();
+						}
+						catch(Exception p) {
+							p.printStackTrace();
+							JOptionPane.showMessageDialog(null,"오류가 발생","알림",JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+					for(int i=0;i<7;i++) {
+						tf_nrb[i].setText("");
+					}
+					rs.close();
+					show();
+				}
+				catch(Exception e2) {
+					e2.printStackTrace();
+				}
+				break;
+			case "도서반납":
+				String redate = today;
+				try {
+					ResultSet rs = DBManager.stmt.executeQuery("update bookrent2 set returndate='"+redate+"' where rentno='"+rentNo+"'");
+					show();
 				}
 				catch(Exception e2) {
 					e2.printStackTrace();
@@ -154,6 +244,64 @@ public class BookManager extends JPanel {
 				break;
 			}
 		}
+	}
+	
+	public void show(){
+		try{
+			ResultSet rs = DBManager.stmt.executeQuery("select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate"
+			+" from books b, (select * from bookRent2) br where b.no = br.bookno order by rentno");
+			//ResultSet rs= DBManager.stmt.executeQuery(query);
+			model.setNumRows(0);
+			while(rs.next()){
+				String[] row=new String[7];
+				row[0]=rs.getString("rn");
+				row[1]=rs.getString("title");
+				row[2]=rs.getString("no"); 
+				row[3]=rs.getString("author");
+				row[4]=rs.getString("id");
+				row[5]=rs.getString("rdate");
+				row[6]=rs.getString("redate");
+				model.addRow(row);
+			}
+			String colName[]={"대여번호","도서명","도서번호","출판사","대여한 회원","대여날짜","반납날짜"}; // 표에 출력할 칼럼명
+			model=new DefaultTableModel(colName,0); // 표의 데이터
+			rs.close();
+		}
+		catch(Exception e1){
+			System.out.println(e1.getMessage());
+			e1.printStackTrace();
+		}
+		
+	}
+	
+	public void showDept(){
+		try{
+			String colName[]={"대여번호","도서명","도서번호","출판사","대여한 회원","대여날짜","반납날짜"}; // 표에 출력할 칼럼명
+//			model=new DefaultTableModel(colName,0); // 표의 데이터
+			ResultSet rs= DBManager.stmt.executeQuery(query);
+			model.setNumRows(0);
+			table = new JTable(model); // 테이블에 모델(데이터) 바인딩
+			JScrollPane jp = new JScrollPane(table);
+			add(jp);
+			System.out.println("ddd"+query);
+			while(rs.next()){
+				String[] row=new String[7];
+				row[0]=rs.getString("rn");
+				row[1]=rs.getString("title");
+				row[2]=rs.getString("bn"); 
+				row[3]=rs.getString("id");
+				row[4]=rs.getString("name");
+				row[5]=rs.getString("dept");
+				row[6]=rs.getString("rd");
+				model.addRow(row);
+			}
+			rs.close();
+		}
+		catch(Exception e1){
+			System.out.println(e1.getMessage());
+			e1.printStackTrace();
+		}
+		
 	}
 	
 	public static void main(String[] args) {
