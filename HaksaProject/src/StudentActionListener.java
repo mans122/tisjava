@@ -99,7 +99,7 @@ public class StudentActionListener implements ActionListener {
 						if(birth.length()!=0) {
 							hdb.stmt.executeUpdate("update student set birth='"+birth+"' where id = '"+id+"'");	}
 						JOptionPane.showMessageDialog(null,"수정이 완료되었습니다.","알림",JOptionPane.INFORMATION_MESSAGE);
-						for(int i=0;i<4;i++) {
+						for(int i=0;i<5;i++) {
 							Student.tf_num[i].setText("");
 						}
 						list();

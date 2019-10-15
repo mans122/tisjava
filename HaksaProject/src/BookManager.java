@@ -24,6 +24,7 @@ import javax.swing.table.DefaultTableModel;
 //학과별 대여목록 볼 수 있도록
 
 public class BookManager extends JPanel {
+	JCheckBox ch = null;
 	public static JTextField[] tf_nrb = new JTextField[7];
 	DefaultTableModel model = null;
 	DefaultTableModel model2 = null;
@@ -39,7 +40,7 @@ public class BookManager extends JPanel {
 	//----------------------------------
 	public BookManager() {
 		query="select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate" + 
-				" from books b, (select * from bookRent2) br where b.no = br.bookno order by rentno";
+				" from books b, (select * from bookRent2) br where b.no(+) = br.bookno order by rentno";
 		SimpleDateFormat format1 = new SimpleDateFormat ("YYYYMMdd");
 		Date time = new Date();
 		today = format1.format(time);
@@ -105,9 +106,7 @@ public class BookManager extends JPanel {
 		tf_nrb[0].setEnabled(false);
 		tf_nrb[5].setEnabled(false);
 		tf_nrb[6].setEnabled(false);
-//		String buttonName[] = {"도서등록","도서수정","도서관리","도서대여","도서반납"};
 		String buttonName[] = {"도서관리","도서대여","도서반납"};
-//		JButton[] book = new JButton[5];
 		JButton[] book = new JButton[3];
 		MyActionListener ma = new MyActionListener();
 		
@@ -123,7 +122,7 @@ public class BookManager extends JPanel {
 		//학과별정렬 체크박스 만드는 부분
 		ResultSet rs = null;    // select한 결과를 저장하는 객체
 		try{
-			rs = DBManager.stmt.executeQuery("select DISTINCT dept from student2");
+			rs = DBManager.stmt.executeQuery("select DISTINCT dept from student");
 			int i=1;
 			deptName.add(0,"전체");
 			while(rs.next()) {
@@ -155,18 +154,20 @@ public class BookManager extends JPanel {
 				//동적쿼리를 만들기 위한 기본적인 틀
 				if(deptIndex==0){ // 전체
 					query="select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate" + 
-							" from books b, (select * from bookRent2) br where b.no = br.bookno order by rn";
+							" from books b, (select * from bookRent2) br where b.no(+) = br.bookno order by rn";
+					ch.setVisible(true);
 					show();
 				}else { //Index 에 맞는 dept이름으로 필터링
 					query = "select br.rentno rn,b.title title, br.bookno bn, s.id id, s.name name, s.dept dept, br.rdate rd" + 
 					" from student s, books2 b, bookrent2 br where br.id = s.id and br.bookno = b.no" +
 					" and dept='"+dept[deptIndex]+"' order by rn";
+					ch.setVisible(false);
 					showDept();
 				}
 			}});
 		//===========================================================================
 		//반납안한 사람만 보기위한 필터링을 추가
-		JCheckBox ch = new JCheckBox("반납한사람 제외");
+		ch = new JCheckBox("반납한사람 제외");
 		ch.setBounds(460, 10, 150, 30);
 		ch.addItemListener(new ItemListener() {
 			@Override
@@ -217,7 +218,7 @@ public class BookManager extends JPanel {
 						String c = String.format("%03d", rnCount+1);
 						try {
 							DBManager.stmt.executeUpdate("insert into bookrent2 values('"+(today+c)+"','"+bookNo+"','"+id+"','"+rdate+"',null)");
-							JOptionPane.showMessageDialog(null,"대여가 완료됬습니다..","알림",JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null,"대여를 완료했습니다..","알림",JOptionPane.INFORMATION_MESSAGE);
 						}
 						catch(Exception p) {
 							p.printStackTrace();
@@ -229,7 +230,7 @@ public class BookManager extends JPanel {
 						String d = String.format("%03d", 1);
 						try {
 							DBManager.stmt.executeUpdate("insert into bookrent2 values('"+(today+d)+"','"+bookNo+"','"+id+"','"+rdate+"',null)");
-							JOptionPane.showMessageDialog(null,"대여가 완료됬습니다..","알림",JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null,"대여를 완료했습니다..","알림",JOptionPane.INFORMATION_MESSAGE);
 						}
 						catch(Exception p) {
 							p.printStackTrace();
@@ -250,7 +251,7 @@ public class BookManager extends JPanel {
 				String redate = today;
 				try {
 					DBManager.stmt.executeUpdate("update bookrent2 set returndate='"+redate+"' where rentno='"+rentNo+"'");
-					JOptionPane.showMessageDialog(null,"반납이 완료됬습니다..","알림",JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null,"반납 완료했습니다.","알림",JOptionPane.INFORMATION_MESSAGE);
 					show();
 				}
 				catch(Exception e2) {

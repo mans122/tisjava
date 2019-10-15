@@ -47,10 +47,10 @@ public class Student extends JPanel {
 		String colName[]={"학번","이름","학과","주소","생일"}; // 표에 출력할 칼럼명
 		model=new DefaultTableModel(colName,0); // 표의 데이터
 		table = new JTable(model); // 테이블에 모델(데이터) 바인딩
-		table.getColumnModel().getColumn(0).setPreferredWidth(70);
-		table.getColumnModel().getColumn(1).setPreferredWidth(70);
-		table.getColumnModel().getColumn(2).setPreferredWidth(70);
-		table.getColumnModel().getColumn(3).setPreferredWidth(220);
+		table.getColumnModel().getColumn(0).setPreferredWidth(60);
+		table.getColumnModel().getColumn(1).setPreferredWidth(50);
+		table.getColumnModel().getColumn(2).setPreferredWidth(90);
+		table.getColumnModel().getColumn(3).setPreferredWidth(230);
 		table.getColumnModel().getColumn(4).setPreferredWidth(50);
 		//table.setPreferredScrollableViewportSize(new Dimension(320,280));//테이블 사이즈
 //		table.setPreferredScrollableViewportSize(new Dimension(600,280));//테이블 사이즈
