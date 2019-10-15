@@ -54,15 +54,8 @@ public class Login extends JFrame{
 		pwdField.setLocation(140,150);
 		pwdField.setSize(210,30);
 		
-		//회원가입 버튼
-//		JButton signUp = new JButton("학번등록");
-//		signUp.setFont(new Font("Serif",Font.BOLD,15));
-//		signUp.setSize(100, 32);
-//		signUp.setLocation(250, 200);
-//		
 		LoginActionListener la = new LoginActionListener();
 		loginButton.addActionListener(la);
-//		signUp.addActionListener(la);
 		
 		back.add(loginField);
 		back.add(loginLabel);
@@ -70,7 +63,6 @@ public class Login extends JFrame{
 		
 		back.add(pwdLabel);
 		back.add(pwdField);
-//		back.add(signUp);
 		scrollPane = new JScrollPane(back);
 		setContentPane(scrollPane);
 		setSize(500, 300);
@@ -81,5 +73,4 @@ public class Login extends JFrame{
 	}
 	public static void main(String[] args) {
 	}
-
 }
