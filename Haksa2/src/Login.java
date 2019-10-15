@@ -29,7 +29,7 @@ public class Login extends JFrame{
 		};
 		
 		//로그인 칸
-		JLabel loginLabel = new JLabel("ID");
+		JLabel loginLabel = new JLabel("학번");
 		loginLabel.setFont(new Font("Serif",Font.BOLD,22));
 		loginLabel.setLocation(140, 35);
 		loginLabel.setSize(loginLabel.getPreferredSize().getSize());
@@ -44,7 +44,7 @@ public class Login extends JFrame{
 		loginButton.setLocation(140, 200);
 		
 		//비밀번호 칸
-		JLabel pwdLabel = new JLabel("PASSWORD");
+		JLabel pwdLabel = new JLabel("생년월일");
 		pwdLabel.setFont(new Font("Serif",Font.BOLD,22));
 		pwdLabel.setLocation(140, 115);
 		pwdLabel.setSize(pwdLabel.getPreferredSize().getSize());
@@ -55,14 +55,14 @@ public class Login extends JFrame{
 		pwdField.setSize(210,30);
 		
 		//회원가입 버튼
-		JButton signUp = new JButton("회원가입");
-		signUp.setFont(new Font("Serif",Font.BOLD,15));
-		signUp.setSize(100, 32);
-		signUp.setLocation(250, 200);
-		
+//		JButton signUp = new JButton("학번등록");
+//		signUp.setFont(new Font("Serif",Font.BOLD,15));
+//		signUp.setSize(100, 32);
+//		signUp.setLocation(250, 200);
+//		
 		LoginActionListener la = new LoginActionListener();
 		loginButton.addActionListener(la);
-		signUp.addActionListener(la);
+//		signUp.addActionListener(la);
 		
 		back.add(loginField);
 		back.add(loginLabel);
@@ -70,7 +70,7 @@ public class Login extends JFrame{
 		
 		back.add(pwdLabel);
 		back.add(pwdField);
-		back.add(signUp);
+//		back.add(signUp);
 		scrollPane = new JScrollPane(back);
 		setContentPane(scrollPane);
 		setSize(500, 300);

@@ -5,23 +5,17 @@ import java.sql.*;
 import javax.swing.JOptionPane;
 
 public class StudentSearchActionListener implements ActionListener{
-//	static Connection conn=null;
-//	static Statement stmt=null;
-//	static String url = "jdbc:oracle:thin:@localhost:1521:myoracle";
-//	static String uid = "ora_user";
-//	static String pass = "hong";
-	//DBManager db = new DBManager();
-	//검색한 결과를 rs에 넣어준 후, 그 결과값을 ws로 받아서 결과값을 talist에 출력해주는 메서드
 	static void tableShow(ResultSet ws) {
 		try{
 			//JTable 초기화
 			Student.model.setNumRows(0);
 			while(ws.next()){
-				String[] row=new String[4];//컬럼의 갯수가 3
+				String[] row=new String[5];//컬럼의 갯수가 3
 				row[0]=ws.getString("id");
 				row[1]=ws.getString("name");
 				row[2]=ws.getString("dept");
 				row[3]=ws.getString("address");
+				row[4]=ws.getString("birth");
 				Student.model.addRow(row);
 			}
 			ws.close();
@@ -66,6 +60,7 @@ public class StudentSearchActionListener implements ActionListener{
 						Student.tf_num[1].setText(rs.getString("name"));
 						Student.tf_num[2].setText(rs.getString("dept"));
 						Student.tf_num[3].setText(rs.getString("address"));
+						Student.tf_num[4].setText(rs.getString("birth"));
 					}
 				}
 			}

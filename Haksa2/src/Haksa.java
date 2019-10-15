@@ -34,16 +34,12 @@ public class Haksa extends JFrame{
 		JMenuItem itemExit = new JMenuItem("Exit");
 		JMenuItem item2 = new JMenuItem("대출 및 반납");
 		JMenuItem item3 = new JMenuItem("대출현황");
-		JMenuItem item4 = new JMenuItem("대출목록");
-		JMenuItem item5 = new JMenuItem("도서 추가");
 		Menu1.add(itemLoad);
 		Menu1.addSeparator();
 		Menu1.add(itemExit);
 		Menu2.add(item2);
 		Menu2.addSeparator();
 		Menu2.add(item3);
-		Menu2.add(item4);
-		Menu2.add(item5);
 		mb.add(Menu1);
 		mb.add(Menu2);
 		HaksaMenuActionListener listener = new HaksaMenuActionListener();
@@ -52,8 +48,6 @@ public class Haksa extends JFrame{
 		itemExit.addActionListener(listener);
 		item2.addActionListener(listener);
 		item3.addActionListener(listener);
-		item4.addActionListener(listener);
-		item5.addActionListener(listener);
 		
 		f.setJMenuBar(mb);
 		this.addWindowListener(new WindowAdapter() {

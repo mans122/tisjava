@@ -170,3 +170,23 @@ select year, month, count(*) count from(select substr(br.rentno,0,4) year,substr
 						 group by year,month order by count desc;
                          
 select * from bookrent2;
+select * from books2;
+select * from student;
+
+create table student(
+    id char(7) primary key,
+    name varchar2(20) not null,
+    dept varchar2(20) not null,
+    address varchar2(100) null,
+    birth char(6) null
+);
+
+insert into student2(id,name,dept,address) select * from student;
+insert into student(id,name,dept,address,birth) select * from student2;
+select * from student;
+
+update student2 set birth='940829' where id='1111111';
+commit;
+
+select count(*) as count from student where id='1111111';
+commit;

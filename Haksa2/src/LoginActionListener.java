@@ -9,8 +9,8 @@ public class LoginActionListener implements ActionListener{
 		ResultSet rs = null;
 		String cmd = e.getActionCommand();
 		String id = Login.loginField.getText();
-		String pwd = Login.pwdField.getToolTipText();
-		DBManager db = new DBManager();
+		String pwd = new String(Login.pwdField.getPassword());
+		
 		switch(cmd) {
 		case "로그인":
 			if(id.length()==0) {
@@ -18,12 +18,11 @@ public class LoginActionListener implements ActionListener{
 			}
 			else {
 				try {
-					rs = DBManager.stmt.executeQuery("select count(*) as count from student where id='"+id+"'");
+					rs = DBManager.stmt.executeQuery("select id,birth from student where id='"+id+"'");
 					rs.next();
-					rs.getInt("count");
-					if(id.equals("test") || rs.getInt("count") == 1) {
+					if(id.equals("test") || rs.getString("id").isEmpty()==false && pwd.equals(rs.getString("birth")) ) {
 						loginId = id;
-						System.out.println("로그인된 아이디 : "+id);
+						System.out.println("로그인");
 						Student.id.setText(loginId+"님 접속중");
 						JOptionPane.showMessageDialog(null,"로그인 성공","알림",JOptionPane.INFORMATION_MESSAGE);
 						Login.main.showFrameTest(); // 메인창 메소드를 이용해 띄우기
@@ -33,10 +32,12 @@ public class LoginActionListener implements ActionListener{
 					}
 					rs.close();
 				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null,"로그인 실패","알림",JOptionPane.INFORMATION_MESSAGE);
 					e1.printStackTrace();
 				}
 			}
 			Login.loginField.setText("");
+			Login.pwdField.setText("");
 			break;
 
 		case "회원가입":

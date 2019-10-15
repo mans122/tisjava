@@ -76,7 +76,7 @@ public class BookGraph extends JPanel {
 						+" books2 b, bookRent2 br where br.id=s.id and br.bookNo=b.no) group by title order by count desc");
 				int i3 = 0;
 				while(rs.next()) {
-					if(i3>4) {
+					if(i3==5) {
 						break;
 					}
 					bookName.add(i3,rs.getString("title"));
@@ -108,7 +108,7 @@ public class BookGraph extends JPanel {
 				for(i=0;i<deptName.size();i++) {deptColor[i] =  new Color((int)(Math.random()*255.0),(int)(Math.random()*255.0),(int)(Math.random()*255.0));}
 				studentColor =new Color[studentName.size()];
 				for(i=0;i<studentName.size();i++) {	studentColor[i] =  new Color((int)(Math.random()*255.0),(int)(Math.random()*255.0),(int)(Math.random()*255.0));}
-				bookColor =new Color[studentName.size()];
+				bookColor =new Color[bookName.size()];
 				for(i=0;i<bookName.size();i++) {bookColor[i] =  new Color((int)(Math.random()*255.0),(int)(Math.random()*255.0),(int)(Math.random()*255.0));			}
 				dateColor =new Color[dateYear.size()];
 				for(i=0;i<dateYear.size();i++) {dateColor[i] =  new Color((int)(Math.random()*255.0),(int)(Math.random()*255.0),(int)(Math.random()*255.0));			}

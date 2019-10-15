@@ -11,17 +11,18 @@ public class Student extends JPanel {
 	static JTable table=null;
 	static JLabel id = new JLabel();
 	//학번~주소를 입력받을 TextField 4개 선언
-	public static JTextField[] tf_num = new JTextField[4];
+	public static JTextField[] tf_num = new JTextField[5];
 	public static JButton[] btnSearch = new JButton[4];
 	public Student() {
 		setLayout(null);
-		JLabel[] a = new JLabel[4];
+		JLabel[] a = new JLabel[5];
 		a[0] = new JLabel("학번");
 		a[1] = new JLabel("이름");
 		a[2] = new JLabel("학과");
 		a[3] = new JLabel("주소");
+		a[4] = new JLabel("생일");
 		//텍스트필드,검색버튼
-		for(int i=0;i<4;i++) {
+		for(int i=0;i<5;i++) {
 			a[i].setSize(new Dimension(30,30));
 			a[i].setLocation(10, 10+(i*30));
 			add(a[i]);
@@ -30,7 +31,8 @@ public class Student extends JPanel {
 			tf_num[i].setLocation(45,12+(i*30));
 			tf_num[i].setSize(200, 25);
 			add(tf_num[i]);
-			
+		}
+		for(int i=0;i<4;i++) {
 			btnSearch[i] = new JButton("검색");
 			btnSearch[i].setSize(60, 25);
 			btnSearch[i].setLocation(250, 12+(i*30));
@@ -42,17 +44,19 @@ public class Student extends JPanel {
 		DefaultTableCellRenderer celAlignRight = new DefaultTableCellRenderer();
 		celAlignRight.setHorizontalAlignment(JLabel.RIGHT);
 		//text area대신 table
-		String colName[]={"학번","이름","학과","주소"}; // 표에 출력할 칼럼명
+		String colName[]={"학번","이름","학과","주소","생일"}; // 표에 출력할 칼럼명
 		model=new DefaultTableModel(colName,0); // 표의 데이터
 		table = new JTable(model); // 테이블에 모델(데이터) 바인딩
 		table.getColumnModel().getColumn(0).setPreferredWidth(70);
 		table.getColumnModel().getColumn(1).setPreferredWidth(70);
 		table.getColumnModel().getColumn(2).setPreferredWidth(70);
-		table.getColumnModel().getColumn(3).setPreferredWidth(200);
+		table.getColumnModel().getColumn(3).setPreferredWidth(220);
+		table.getColumnModel().getColumn(4).setPreferredWidth(50);
 		//table.setPreferredScrollableViewportSize(new Dimension(320,280));//테이블 사이즈
+//		table.setPreferredScrollableViewportSize(new Dimension(600,280));//테이블 사이즈
 		JScrollPane jp = new JScrollPane(table);
-		jp.setSize(new Dimension(465,250));
-		jp.setLocation(10, 140);
+		jp.setSize(new Dimension(480,220));
+		jp.setLocation(10, 170);
 		add(jp);
 		table.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent e) {
@@ -63,11 +67,13 @@ public class Student extends JPanel {
 				String name = (String)model.getValueAt(table.getSelectedRow(), 1);
 				String dept = (String)model.getValueAt(table.getSelectedRow(), 2);
 				String address = (String)model.getValueAt(table.getSelectedRow(), 3);
+				String birth = (String)model.getValueAt(table.getSelectedRow(), 4);
 				
 				tf_num[0].setText(id);
 				tf_num[1].setText(name);
 				tf_num[2].setText(dept);
 				tf_num[3].setText(address);
+				tf_num[4].setText(birth);
 			}
 			public void mouseReleased(MouseEvent e) {}
 			public void mousePressed(MouseEvent e) {}

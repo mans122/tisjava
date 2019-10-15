@@ -24,7 +24,6 @@ public class BookAdd extends JFrame {
 		JFrame f = new JFrame();
 		f.setTitle("도서 추가");
 		f.setLayout(null);
-		//f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JLabel title = new JLabel("도서 관리");
 		title.setFont(new Font("Gothic",Font.BOLD,30));
 		title.setBounds(50,0, 200, 40);
@@ -114,11 +113,9 @@ public class BookAdd extends JFrame {
 			switch(cmd) {
 			case "등록":
 				if(no.length()==0) {
-					System.out.println(no.length());
 					JOptionPane.showMessageDialog(null,"책 번호를 입력하세요","경고",JOptionPane.WARNING_MESSAGE);
 				}
 				else {
-					System.out.println("dd");
 					if (isStringInt(no))
 						isNumber=true;
 					else

@@ -41,16 +41,6 @@ import javax.swing.JMenuItem;
 			case "Exit":
 				System.exit(0);
 				break;
-			case "대출목록":
-				Haksa.panel.removeAll();
-				Haksa.panel.revalidate();
-				Haksa.panel.repaint();
-				Haksa.panel.add(new BookRent());
-				Haksa.panel.setLayout(null);
-				Haksa.f.setPreferredSize(new Dimension(500,500));
-				Haksa.f.setResizable(false);
-				Haksa.f.pack();
-				break;
 			case "대출현황":
 				Haksa.panel.removeAll();
 				Haksa.panel.revalidate();
@@ -59,11 +49,6 @@ import javax.swing.JMenuItem;
 				Haksa.f.setPreferredSize(new Dimension(620,500));
 				Haksa.panel.setLayout(null);
 				Haksa.f.pack();
-				break;
-
-			case "도서 추가":
-				System.out.println("도서 추가");
-				new BookAdd();
 				break;
 			}
 		}

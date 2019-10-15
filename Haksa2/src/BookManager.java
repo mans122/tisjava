@@ -105,15 +105,17 @@ public class BookManager extends JPanel {
 		tf_nrb[0].setEnabled(false);
 		tf_nrb[5].setEnabled(false);
 		tf_nrb[6].setEnabled(false);
-		String buttonName[] = {"도서등록","도서수정","도서관리","도서대여","도서반납"};
-		JButton[] book = new JButton[5];
+//		String buttonName[] = {"도서등록","도서수정","도서관리","도서대여","도서반납"};
+		String buttonName[] = {"도서관리","도서대여","도서반납"};
+//		JButton[] book = new JButton[5];
+		JButton[] book = new JButton[3];
 		MyActionListener ma = new MyActionListener();
 		
-		for(int i=0; i<5;i++)
+		for(int i=0; i<3;i++)
 		{	
 			book[i] = new JButton(buttonName[i]);
 			book[i].setSize(90,30);
-			book[i].setLocation(55+(100*i),450);
+			book[i].setLocation(155+(100*i),450);
 			book[i].addActionListener(ma);
 			add(book[i]);
 		}
@@ -121,7 +123,7 @@ public class BookManager extends JPanel {
 		//학과별정렬 체크박스 만드는 부분
 		ResultSet rs = null;    // select한 결과를 저장하는 객체
 		try{
-			rs = DBManager.stmt.executeQuery("select DISTINCT dept from student");
+			rs = DBManager.stmt.executeQuery("select DISTINCT dept from student2");
 			int i=1;
 			deptName.add(0,"전체");
 			while(rs.next()) {
