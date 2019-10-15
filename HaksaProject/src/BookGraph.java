@@ -122,6 +122,7 @@ public class BookGraph extends JPanel {
 		np.setLayout(new FlowLayout());//np패널은 FlowLayout으로 정렬
 		add(cp,BorderLayout.CENTER); //CENTER에 cp패널 올림
 		add(np,BorderLayout.NORTH);//NORTH에 np패널 올림
+		setBackground(Color.LIGHT_GRAY);
 		setSize(650, 500); // 프레임 사이즈 지정
 		setVisible(true); // 프레임을 보이게 함
 	}	
@@ -129,6 +130,7 @@ public class BookGraph extends JPanel {
 	//BorderLayout.NORTH 패널 생성 및 들어갈 내용 작성
 	class NorthPanel extends JPanel{
 		public NorthPanel() {
+			setBackground(Color.LIGHT_GRAY);
 			//this.setLayout(new FlowLayout(FlowLayout.CENTER,50,0));
 			MyActionListener ma = new MyActionListener();
 			ButtonGroup bg = new ButtonGroup();
@@ -141,6 +143,10 @@ public class BookGraph extends JPanel {
 			add(studentRb);
 			add(bookRb);
 			add(dateRb);
+			deptRb.setBackground(Color.LIGHT_GRAY);
+			studentRb.setBackground(Color.LIGHT_GRAY);
+			bookRb.setBackground(Color.LIGHT_GRAY);
+			dateRb.setBackground(Color.LIGHT_GRAY);
 			
 			//모두 아이템리스너에 올려줌
 			deptRb.addItemListener(ma);
@@ -165,11 +171,11 @@ public class BookGraph extends JPanel {
 				deptGak.add(0,0);//처음 시작각은 0도부터이기에 0번 인덱스에 0을 넣음
 				g.setFont(new Font("Gothic",Font.ITALIC,20));
 				g.setColor(Color.BLACK);
-				g.drawString("학과별 대출 비율", 400, 110);
+				g.drawString("학과별 대출 비율", 410, 110);
 				int deptGap=360;//과별 카운트의 각도 계산값의 합이 360으로 딱 떨어지지 않을수가 있음. 그래프가 이쁘게 안그려지므로 그때 모자란 수치를 더해주기위해 gap값을 구해주기위한 변수
 				for(int k=0;k<deptName.size();k++	) {//deptName의 크기 = 학과 개수만큼 반복
 					deptGap-=(int)Math.round(((float)deptCount.get(k)/sum)*360);//360에서 k번째 학과이름의 count값을 빼줌
-					g.setFont(new Font("Gothic",Font.ITALIC,15));
+					g.setFont(new Font("Gothic",Font.BOLD,15));
 					g.setColor(deptColor[k]);//미리저장해둔 랜덤색 사용
 					g.drawString(deptName.get(k)+" - "+deptCount.get(k)+"권", 450, 140+(20*k));//어떤색이 어떤학과를 나타내는지 표시해주고 몇권을 빌려갔는지 표시
 					g.fillRect(420, 130+(20*k), 20, 10); //작은 네모색칸임 무슨색인지 잘보여주기위한것
@@ -179,6 +185,7 @@ public class BookGraph extends JPanel {
 						g.fillArc(50, 50, 300, 300, deptGak.get(k),(int)Math.round((double)deptCount.get(k)/sum*360));
 					deptGak.add(k+1,deptGak.get(k)+(int)Math.round((double)deptCount.get(k)/sum*360));//k+1번째 각도의 시작은 k번째 각도가 끝난곳 부터임
 				}
+				setBackground(Color.LIGHT_GRAY);
 			}
 			//==================================================================================================
 			
@@ -189,10 +196,10 @@ public class BookGraph extends JPanel {
 				studentGak.add(0,0);
 				g.setFont(new Font("Gothic",Font.ITALIC,20));
 				g.setColor(Color.BLACK);
-				g.drawString("상위 5명 대출비율", 400, 110);
+				g.drawString("상위 5명 대출비율", 410, 110);
 				for(int k=0;k<studentName.size();k++	) {
 					studentGap-=(int)Math.round(((float)studentCount.get(k)/sum2)*360);
-					g.setFont(new Font("Gothic",Font.ITALIC,15));
+					g.setFont(new Font("Gothic",Font.BOLD,15));
 					g.setColor(studentColor[k]);
 					g.drawString(studentName.get(k)+" "+studentId.get(k)+" - "+studentCount.get(k)+"권", 440, 140+(20*k));
 					g.fillRect(420, 130+(20*k), 20, 10);
@@ -202,6 +209,7 @@ public class BookGraph extends JPanel {
 						g.fillArc(50, 50, 300, 300, studentGak.get(k),(int)Math.round((double)studentCount.get(k)/sum2*360));
 					studentGak.add(k+1,studentGak.get(k)+(int)Math.round((double)studentCount.get(k)/sum2*360));
 				}
+				setBackground(Color.LIGHT_GRAY);
 			}
 			//==================================================================================================
 
@@ -212,10 +220,10 @@ public class BookGraph extends JPanel {
 				bookGak.add(0,0);
 				g.setFont(new Font("Gothic",Font.ITALIC,20));
 				g.setColor(Color.BLACK);
-				g.drawString("상위 5권 대출비율", 400, 110);
+				g.drawString("상위 5권 대출비율", 410, 110);
 				for(int k=0;k<bookName.size();k++	) {
 					bookGap-=(int)Math.round(((float)bookCount.get(k)/sum3)*360);
-					g.setFont(new Font("Gothic",Font.ITALIC,15));
+					g.setFont(new Font("Gothic",Font.BOLD,15));
 					g.setColor(bookColor[k]);
 					g.drawString(bookName.get(k)+" - "+bookCount.get(k)+"회", 450, 140+(20*k));
 					g.fillRect(420, 130+(20*k), 20, 10);
@@ -225,6 +233,7 @@ public class BookGraph extends JPanel {
 						g.fillArc(50, 50, 300, 300, bookGak.get(k),(int)Math.round((float)bookCount.get(k)/sum3*360));
 					bookGak.add(k+1,bookGak.get(k)+(int)Math.round((float)bookCount.get(k)/sum3*360));
 				}
+				setBackground(Color.LIGHT_GRAY);
 			}
 			//==================================================================================================
 
@@ -235,10 +244,10 @@ public class BookGraph extends JPanel {
 				dateGak.add(0,0);
 				g.setFont(new Font("Gothic",Font.ITALIC,20));
 				g.setColor(Color.BLACK);
-				g.drawString("상위 5개월 대출비율", 400, 110);
+				g.drawString("상위 5개월 대출비율", 410, 110);
 				for(int k=0;k<dateYear.size();k++	) {
 					dateGap-=(int)Math.round(((float)dateCount.get(k)/sum4)*360);
-					g.setFont(new Font("Gothic",Font.ITALIC,15));
+					g.setFont(new Font("Gothic",Font.BOLD,15));
 					g.setColor(dateColor[k]);
 					g.drawString(dateYear.get(k)+"년 "+dateMonth.get(k)+"월 - "+dateCount.get(k)+"권", 450, 140+(20*k));
 					g.fillRect(420, 130+(20*k), 20, 10);
@@ -248,6 +257,7 @@ public class BookGraph extends JPanel {
 						g.fillArc(50, 50, 300, 300, dateGak.get(k),(int)Math.round((float)dateCount.get(k)/sum4*360));
 					dateGak.add(k+1,dateGak.get(k)+(int)Math.round((float)dateCount.get(k)/sum4*360));
 				}
+				setBackground(Color.LIGHT_GRAY);
 			}
 			//==================================================================================================
 		}

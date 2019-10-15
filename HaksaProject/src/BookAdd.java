@@ -21,6 +21,8 @@ public class BookAdd extends JFrame {
 	JTable table;
 	static JTextField[] tf_add = new JTextField[4];
 	public BookAdd() {
+		DBManager db = new DBManager();
+		db.Connection();
 		JFrame f = new JFrame();
 		f.setTitle("도서 추가");
 		f.setLayout(null);

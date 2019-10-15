@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -40,7 +41,7 @@ public class BookManager extends JPanel {
 	//----------------------------------
 	public BookManager() {
 		query="select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate" + 
-				" from books b, (select * from bookRent2) br where b.no(+) = br.bookno order by rentno";
+				" from books2 b, (select * from bookRent2) br where b.no(+) = br.bookno order by rentno";
 		SimpleDateFormat format1 = new SimpleDateFormat ("YYYYMMdd");
 		Date time = new Date();
 		today = format1.format(time);
@@ -154,7 +155,7 @@ public class BookManager extends JPanel {
 				//동적쿼리를 만들기 위한 기본적인 틀
 				if(deptIndex==0){ // 전체
 					query="select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate" + 
-							" from books b, (select * from bookRent2) br where b.no(+) = br.bookno order by rn";
+							" from books2 b, (select * from bookRent2) br where b.no(+) = br.bookno order by rn";
 					ch.setVisible(true);
 					show();
 				}else { //Index 에 맞는 dept이름으로 필터링
@@ -174,21 +175,23 @@ public class BookManager extends JPanel {
 			public void itemStateChanged(ItemEvent arg0) {
 				if(ch.isSelected()) {
 					query="select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate" + 
-							" from books b, (select * from bookRent2) br where b.no = br.bookno and br.returndate is null order by rn";
+							" from books2 b, (select * from bookRent2) br where b.no = br.bookno and br.returndate is null order by rn";
 					show();
 				}
 				else {
 					query="select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate" + 
-							" from books b, (select * from bookRent2) br where b.no = br.bookno order by rn";
+							" from books2 b, (select * from bookRent2) br where b.no(+) = br.bookno order by rn";
 					show();
 				}
 			}
 		});
+		ch.setBackground(Color.LIGHT_GRAY);
 		add(ch);
 		//===========================================================================
 		show();
 		add(bookInfo);
 		add(rentInfo);
+		setBackground(Color.LIGHT_GRAY);
 		setSize(700,500);
 		setVisible(true);
 	}
