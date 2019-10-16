@@ -24,7 +24,7 @@ public class PieChart3D extends JPanel {
         final PieDataset dataset = createSampleDataset();
         final JFreeChart chart = createChart(dataset);
         final ChartPanel chartPanel = new ChartPanel(chart);
-//        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
         chartPanel.setPreferredSize(new Dimension(500, 300));
 //        setTitle("原原原原原");
 //        setContentPane(chartPanel);
@@ -71,8 +71,8 @@ public class PieChart3D extends JPanel {
     public static void main(final String[] args) {
 
         final PieChart3D demo = new PieChart3D();
-        demo.pack();
-        RefineryUtilities.centerFrameOnScreen(demo);
+//        demo.pack();
+//        RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
 
     }
