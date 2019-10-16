@@ -51,6 +51,16 @@ import javax.swing.JMenuItem;
 				Haksa.panel.setLayout(null);
 				Haksa.f.pack();
 				break;
+			case "3D":
+				System.out.println("dd");
+				Haksa.panel.removeAll();
+				Haksa.panel.revalidate();
+				Haksa.panel.repaint();
+				Haksa.panel.add(new PieChart3D());
+				Haksa.f.setPreferredSize(new Dimension(500,500));
+				Haksa.panel.setLayout(null);
+				Haksa.f.pack();
+				break;
 			}
 		}
 	public static void main(String[] args) {

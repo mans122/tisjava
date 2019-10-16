@@ -4,5 +4,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="ojdbc6.jar"/>
 	<classpathentry kind="lib" path="mysql-connector-java-5.1.48.jar"/>
+	<classpathentry kind="lib" path="jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="jfreechart-1.0.19.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
