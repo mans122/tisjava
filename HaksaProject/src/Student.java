@@ -122,7 +122,7 @@ public class Student extends JPanel {
 		add(btnDelete);
 		add(btnLogout);
 		
-		
+		setOpaque(false);
 		setSize(500,500);
 		setVisible(true);
 	}

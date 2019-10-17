@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.ResultSet;
@@ -23,16 +25,14 @@ public class BookGraph extends JPanel {
 	static ArrayList<String> dateMonth = new ArrayList<>();
 	static ArrayList<Integer> dateCount = new ArrayList<>();
 	static int sum4=0;
-	static Color[] deptColor;
-	static Color[] studentColor;
-	static Color[] bookColor;
-	static Color[] dateColor;
 	static int isFirst = 0;
 	ResultSet rs = null;
+	static Color[] color = new Color[10];
 	JRadioButton  deptRb = new JRadioButton("학과별");
 	JRadioButton  studentRb = new JRadioButton("학생별");
 	JRadioButton  bookRb = new JRadioButton("도서별");
 	JRadioButton  dateRb = new JRadioButton("월별");
+	JRadioButton imsi = new JRadioButton();
 	CenterPanel cp = new CenterPanel(); // CenterPanel클래스로 만든 메인프레임 가운데 붙일 패널 cp생성
 	NorthPanel np= new NorthPanel();	//NotrhPanel클래스로 만든 위에붙일 패널 np 생성
 	String query;
@@ -102,16 +102,17 @@ public class BookGraph extends JPanel {
 				}
 
 				//=========================================================================================================================
-
 				//선택할떄마다 색이 바뀌지 않게 미리 색을 리스트에 넣어둔다.
-				deptColor = new Color[deptName.size()];
-				for(i=0;i<deptName.size();i++) {deptColor[i] =  new Color((int)(Math.random()*255.0),(int)(Math.random()*255.0),(int)(Math.random()*255.0));}
-				studentColor =new Color[studentName.size()];
-				for(i=0;i<studentName.size();i++) {	studentColor[i] =  new Color((int)(Math.random()*255.0),(int)(Math.random()*255.0),(int)(Math.random()*255.0));}
-				bookColor =new Color[bookName.size()];
-				for(i=0;i<bookName.size();i++) {bookColor[i] =  new Color((int)(Math.random()*255.0),(int)(Math.random()*255.0),(int)(Math.random()*255.0));			}
-				dateColor =new Color[dateYear.size()];
-				for(i=0;i<dateYear.size();i++) {dateColor[i] =  new Color((int)(Math.random()*255.0),(int)(Math.random()*255.0),(int)(Math.random()*255.0));			}
+				color[0]= new Color(239,86,45);
+				color[1]= new Color(246,210,88);
+				color[2]= new Color(239,206,197);
+				color[3]= new Color(151,213,224);
+				color[4]= new Color(12,76,138);
+				color[5]= new Color(85,135,162);
+				color[6]= new Color(209,175,148);
+				color[7]= new Color(136,177,75);
+				color[8]= new Color(92,113,72);
+				color[9]= new Color(209,48,118);
 				//=======================================================================================================================
 			}catch(Exception e){
 				e.printStackTrace();
@@ -119,41 +120,49 @@ public class BookGraph extends JPanel {
 			isFirst++;//if부분을 종료하기전 isFirst를 증가시켜 다음에 또 호출시 넘어가도록
 		}
 		setLayout(new BorderLayout()); // 패널 정렬을 BorderLayout으로
-		np.setLayout(new FlowLayout());//np패널은 FlowLayout으로 정렬
+		np.setLayout(new FlowLayout(FlowLayout.CENTER,20,0));//np패널은 FlowLayout으로 정렬
 		add(cp,BorderLayout.CENTER); //CENTER에 cp패널 올림
 		add(np,BorderLayout.NORTH);//NORTH에 np패널 올림
 		setBackground(Color.LIGHT_GRAY);
-		setSize(650, 500); // 프레임 사이즈 지정
+		setOpaque(false);
+		setSize(600, 500); // 프레임 사이즈 지정
 		setVisible(true); // 프레임을 보이게 함
 	}	
 	
 	//BorderLayout.NORTH 패널 생성 및 들어갈 내용 작성
 	class NorthPanel extends JPanel{
 		public NorthPanel() {
-			setBackground(Color.LIGHT_GRAY);
-			//this.setLayout(new FlowLayout(FlowLayout.CENTER,50,0));
 			MyActionListener ma = new MyActionListener();
 			ButtonGroup bg = new ButtonGroup();
-			//라디오 버튼을 생성하고 버튼그룹 bg에 모두 올려서 이쁘게 정렬
+			JButton bt = new JButton();
+//			라디오 버튼을 생성하고 버튼그룹 bg에 모두 올려서 이쁘게 정렬
 			bg.add(studentRb);
 			bg.add(deptRb);
 			bg.add(bookRb);
 			bg.add(dateRb);
+			bg.add(imsi);
 			add(deptRb);
 			add(studentRb);
 			add(bookRb);
 			add(dateRb);
-			deptRb.setBackground(Color.LIGHT_GRAY);
-			studentRb.setBackground(Color.LIGHT_GRAY);
-			bookRb.setBackground(Color.LIGHT_GRAY);
-			dateRb.setBackground(Color.LIGHT_GRAY);
+			//버튼 투명하게 해서 뒷배경 보이게
+			deptRb.setOpaque(false);
+			studentRb.setOpaque(false);
+			bookRb.setOpaque(false);
+			dateRb.setOpaque(false);
+			//--------------------------
 			
 			//모두 아이템리스너에 올려줌
 			deptRb.addItemListener(ma);
 			studentRb.addItemListener(ma);
 			bookRb.addItemListener(ma);
 			dateRb.addItemListener(ma);
-
+			
+			ButtonListener bt2 = new ButtonListener();
+			add(bt);
+			bt.addActionListener(bt2);
+			setOpaque(false); // NorthPanel 투명하게해서 뒷배경보이게
+			
 		}
 	}
 //NorthPanel 끝 ==========================================================================================================
@@ -171,21 +180,20 @@ public class BookGraph extends JPanel {
 				deptGak.add(0,0);//처음 시작각은 0도부터이기에 0번 인덱스에 0을 넣음
 				g.setFont(new Font("Gothic",Font.ITALIC,20));
 				g.setColor(Color.BLACK);
-				g.drawString("학과별 대출 비율", 410, 110);
+				g.drawString("학과별 대출 비율", 400, 110);
 				int deptGap=360;//과별 카운트의 각도 계산값의 합이 360으로 딱 떨어지지 않을수가 있음. 그래프가 이쁘게 안그려지므로 그때 모자란 수치를 더해주기위해 gap값을 구해주기위한 변수
 				for(int k=0;k<deptName.size();k++	) {//deptName의 크기 = 학과 개수만큼 반복
 					deptGap-=(int)Math.round(((float)deptCount.get(k)/sum)*360);//360에서 k번째 학과이름의 count값을 빼줌
 					g.setFont(new Font("Gothic",Font.BOLD,15));
-					g.setColor(deptColor[k]);//미리저장해둔 랜덤색 사용
-					g.drawString(deptName.get(k)+" - "+deptCount.get(k)+"권", 450, 140+(20*k));//어떤색이 어떤학과를 나타내는지 표시해주고 몇권을 빌려갔는지 표시
-					g.fillRect(420, 130+(20*k), 20, 10); //작은 네모색칸임 무슨색인지 잘보여주기위한것
+					g.setColor(color[k]);//미리저장해둔 랜덤색 사용
+					g.drawString(deptName.get(k)+" - "+deptCount.get(k)+"권", 440, 140+(20*k));//어떤색이 어떤학과를 나타내는지 표시해주고 몇권을 빌려갔는지 표시
+					g.fillRect(410, 130+(20*k), 20, 10); //작은 네모색칸임 무슨색인지 잘보여주기위한것
 					if(k==deptName.size()-1)//마지막 학과를 그릴때 deptGap을 더해주기위한 코드
 						g.fillArc(50, 50, 300, 300, deptGak.get(k),(int)Math.round((double)deptCount.get(k)/sum*360)+deptGap);
 					else//마지막학과가 아니면 그냥 그림
 						g.fillArc(50, 50, 300, 300, deptGak.get(k),(int)Math.round((double)deptCount.get(k)/sum*360));
 					deptGak.add(k+1,deptGak.get(k)+(int)Math.round((double)deptCount.get(k)/sum*360));//k+1번째 각도의 시작은 k번째 각도가 끝난곳 부터임
 				}
-				setBackground(Color.LIGHT_GRAY);
 			}
 			//==================================================================================================
 			
@@ -196,20 +204,19 @@ public class BookGraph extends JPanel {
 				studentGak.add(0,0);
 				g.setFont(new Font("Gothic",Font.ITALIC,20));
 				g.setColor(Color.BLACK);
-				g.drawString("상위 5명 대출비율", 410, 110);
+				g.drawString("상위 5명 대출비율", 400, 110);
 				for(int k=0;k<studentName.size();k++	) {
 					studentGap-=(int)Math.round(((float)studentCount.get(k)/sum2)*360);
 					g.setFont(new Font("Gothic",Font.BOLD,15));
-					g.setColor(studentColor[k]);
-					g.drawString(studentName.get(k)+" "+studentId.get(k)+" - "+studentCount.get(k)+"권", 440, 140+(20*k));
-					g.fillRect(420, 130+(20*k), 20, 10);
+					g.setColor(color[k+2]);
+					g.drawString(studentName.get(k)+" "+studentId.get(k)+" - "+studentCount.get(k)+"권", 430, 140+(20*k));
+					g.fillRect(410, 130+(20*k), 20, 10);
 					if(k==studentName.size()-1)
 						g.fillArc(50, 50, 300, 300, studentGak.get(k),(int)Math.round((double)studentCount.get(k)/sum2*360)+studentGap);
 					else
 						g.fillArc(50, 50, 300, 300, studentGak.get(k),(int)Math.round((double)studentCount.get(k)/sum2*360));
 					studentGak.add(k+1,studentGak.get(k)+(int)Math.round((double)studentCount.get(k)/sum2*360));
 				}
-				setBackground(Color.LIGHT_GRAY);
 			}
 			//==================================================================================================
 
@@ -220,20 +227,19 @@ public class BookGraph extends JPanel {
 				bookGak.add(0,0);
 				g.setFont(new Font("Gothic",Font.ITALIC,20));
 				g.setColor(Color.BLACK);
-				g.drawString("상위 5권 대출비율", 410, 110);
+				g.drawString("상위 5권 대출비율", 400, 110);
 				for(int k=0;k<bookName.size();k++	) {
 					bookGap-=(int)Math.round(((float)bookCount.get(k)/sum3)*360);
 					g.setFont(new Font("Gothic",Font.BOLD,15));
-					g.setColor(bookColor[k]);
-					g.drawString(bookName.get(k)+" - "+bookCount.get(k)+"회", 450, 140+(20*k));
-					g.fillRect(420, 130+(20*k), 20, 10);
+					g.setColor(color[k+4]);
+					g.drawString(bookName.get(k)+" - "+bookCount.get(k)+"회", 440, 140+(20*k));
+					g.fillRect(410, 130+(20*k), 20, 10);
 					if(k==bookName.size()-1)
 						g.fillArc(50, 50, 300, 300, bookGak.get(k),(int)Math.round((float)bookCount.get(k)/sum3*360)+bookGap);
 					else
 						g.fillArc(50, 50, 300, 300, bookGak.get(k),(int)Math.round((float)bookCount.get(k)/sum3*360));
 					bookGak.add(k+1,bookGak.get(k)+(int)Math.round((float)bookCount.get(k)/sum3*360));
 				}
-				setBackground(Color.LIGHT_GRAY);
 			}
 			//==================================================================================================
 
@@ -244,22 +250,22 @@ public class BookGraph extends JPanel {
 				dateGak.add(0,0);
 				g.setFont(new Font("Gothic",Font.ITALIC,20));
 				g.setColor(Color.BLACK);
-				g.drawString("상위 5개월 대출비율", 410, 110);
+				g.drawString("상위 5개월 대출비율", 400, 110);
 				for(int k=0;k<dateYear.size();k++	) {
 					dateGap-=(int)Math.round(((float)dateCount.get(k)/sum4)*360);
 					g.setFont(new Font("Gothic",Font.BOLD,15));
-					g.setColor(dateColor[k]);
-					g.drawString(dateYear.get(k)+"년 "+dateMonth.get(k)+"월 - "+dateCount.get(k)+"권", 450, 140+(20*k));
-					g.fillRect(420, 130+(20*k), 20, 10);
+					g.setColor(color[k*2]);
+					g.drawString(dateYear.get(k)+"년 "+dateMonth.get(k)+"월 - "+dateCount.get(k)+"권", 440, 140+(20*k));
+					g.fillRect(410, 130+(20*k), 20, 10);
 					if(k==dateYear.size()-1)
 						g.fillArc(50, 50, 300, 300, dateGak.get(k),(int)Math.round((float)dateCount.get(k)/sum4*360)+dateGap);
 					else
 						g.fillArc(50, 50, 300, 300, dateGak.get(k),(int)Math.round((float)dateCount.get(k)/sum4*360));
 					dateGak.add(k+1,dateGak.get(k)+(int)Math.round((float)dateCount.get(k)/sum4*360));
 				}
-				setBackground(Color.LIGHT_GRAY);
 			}
 			//==================================================================================================
+			setOpaque(false);
 		}
 	}
 //CenterPanel 끝======================================================================================================
@@ -269,7 +275,26 @@ public class BookGraph extends JPanel {
 			cp.repaint();//아이템 리스너에 등록한 버튼들이 뭐가됐든 눌리면 cp.repaint()실행
 		}
 	}
-
+	class ButtonListener implements ActionListener{
+		PieChart3D pc3 = new PieChart3D();
+		JPanel jp = new JPanel();
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(dateRb.isSelected()) {
+				System.out.println("날짲별 체크~~");
+				imsi.setSelected(true);
+				jp.setBackground(Color.red);
+				jp.setSize(600,450);
+				jp.setLocation(0,30);
+				add(jp);
+				jp.add(pc3);
+				pc3.setSize(600,450);
+				System.out.println(pc3.getSize());
+								
+			}
+		}
+		
+	}
 	public static void main(String args[]) {
 	}
 }

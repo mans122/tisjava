@@ -1,9 +1,9 @@
 
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.text.AttributedString;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
@@ -13,43 +13,38 @@ import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
-import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.RefineryUtilities;
 import org.jfree.util.Rotation;
 
 
 public class PieChart3D extends JPanel {
-
+	public static ChartPanel chartPanel;
+	
     public PieChart3D() {
         final PieDataset dataset = createSampleDataset();
         final JFreeChart chart = createChart(dataset);
-        final ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-        chartPanel.setPreferredSize(new Dimension(500, 300));
-//        setTitle("¸¶¸¶¸¶¸¶¸¶");
-//        setContentPane(chartPanel);
+        chartPanel = new ChartPanel(chart);
+//        chartPanel.setOpaque(false);
+        setSize(600,500);
+        add(chartPanel);
+        setVisible(true);
+        
 
     }
 
     private PieDataset createSampleDataset() {
         
         final DefaultPieDataset result = new DefaultPieDataset();
-//        result.setValue("Java", new Double(43.2));
-//        result.setValue("Visual Basic", new Double(10.0));
-//        result.setValue("C/C++", new Double(17.5));
-//        result.setValue("PHP", new Double(32.5));
-//        result.setValue("Perl", new Double(1.0));
         result.setValue("Java : "+ new Integer(43), new Integer(43));
         result.setValue("Visual Basic", new Integer(10));
         result.setValue("C/C++", new Integer(17));
         result.setValue("PHP", new Integer(32));
         result.setValue("Perl", new Integer(1));
+        
         return result;
         
     }
  
     private JFreeChart createChart(final PieDataset dataset) {
-        
         final JFreeChart chart = ChartFactory.createPieChart3D(
             "3D ÆÄÀÌÂ÷Æ®",  // chart title
             dataset,                // data
@@ -64,17 +59,14 @@ public class PieChart3D extends JPanel {
         plot.setForegroundAlpha(0.5f);
         plot.setNoDataMessage("No data to display");
         plot.setLabelGenerator(new CustomLabelGenerator());
+        chart.getTitle().setFont(new Font("°íµñ", Font.BOLD, 15));
+        // ¹ü·Ê
+        chart.getLegend().setItemFont(new Font("°íµñ", Font.PLAIN, 10));
         return chart;
         
     }
  
     public static void main(final String[] args) {
-
-        final PieChart3D demo = new PieChart3D();
-//        demo.pack();
-//        RefineryUtilities.centerFrameOnScreen(demo);
-        demo.setVisible(true);
-
     }
     
 
@@ -90,10 +82,8 @@ public class PieChart3D extends JPanel {
             }
             return result;
         }
-
 		@Override
 		public AttributedString generateAttributedSectionLabel(PieDataset arg0, Comparable arg1) {
-			// TODO Auto-generated method stub
 			return null;
 		}
    

@@ -40,8 +40,7 @@ public class MainProcess {
 		MainProcess.login.setSize(500, 300);
 		Dimension frameSize = MainProcess.login.getSize();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		MainProcess.login.setLocation((screenSize.width - frameSize.width) / 2,
-				(screenSize.height - frameSize.height) / 2);
+		MainProcess.login.setLocation((screenSize.width - frameSize.width) / 2,	(screenSize.height - frameSize.height) / 2);
 		MainProcess.login.setResizable(false);
 		MainProcess.login.setVisible(true);
 	}

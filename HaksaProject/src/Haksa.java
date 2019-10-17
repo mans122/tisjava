@@ -7,6 +7,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.ResultSet;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -22,11 +23,18 @@ public class Haksa extends JFrame{
 	static JPanel panel = null;
 	public Haksa() {
 		db = new DBManager();
+		ImageIcon icon = new ImageIcon("img/back1.jpg");
 		f.setTitle("학사관리");
-		f.setPreferredSize(new Dimension(500,500));
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Container c = f.getContentPane();
-		panel = new JPanel();
+		panel = new JPanel() {
+			public void paintComponent(Graphics g) {
+			Dimension d = getSize();
+			g.drawImage(icon.getImage(), 0, 0, d.width, d.height, null);
+			setOpaque(false); //그림을 표시하게 설정,투명하게 조절
+			super.paintComponent(g);
+			}};
+		panel.setBackground(Color.LIGHT_GRAY);
 		JMenuBar mb = new JMenuBar();
 		
 		JMenu Menu1 = new JMenu("학생관리");
@@ -66,6 +74,7 @@ public class Haksa extends JFrame{
 		});
 		c.add(panel);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		f.setPreferredSize(new Dimension(600,500));
 		f.setLocation((screenSize.width-f.getPreferredSize().width)/2,(screenSize.height-f.getPreferredSize().height)/2);
 		f.pack();
 		f.setResizable(false);
@@ -75,7 +84,7 @@ public class Haksa extends JFrame{
 		this.main = main;
 	}
 	public static void main(String[] args) {
-		//new Haksa();
+		new Haksa();
 	}
 }
 

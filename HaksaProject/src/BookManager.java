@@ -170,6 +170,7 @@ public class BookManager extends JPanel {
 		//반납안한 사람만 보기위한 필터링을 추가
 		ch = new JCheckBox("반납한사람 제외");
 		ch.setBounds(460, 10, 150, 30);
+		ch.setOpaque(false);
 		ch.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
@@ -191,7 +192,10 @@ public class BookManager extends JPanel {
 		show();
 		add(bookInfo);
 		add(rentInfo);
+		jp.setOpaque(false);
+		table.setOpaque(false);
 		setBackground(Color.LIGHT_GRAY);
+		setOpaque(false);
 		setSize(700,500);
 		setVisible(true);
 	}
