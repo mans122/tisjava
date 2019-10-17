@@ -23,7 +23,7 @@ public class LoginActionListener implements ActionListener{
 					if(id.equals("test") || rs.getString("id").isEmpty()==false && pwd.equals(rs.getString("birth")) ) {
 						loginId = id;
 						System.out.println("로그인");
-						Student.id.setText(loginId+"님 접속중");
+						Student.id.setText(loginId+"님");
 						JOptionPane.showMessageDialog(null,"로그인 성공","알림",JOptionPane.INFORMATION_MESSAGE);
 						Login.main.showFrameTest(); // 메인창 메소드를 이용해 띄우기
 					}

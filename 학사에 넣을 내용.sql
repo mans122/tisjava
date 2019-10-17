@@ -173,19 +173,20 @@ select * from bookrent2;
 select * from books2;
 select * from student;
 
-create table student2(
+create table student(
     id char(7) primary key,
     name varchar2(20) not null,
     dept varchar2(20) not null,
     address varchar2(100) null,
     birth char(6) default '000000' not null
 );
-drop table student2;
+drop table student;
 
 select * from student2;
 delete from student2;
 
 insert into student2(id,name,dept,address,birth) select * from student;
+insert into student2(id,name,dept,address) select * from student;
 insert into student(id,name,dept,address,birth) select * from student2;
 select * from student;
 

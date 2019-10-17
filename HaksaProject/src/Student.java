@@ -7,12 +7,13 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 public class Student extends JPanel {
+	static JComboBox comboboxSearch = null;
 	static DefaultTableModel model = null;
 	static JTable table=null;
 	static JLabel id = new JLabel();
 	//학번~주소를 입력받을 TextField 4개 선언
 	public static JTextField[] tf_num = new JTextField[5];
-	public static JButton[] btnSearch = new JButton[4];
+	public static JButton btnSearch = new JButton();
 	public Student() {
 		setLayout(null);
 		JLabel[] a = new JLabel[5];
@@ -22,22 +23,39 @@ public class Student extends JPanel {
 		a[3] = new JLabel("주소");
 		a[4] = new JLabel("생일");
 		//텍스트필드,검색버튼
+		int kk=0;
 		for(int i=0;i<5;i++) {
+			if(i==1)
+				kk=1;
+			
 			a[i].setSize(new Dimension(30,30));
-			a[i].setLocation(10, 10+(i*30));
+			a[i].setLocation(10, 8+(i*30));
 			add(a[i]);
 			
 			tf_num[i] = new JTextField();
 			tf_num[i].setLocation(45,12+(i*30));
-			tf_num[i].setSize(200, 25);
+			tf_num[i].setSize(200+(kk*70), 25);
 			add(tf_num[i]);
 		}
+		
+		//검색하는곳 만들기
+		String[] searchList = new String[4];
 		for(int i=0;i<4;i++) {
-			btnSearch[i] = new JButton("검색");
-			btnSearch[i].setSize(60, 25);
-			btnSearch[i].setLocation(250, 12+(i*30));
-			add(btnSearch[i]);
-			}
+			searchList[i] = a[i].getText(); 
+		}
+		comboboxSearch=new JComboBox(searchList);
+		comboboxSearch.setBounds(250, 12, 65, 25);
+		add(comboboxSearch);
+		
+		JLabel b = new JLabel("(으)로");
+		b.setBounds(320, 12, 50, 25);
+		add(b);
+		
+		btnSearch = new JButton("검색");
+		btnSearch.setBounds(360, 9, 60, 30);
+		add(btnSearch);
+		//--------------------------------------------------------------------------
+		
 		//JTable 셀 내용 정렬
 		DefaultTableCellRenderer celAlignCenter = new DefaultTableCellRenderer();
 		celAlignCenter.setHorizontalAlignment(JLabel.CENTER);
@@ -52,7 +70,6 @@ public class Student extends JPanel {
 		table.getColumnModel().getColumn(2).setPreferredWidth(90);
 		table.getColumnModel().getColumn(3).setPreferredWidth(230);
 		table.getColumnModel().getColumn(4).setPreferredWidth(50);
-		//table.setPreferredScrollableViewportSize(new Dimension(320,280));//테이블 사이즈
 //		table.setPreferredScrollableViewportSize(new Dimension(600,280));//테이블 사이즈
 		JScrollPane jp = new JScrollPane(table);
 		jp.setSize(new Dimension(480,220));
@@ -102,20 +119,22 @@ public class Student extends JPanel {
 		StudentActionListener ma = new StudentActionListener();//리스너 생성
 		StudentSearchActionListener sa = new StudentSearchActionListener();
 		//버튼을 리스너에 등록
-		btnSearch[0].addActionListener(sa);
-		btnSearch[1].addActionListener(sa);
-		btnSearch[2].addActionListener(sa);
-		btnSearch[3].addActionListener(sa);
+		btnSearch.addActionListener(sa);
 		btnInsert.addActionListener(ma);
 		btnList.addActionListener(ma);
 		btnUpdate.addActionListener(ma);
 		btnDelete.addActionListener(ma);
 		btnLogout.addActionListener(ma);
+		Font font= new Font("Courier",Font.BOLD,20);
+		id.setFont(font);
+		id.setBounds(350, 50, 150, 40);
+		JLabel id2 = new JLabel("환영합니다.");
+		id2.setFont(font);
+		id2.setBounds(350, 90, 150, 40);
 		
-		id.setSize(150, 60);
-		id.setLocation(350, 0);
 		//버튼을 패널에 등록
 		add(id);
+		add(id2);
 		add(btnInsert);
 		add(btnList);
 		add(btnUpdate);

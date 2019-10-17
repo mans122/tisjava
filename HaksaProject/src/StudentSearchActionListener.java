@@ -2,6 +2,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 public class StudentSearchActionListener implements ActionListener{
@@ -24,7 +25,9 @@ public class StudentSearchActionListener implements ActionListener{
 			System.out.println(e1.getMessage());
 		}
 	}
+	
 	public void actionPerformed(ActionEvent e) {
+		int selected = Student.comboboxSearch.getSelectedIndex();
 		String id = Student.tf_num[0].getText();
 		String name = Student.tf_num[1].getText();
 		String dept = Student.tf_num[2].getText();
@@ -40,7 +43,7 @@ public class StudentSearchActionListener implements ActionListener{
 		}
 		//학번으로 검색
 		try {
-			if(e.getSource() == Student.btnSearch[0]){
+			if(selected ==0){
 				if(id.length()==0) {
 					JOptionPane.showMessageDialog(null,"값이 입력되지 않았습니다.","경고",JOptionPane.WARNING_MESSAGE);
 				}
@@ -54,6 +57,7 @@ public class StudentSearchActionListener implements ActionListener{
 					rs = DBManager.stmt.executeQuery("select * from student where id ='"+id+"'");
 					tableShow(rs);
 					//textarea에 보여주던가 텍스트필드 채워놓던가
+					/*
 					rs = DBManager.stmt.executeQuery("select * from student where id ='"+id+"'");
 					while(rs.next()) {
 						Student.tf_num[0].setText(rs.getString("id")); 
@@ -62,25 +66,26 @@ public class StudentSearchActionListener implements ActionListener{
 						Student.tf_num[3].setText(rs.getString("address"));
 						Student.tf_num[4].setText(rs.getString("birth"));
 					}
+					*/
 				}
 			}
 			//이름으로 검색
-			if(e.getSource() == Student.btnSearch[1]){
+			if(selected ==1){
 				rs = DBManager.stmt.executeQuery("select * from student where name ='"+name+"'");
 				tableShow(rs);
-				Student.tf_num[1].setText("");
 			}
 			//학과로 검색
-			if(e.getSource() == Student.btnSearch[2]){
+			if(selected ==2){
 				rs = DBManager.stmt.executeQuery("select * from student where dept like '%"+dept+"%'");
 				tableShow(rs);
-				Student.tf_num[2].setText("");
 			}
 			//주소로 검색
-			if(e.getSource() == Student.btnSearch[3]){
+			if(selected ==3){
 				rs = DBManager.stmt.executeQuery("select * from student where address like'%"+address+"%'");
 				tableShow(rs);
-				Student.tf_num[3].setText("");
+			}
+			for(int i=0;i<5;i++) {
+				Student.tf_num[i].setText("");
 			}
 		}
 		catch(Exception e1 ) {

@@ -51,21 +51,10 @@ import org.jfree.ui.RefineryUtilities;
 				Haksa.panel.revalidate();
 				Haksa.panel.repaint();
 				Haksa.panel.add(new BookGraph());
-				Haksa.f.setPreferredSize(new Dimension(600,500));
+				Haksa.f.setPreferredSize(new Dimension(600,550));
 				Haksa.panel.setLayout(null);
 				Haksa.f.pack();
 				break;
-			case "3D":
-				System.out.println("dd");
-				PieChart3D pi = new PieChart3D();
-				Haksa.panel.removeAll();
-				Haksa.panel.revalidate();
-				Haksa.panel.repaint();
-				Haksa.panel.setLayout(null);
-				Haksa.panel.add(pi);
-				Haksa.f.setPreferredSize(new Dimension(600,500));
-				Haksa.f.pack();
-				break;	
 			}
 		}
 	public static void main(String[] args) {

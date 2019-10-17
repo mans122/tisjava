@@ -4,10 +4,22 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.ResultSet;
+import java.text.AttributedString;
 import java.util.ArrayList;
 import javax.swing.*;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot3D;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
+import org.jfree.util.Rotation;
+
+//isFirst때문에 추가하고 새로 가져와도 값 갱신이안됌
 public class BookGraph extends JPanel {
+	static ChartPanel chartPanel;
 	static JPanel jp = new JPanel();
 	static ArrayList<String> deptName = new ArrayList<>();
 	static ArrayList<Integer> deptCount = new ArrayList<>();
@@ -33,7 +45,10 @@ public class BookGraph extends JPanel {
 	JRadioButton  studentRb = new JRadioButton("학생별");
 	JRadioButton  bookRb = new JRadioButton("도서별");
 	JRadioButton  dateRb = new JRadioButton("월별");
-	JRadioButton imsi = new JRadioButton();
+	JRadioButton dept = new JRadioButton();
+	JRadioButton student = new JRadioButton();
+	JRadioButton book = new JRadioButton();
+	JRadioButton date = new JRadioButton();
 	CenterPanel cp = new CenterPanel(); // CenterPanel클래스로 만든 메인프레임 가운데 붙일 패널 cp생성
 	NorthPanel np= new NorthPanel();	//NotrhPanel클래스로 만든 위에붙일 패널 np 생성
 	String query;
@@ -141,7 +156,10 @@ public class BookGraph extends JPanel {
 			bg.add(deptRb);
 			bg.add(bookRb);
 			bg.add(dateRb);
-			bg.add(imsi);
+			bg.add(student);
+			bg.add(dept);
+			bg.add(book);
+			bg.add(date);
 			add(deptRb);
 			add(studentRb);
 			add(bookRb);
@@ -277,27 +295,98 @@ public class BookGraph extends JPanel {
 		}
 	}
 	class ButtonListener implements ActionListener{
-		PieChart3D pc3 = new PieChart3D();
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			cp.setSize(600,400);
 			cp.removeAll();
 			cp.revalidate();
 			cp.repaint();
+			
+			if(deptRb.isSelected()) {
+				dept.setSelected(true);
+				cp.add(new PieChart3D());
+			}
+			if(studentRb.isSelected()) {
+				student.setSelected(true);
+				cp.add(new PieChart3D());
+			}
+			if(bookRb.isSelected()) {
+				book.setSelected(true);
+				cp.add(new PieChart3D());
+			}
 			if(dateRb.isSelected()) {
-				System.out.println("날짲별 체크~~");
-				imsi.setSelected(true);
-				
-				cp.setSize(600,450);
-				cp.setLocation(0,30);
-				cp.removeAll();
-				cp.revalidate();
-				cp.repaint();
-				cp.setLayout(null);
-				cp.add(pc3);
+				date.setSelected(true);
+//				cp.setSize(600,400);
+//				cp.removeAll();
+//				cp.revalidate();
+//				cp.repaint();
+//				cp.setLayout(null);
+				cp.add(new PieChart3D());
 			}
 		}
 		
 	}
 	public static void main(String args[]) {
 	}
+	//============================================================================
+	//=======3D 파이차트 만들어주는 코드==============================================
+	 class PieChart3D extends JPanel {
+		 String titleName = null;
+	    public PieChart3D() {
+	        final PieDataset dataset = createSampleDataset();
+	        final JFreeChart chart = createChart(dataset);
+	        chartPanel = new ChartPanel(chart);
+	        setSize(600,450);
+	        add(chartPanel);
+	        setVisible(true);
+	    }
+
+	    private PieDataset createSampleDataset() {
+	    	final DefaultPieDataset result = new DefaultPieDataset();
+	        if(dept.isSelected()) {
+	        	for(int i=0;i<deptName.size();i++) {
+	        		result.setValue(deptName.get(i)+" - "+deptCount.get(i)+"권", new Double((100/sum)*deptCount.get(i)));
+	        	}
+	        	titleName = "상위5개 학과 3D차트";
+	        }
+	        
+	        if(student.isSelected()) {
+	        	for(int i=0;i<studentName.size();i++) {
+	        		result.setValue(studentName.get(i)+" "+studentId.get(i)+" - "+studentCount.get(i)+"권", new Double((100/sum2)*studentCount.get(i)));
+	        		}
+	        	titleName = "상위5명 학생 3D차트";
+	        } 
+	        
+	        if(book.isSelected()) {
+	        	for(int i=0;i<bookName.size();i++) {
+	        		result.setValue(bookName.get(i)+" - "+bookCount.get(i)+"회", new Double((100/sum3)*bookCount.get(i)));
+	        	}
+	        	titleName = "상위5개 도서 3D차트";
+	        }
+	        
+	        if(date.isSelected()) {
+	        	for(int i=0;i<dateYear.size();i++) {
+	        		result.setValue(dateYear.get(i)+"년 "+dateMonth.get(i)+"월 - "+dateCount.get(i)+"권", new Double((100/sum4)*dateCount.get(i)));
+	        	}
+	        	titleName = "상위5개월 3D차트";
+	        }
+	        return result;
+	    }
+	 
+	    private JFreeChart createChart(final PieDataset dataset) {
+	        final JFreeChart chart = ChartFactory.createPieChart3D(
+	        		titleName, dataset, true, true, false
+	        );
+
+	        final PiePlot3D plot = (PiePlot3D) chart.getPlot();
+	        plot.setStartAngle(290);
+	        plot.setDirection(Rotation.CLOCKWISE);
+	        plot.setForegroundAlpha(0.5f);
+	        plot.setNoDataMessage("No data to display");
+	        chart.getTitle().setFont(new Font("고딕", Font.BOLD, 15));
+	        plot.setLabelFont(new Font("고딕", Font.PLAIN, 12));
+	        chart.getLegend().setItemFont(new Font("고딕", Font.PLAIN, 10));
+	        return chart;
+	    }
+	 }
 }
