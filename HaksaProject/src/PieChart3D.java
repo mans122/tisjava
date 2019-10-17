@@ -18,12 +18,10 @@ import org.jfree.util.Rotation;
 
 public class PieChart3D extends JPanel {
 	public static ChartPanel chartPanel;
-	
     public PieChart3D() {
         final PieDataset dataset = createSampleDataset();
         final JFreeChart chart = createChart(dataset);
         chartPanel = new ChartPanel(chart);
-//        chartPanel.setOpaque(false);
         setSize(600,500);
         add(chartPanel);
         setVisible(true);
@@ -32,13 +30,18 @@ public class PieChart3D extends JPanel {
     }
 
     private PieDataset createSampleDataset() {
-        
-        final DefaultPieDataset result = new DefaultPieDataset();
-        result.setValue("Java : "+ new Integer(43), new Integer(43));
-        result.setValue("Visual Basic", new Integer(10));
-        result.setValue("C/C++", new Integer(17));
-        result.setValue("PHP", new Integer(32));
-        result.setValue("Perl", new Integer(1));
+    	final DefaultPieDataset result = new DefaultPieDataset();
+    	
+      result.setValue("", new Double(43.2));
+      result.setValue("Visual Basic", new Double(10.0));
+      result.setValue("C/C++", new Double(17.5));
+      result.setValue("PHP", new Double(32.5));
+      result.setValue("Perl", new Double(1.0));
+//        result.setValue("Java : "+ new Integer(43), new Integer(43));
+//        result.setValue("Visual Basic", new Integer(10));
+//        result.setValue("C/C++", new Integer(17));
+//        result.setValue("PHP", new Integer(32));
+//        result.setValue("Perl", new Integer(1));
         
         return result;
         

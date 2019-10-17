@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 public class BookGraph extends JPanel {
+	static JPanel jp = new JPanel();
 	static ArrayList<String> deptName = new ArrayList<>();
 	static ArrayList<Integer> deptCount = new ArrayList<>();
 	static int sum=0;
@@ -134,7 +135,7 @@ public class BookGraph extends JPanel {
 		public NorthPanel() {
 			MyActionListener ma = new MyActionListener();
 			ButtonGroup bg = new ButtonGroup();
-			JButton bt = new JButton();
+			JButton bt = new JButton("3D로 보기");
 //			라디오 버튼을 생성하고 버튼그룹 bg에 모두 올려서 이쁘게 정렬
 			bg.add(studentRb);
 			bg.add(deptRb);
@@ -277,20 +278,22 @@ public class BookGraph extends JPanel {
 	}
 	class ButtonListener implements ActionListener{
 		PieChart3D pc3 = new PieChart3D();
-		JPanel jp = new JPanel();
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			cp.removeAll();
+			cp.revalidate();
+			cp.repaint();
 			if(dateRb.isSelected()) {
 				System.out.println("날짲별 체크~~");
 				imsi.setSelected(true);
-				jp.setBackground(Color.red);
-				jp.setSize(600,450);
-				jp.setLocation(0,30);
-				add(jp);
-				jp.add(pc3);
-				pc3.setSize(600,450);
-				System.out.println(pc3.getSize());
-								
+				
+				cp.setSize(600,450);
+				cp.setLocation(0,30);
+				cp.removeAll();
+				cp.revalidate();
+				cp.repaint();
+				cp.setLayout(null);
+				cp.add(pc3);
 			}
 		}
 		
