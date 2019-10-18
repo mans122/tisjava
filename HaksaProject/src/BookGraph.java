@@ -4,14 +4,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.ResultSet;
-import java.text.AttributedString;
 import java.util.ArrayList;
 import javax.swing.*;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
@@ -23,21 +21,21 @@ public class BookGraph extends JPanel {
 	static JPanel jp = new JPanel();
 	static ArrayList<String> deptName = new ArrayList<>();
 	static ArrayList<Integer> deptCount = new ArrayList<>();
-	static int sum=0;
+	static int sum;
 
 	static ArrayList<String> studentId = new ArrayList<>();
 	static ArrayList<String> studentName = new ArrayList<>();
 	static ArrayList<Integer> studentCount = new ArrayList<>();
-	static int sum2=0;
+	static int sum2;
 
 	static ArrayList<String> bookName = new ArrayList<>();
 	static ArrayList<Integer> bookCount = new ArrayList<>();
-	static int sum3=0;
-
+	static int sum3;
+	
 	static ArrayList<String> dateYear = new ArrayList<>();
 	static ArrayList<String> dateMonth = new ArrayList<>();
 	static ArrayList<Integer> dateCount = new ArrayList<>();
-	static int sum4=0;
+	static int sum4;
 	static int isFirst = 0;
 	ResultSet rs = null;
 	static Color[] color = new Color[10];
@@ -53,87 +51,107 @@ public class BookGraph extends JPanel {
 	NorthPanel np= new NorthPanel();	//NotrhPanel클래스로 만든 위에붙일 패널 np 생성
 	String query;
 	public BookGraph() {
-		if(isFirst==0) {//만약 다른 메뉴로 들어갔다 다시 BookGraph를 호출했을때  쿼리를 다시돌리고 값을 
-			//다시저장하면 꼬이는경우가 발생 BookGraph메서드 마지막에 isFirst 값을 증가시켜 다음에 또 찾아올경우 이부분을 넘어가도록
-			try{
-				//학과별로 분류하기위한 내용
-				rs = DBManager.stmt.executeQuery("select dept, count(*) as count from (select s.dept, br.rdate from student s, books2 b, bookRent2 br"
-						+" where br.id=s.id and br.bookNo=b.no) group by dept order by count desc");
-				int i=0;
-				//====================================================
-				
-				//학과별로 BookRent 테이블에서 검색해서 나오는 학과,학과별 총합을 구해줌
-				while(rs.next()) {
-					deptName.add(i,rs.getString("dept"));
-					deptCount.add(i,rs.getInt("count"));
-					sum+=deptCount.get(i);
-					i++;
-				}
-				//====================================================
-				//학생별 값 구해서 넣어주는코드,대여하는 학생이 수백 수천일수도 있으므로 상위 5명만 구해준다.
-				rs = DBManager.stmt.executeQuery("select id,name, count(*) count"
-						+" from(select br.id id,name,b.no no,b.title title, br.rdate from student s, books2 b, bookRent2 br where br.id=s.id and br.bookNo=b.no)"
-						+" group by id,name order by count desc");
-				int i2 = 0;
-				while(rs.next()) {
-					if(i2>4) {
-						break;
-					}
-					studentId.add(i2,rs.getString("id"));
-					studentName.add(i2,rs.getString("name"));
-					studentCount.add(i2,rs.getInt("count"));
-					sum2+=studentCount.get(i2);
-					i2++;
-				}
-				//=======================================================================================================================
+		//처음 호출됐으면 컬러값을 넣어준다.
+		if(isFirst==0) {
+			color[0]= new Color(239,86,45);
+			color[1]= new Color(246,210,88);
+			color[2]= new Color(239,206,197);
+			color[3]= new Color(151,213,224);
+			color[4]= new Color(12,76,138);
+			color[5]= new Color(85,135,162);
+			color[6]= new Color(209,175,148);
+			color[7]= new Color(136,177,75);
+			color[8]= new Color(92,113,72);
+			color[9]= new Color(209,48,118);
+			isFirst++;
+		}
+		
+		//ArrayList에 저장하기때문에 BookGraph가 호출될때마다 누적되어 쌓여서 코드가 꼬이기때문에 호출할때마다 ArrayList를 초기화해준다
+		deptName.clear();
+		deptCount.clear();
 
-				//도서별 상위 5종류만 구해준다.
-				rs = DBManager.stmt.executeQuery("select title, count(*) count from(select br.id id,name,b.no no,b.title title, br.rdate from student s,"
-						+" books2 b, bookRent2 br where br.id=s.id and br.bookNo=b.no) group by title order by count desc");
-				int i3 = 0;
-				while(rs.next()) {
-					if(i3==5) {
-						break;
-					}
-					bookName.add(i3,rs.getString("title"));
-					bookCount.add(i3,rs.getInt("count"));
-					sum3+=bookCount.get(i3);
-					i3++;
-				}
-				//=======================================================================================================================
+		studentId.clear();
+		studentName.clear();
+		studentCount.clear();
 
-				//대여기록이 많은 년월을 구해준다.
-				rs = DBManager.stmt.executeQuery("select year, month, count(*) count from(select substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from student s, books2 b, bookRent2 br where br.id=s.id(+) and br.bookNo=b.no)" + 
-						" group by year,month order by count desc");
-				int i4 = 0;
-				while(rs.next()) {
-					if(i4>4) {
-						break;
-					}
-					dateYear.add(i4,rs.getString("year"));
-					dateMonth.add(i4,rs.getString("month"));
-					dateCount.add(i4,rs.getInt("count"));
-					sum4+=dateCount.get(i4);
-					i4++;
-				}
+		bookName.clear();
+		bookCount.clear();
 
-				//=========================================================================================================================
-				//선택할떄마다 색이 바뀌지 않게 미리 색을 리스트에 넣어둔다.
-				color[0]= new Color(239,86,45);
-				color[1]= new Color(246,210,88);
-				color[2]= new Color(239,206,197);
-				color[3]= new Color(151,213,224);
-				color[4]= new Color(12,76,138);
-				color[5]= new Color(85,135,162);
-				color[6]= new Color(209,175,148);
-				color[7]= new Color(136,177,75);
-				color[8]= new Color(92,113,72);
-				color[9]= new Color(209,48,118);
-				//=======================================================================================================================
-			}catch(Exception e){
-				e.printStackTrace();
+		dateYear.clear();
+		dateMonth.clear();
+		dateCount.clear();
+		//======================================================================================================================================================
+		
+		try{
+			//학과별로 분류하기위한 내용
+			rs = DBManager.stmt.executeQuery("select dept, count(*) as count from (select s.dept, br.rdate from student s, books2 b, bookRent2 br"
+					+" where br.id=s.id and br.bookNo=b.no) group by dept order by count desc");
+			int i=0;
+			sum=0;
+			//==========================================================================================================================================================
+
+			//학과별로 BookRent 테이블에서 검색해서 나오는 학과,학과별 총합을 구해줌
+			while(rs.next()) {
+				deptName.add(i,rs.getString("dept"));
+				deptCount.add(i,rs.getInt("count"));
+				sum+=deptCount.get(i);
+				i++;
 			}
-			isFirst++;//if부분을 종료하기전 isFirst를 증가시켜 다음에 또 호출시 넘어가도록
+			//==========================================================================================================================================================
+			
+			//학생별 값 구해서 넣어주는코드,대여하는 학생이 수백 수천일수도 있으므로 상위 5명만 구해준다.
+			rs = DBManager.stmt.executeQuery("select id,name, count(*) count"
+					+" from(select br.id id,name,b.no no,b.title title, br.rdate from student s, books2 b, bookRent2 br where br.id=s.id and br.bookNo=b.no)"
+					+" group by id,name order by count desc");
+			int i2 = 0;
+			sum2=0;
+			while(rs.next()) {
+				if(i2>4) {
+					break;
+				}
+				studentId.add(i2,rs.getString("id"));
+				studentName.add(i2,rs.getString("name"));
+				studentCount.add(i2,rs.getInt("count"));
+				sum2+=studentCount.get(i2);
+				i2++;
+			}
+			//==========================================================================================================================================================================
+
+			//도서별 상위 5종류만 구해준다.
+			rs = DBManager.stmt.executeQuery("select title, count(*) count from(select br.id id,name,b.no no,b.title title, br.rdate from student s,"
+					+" books2 b, bookRent2 br where br.id=s.id and br.bookNo=b.no) group by title order by count desc");
+			int i3 = 0;
+			sum3=0;
+			while(rs.next()) {
+				if(i3==5) {
+					break;
+				}
+				bookName.add(i3,rs.getString("title"));
+				bookCount.add(i3,rs.getInt("count"));
+				sum3+=bookCount.get(i3);
+				i3++;
+			}
+			//==========================================================================================================================================================================
+
+			//대여기록이 많은 년월을 구해준다.
+			rs = DBManager.stmt.executeQuery("select year, month, count(*) count from(select substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from student s, books2 b, bookRent2 br where br.id=s.id(+) and br.bookNo=b.no)" + 
+					" group by year,month order by count desc");
+			int i4 = 0;
+			sum4=0;
+			while(rs.next()) {
+				if(i4>4) {
+					break;
+				}
+				dateYear.add(i4,rs.getString("year"));
+				dateMonth.add(i4,rs.getString("month"));
+				dateCount.add(i4,rs.getInt("count"));
+				sum4+=dateCount.get(i4);
+				i4++;
+			}
+			//============================================================================================================================================================================
+
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 		setLayout(new BorderLayout()); // 패널 정렬을 BorderLayout으로
 		np.setLayout(new FlowLayout(FlowLayout.CENTER,20,0));//np패널은 FlowLayout으로 정렬
@@ -144,14 +162,14 @@ public class BookGraph extends JPanel {
 		setSize(600, 500); // 프레임 사이즈 지정
 		setVisible(true); // 프레임을 보이게 함
 	}	
-	
+	//======================================================================================================================================================
 	//BorderLayout.NORTH 패널 생성 및 들어갈 내용 작성
 	class NorthPanel extends JPanel{
 		public NorthPanel() {
 			MyActionListener ma = new MyActionListener();
 			ButtonGroup bg = new ButtonGroup();
 			JButton bt = new JButton("3D로 보기");
-//			라디오 버튼을 생성하고 버튼그룹 bg에 모두 올려서 이쁘게 정렬
+			//			라디오 버튼을 생성하고 버튼그룹 bg에 모두 올려서 이쁘게 정렬
 			bg.add(studentRb);
 			bg.add(deptRb);
 			bg.add(bookRb);
@@ -170,21 +188,21 @@ public class BookGraph extends JPanel {
 			bookRb.setOpaque(false);
 			dateRb.setOpaque(false);
 			//--------------------------
-			
+
 			//모두 아이템리스너에 올려줌
 			deptRb.addItemListener(ma);
 			studentRb.addItemListener(ma);
 			bookRb.addItemListener(ma);
 			dateRb.addItemListener(ma);
-			
+
 			ButtonListener bt2 = new ButtonListener();
 			add(bt);
 			bt.addActionListener(bt2);
 			setOpaque(false); // NorthPanel 투명하게해서 뒷배경보이게
-			
+
 		}
 	}
-//NorthPanel 끝 ==========================================================================================================
+	//============================================================================================================================================================
 	//CenterPanel 클래스 작성
 	class CenterPanel extends JPanel{
 		ArrayList<Integer> deptGak = new ArrayList<>();
@@ -213,9 +231,10 @@ public class BookGraph extends JPanel {
 						g.fillArc(50, 50, 300, 300, deptGak.get(k),(int)Math.round((double)deptCount.get(k)/sum*360));
 					deptGak.add(k+1,deptGak.get(k)+(int)Math.round((double)deptCount.get(k)/sum*360));//k+1번째 각도의 시작은 k번째 각도가 끝난곳 부터임
 				}
+
 			}
 			//==================================================================================================
-			
+
 			//학생별 상위5명 차트 생성
 			if(studentRb.isSelected()) {
 				int studentGap = 360;
@@ -250,7 +269,7 @@ public class BookGraph extends JPanel {
 				for(int k=0;k<bookName.size();k++	) {
 					bookGap-=(int)Math.round(((float)bookCount.get(k)/sum3)*360);
 					g.setFont(new Font("Gothic",Font.BOLD,15));
-					g.setColor(color[k+4]);
+					g.setColor(color[k*2+1]);
 					g.drawString(bookName.get(k)+" - "+bookCount.get(k)+"회", 440, 140+(20*k));
 					g.fillRect(410, 130+(20*k), 20, 10);
 					if(k==bookName.size()-1)
@@ -287,13 +306,16 @@ public class BookGraph extends JPanel {
 			setOpaque(false);
 		}
 	}
-//CenterPanel 끝======================================================================================================
+	//CenterPanel 끝======================================================================================================
+	//아이템 리스너에 등록한 버튼들이 뭐가됐든 눌리면 cp.repaint()실행 (CenterPanel 다시그린다)
 	class MyActionListener implements ItemListener{
 		@Override
 		public void itemStateChanged(ItemEvent e) {
-			cp.repaint();//아이템 리스너에 등록한 버튼들이 뭐가됐든 눌리면 cp.repaint()실행
+			cp.repaint();
 		}
 	}
+	//=========================================================================================================================================================
+	//3D로 보기 버튼 눌렀을때 선택되어있던 radiobt을 기준으로 값을 받아와 출력
 	class ButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -301,7 +323,7 @@ public class BookGraph extends JPanel {
 			cp.removeAll();
 			cp.revalidate();
 			cp.repaint();
-			
+
 			if(deptRb.isSelected()) {
 				dept.setSelected(true);
 				cp.add(new PieChart3D());
@@ -316,77 +338,77 @@ public class BookGraph extends JPanel {
 			}
 			if(dateRb.isSelected()) {
 				date.setSelected(true);
-//				cp.setSize(600,400);
-//				cp.removeAll();
-//				cp.revalidate();
-//				cp.repaint();
-//				cp.setLayout(null);
+				//				cp.setSize(600,400);
+				//				cp.removeAll();
+				//				cp.revalidate();
+				//				cp.repaint();
+				//				cp.setLayout(null);
 				cp.add(new PieChart3D());
 			}
 		}
-		
 	}
+	//=========================================================================================================================================================
 	public static void main(String args[]) {
 	}
-	//============================================================================
-	//=======3D 파이차트 만들어주는 코드==============================================
-	 class PieChart3D extends JPanel {
-		 String titleName = null;
-	    public PieChart3D() {
-	        final PieDataset dataset = createSampleDataset();
-	        final JFreeChart chart = createChart(dataset);
-	        chartPanel = new ChartPanel(chart);
-	        setSize(600,450);
-	        add(chartPanel);
-	        setVisible(true);
-	    }
+	//===============================================================================================================================
+	//=======3D 파이차트 만들어주는 코드=================================================================================================
+	class PieChart3D extends JPanel {
+		String titleName = null;
+		public PieChart3D() {
+			final PieDataset dataset = createSampleDataset();
+			final JFreeChart chart = createChart(dataset);
+			chartPanel = new ChartPanel(chart);
+			setSize(600,450);
+			add(chartPanel);
+			setVisible(true);
+		}
 
-	    private PieDataset createSampleDataset() {
-	    	final DefaultPieDataset result = new DefaultPieDataset();
-	        if(dept.isSelected()) {
-	        	for(int i=0;i<deptName.size();i++) {
-	        		result.setValue(deptName.get(i)+" - "+deptCount.get(i)+"권", new Double((100/sum)*deptCount.get(i)));
-	        	}
-	        	titleName = "상위5개 학과 3D차트";
-	        }
-	        
-	        if(student.isSelected()) {
-	        	for(int i=0;i<studentName.size();i++) {
-	        		result.setValue(studentName.get(i)+" "+studentId.get(i)+" - "+studentCount.get(i)+"권", new Double((100/sum2)*studentCount.get(i)));
-	        		}
-	        	titleName = "상위5명 학생 3D차트";
-	        } 
-	        
-	        if(book.isSelected()) {
-	        	for(int i=0;i<bookName.size();i++) {
-	        		result.setValue(bookName.get(i)+" - "+bookCount.get(i)+"회", new Double((100/sum3)*bookCount.get(i)));
-	        	}
-	        	titleName = "상위5개 도서 3D차트";
-	        }
-	        
-	        if(date.isSelected()) {
-	        	for(int i=0;i<dateYear.size();i++) {
-	        		result.setValue(dateYear.get(i)+"년 "+dateMonth.get(i)+"월 - "+dateCount.get(i)+"권", new Double((100/sum4)*dateCount.get(i)));
-	        	}
-	        	titleName = "상위5개월 3D차트";
-	        }
-	        return result;
-	    }
-	 
-	    private JFreeChart createChart(final PieDataset dataset) {
-	        final JFreeChart chart = ChartFactory.createPieChart3D(
-	        		titleName, dataset, true, true, false
-	        );
+		private PieDataset createSampleDataset() {
+			final DefaultPieDataset result = new DefaultPieDataset();
+			if(dept.isSelected()) {
+				for(int i=0;i<deptName.size();i++) {
+					result.setValue(deptName.get(i)+" - "+deptCount.get(i)+"권", new Double((100/sum)*deptCount.get(i)));
+				}
+				titleName = "상위5개 학과 3D차트";
+			}
 
-	        final PiePlot3D plot = (PiePlot3D) chart.getPlot();
-	        plot.setStartAngle(290);
-	        plot.setDirection(Rotation.CLOCKWISE);
-	        plot.setForegroundAlpha(0.5f);
-	        plot.setNoDataMessage("No data to display");
-	        chart.getTitle().setFont(new Font("고딕", Font.BOLD, 15));
-	        plot.setLabelFont(new Font("고딕", Font.PLAIN, 12));
-	        chart.getLegend().setItemFont(new Font("고딕", Font.PLAIN, 10));
-	        return chart;
-	    }
-	 }
+			if(student.isSelected()) {
+				for(int i=0;i<studentName.size();i++) {
+					result.setValue(studentName.get(i)+" "+studentId.get(i)+" - "+studentCount.get(i)+"권", new Double((100/sum2)*studentCount.get(i)));
+				}
+				titleName = "상위5명 학생 3D차트";
+			} 
+
+			if(book.isSelected()) {
+				for(int i=0;i<bookName.size();i++) {
+					result.setValue(bookName.get(i)+" - "+bookCount.get(i)+"회", new Double((100/sum3)*bookCount.get(i)));
+				}
+				titleName = "상위5개 도서 3D차트";
+			}
+
+			if(date.isSelected()) {
+				for(int i=0;i<dateYear.size();i++) {
+					result.setValue(dateYear.get(i)+"년 "+dateMonth.get(i)+"월 - "+dateCount.get(i)+"권", new Double((100/sum4)*dateCount.get(i)));
+				}
+				titleName = "상위5개월 3D차트";
+			}
+			return result;
+		}
+
+		private JFreeChart createChart(final PieDataset dataset) {
+			final JFreeChart chart = ChartFactory.createPieChart3D(
+					titleName, dataset, true, true, false
+					);
+
+			final PiePlot3D plot = (PiePlot3D) chart.getPlot();
+			plot.setStartAngle(290);
+			plot.setDirection(Rotation.CLOCKWISE);
+			plot.setForegroundAlpha(0.5f);
+			plot.setNoDataMessage("No data to display");
+			chart.getTitle().setFont(new Font("고딕", Font.BOLD, 15));
+			plot.setLabelFont(new Font("고딕", Font.PLAIN, 10));
+			chart.getLegend().setItemFont(new Font("고딕", Font.PLAIN, 10));
+			return chart;
+		}
+	}
 }

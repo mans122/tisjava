@@ -41,7 +41,7 @@ public class BookManager extends JPanel {
 	//----------------------------------
 	public BookManager() {
 		query="select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate" + 
-				" from books2 b, (select * from bookRent2) br where b.no(+) = br.bookno order by rentno";
+				" from books2 b, (select * from bookRent2) br where b.no(+) = br.bookno order by rentno desc";
 		SimpleDateFormat format1 = new SimpleDateFormat ("YYYYMMdd");
 		Date time = new Date();
 		today = format1.format(time);
@@ -161,7 +161,7 @@ public class BookManager extends JPanel {
 				}else { //Index 에 맞는 dept이름으로 필터링
 					query = "select br.rentno rn,b.title title, br.bookno bn, s.id id, s.name name, s.dept dept, br.rdate rd" + 
 					" from student s, books2 b, bookrent2 br where br.id = s.id and br.bookno = b.no" +
-					" and dept='"+dept[deptIndex]+"' order by rn";
+					" and dept='"+dept[deptIndex]+"' order by rn desc";
 					ch.setVisible(false);
 					showDept();
 				}
@@ -176,12 +176,12 @@ public class BookManager extends JPanel {
 			public void itemStateChanged(ItemEvent arg0) {
 				if(ch.isSelected()) {
 					query="select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate" + 
-							" from books2 b, (select * from bookRent2) br where b.no = br.bookno and br.returndate is null order by rn";
+							" from books2 b, (select * from bookRent2) br where b.no = br.bookno and br.returndate is null order by rn desc";
 					show();
 				}
 				else {
 					query="select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate" + 
-							" from books2 b, (select * from bookRent2) br where b.no(+) = br.bookno order by rn";
+							" from books2 b, (select * from bookRent2) br where b.no(+) = br.bookno order by rn desc";
 					show();
 				}
 			}
