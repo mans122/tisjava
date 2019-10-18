@@ -53,7 +53,7 @@ public class BookManager extends JPanel {
 		table = new JTable(model); // 테이블에 모델(데이터) 바인딩
 		JScrollPane jp = new JScrollPane(table);
 		jp.setSize(new Dimension(575,230));
-		jp.setLocation(10, 50);
+		jp.setLocation(15, 50);
 		add(jp);
 		table.addMouseListener(new MouseListener() {
 			public void mouseClicked(MouseEvent e) {
