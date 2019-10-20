@@ -1,3 +1,4 @@
+package org.jfree.chart.demo;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -48,7 +49,7 @@ public class LineChartDemo1 extends ApplicationFrame {
         final String series3 = "Third";
 
         // column keys...
-        final String type1 = "bookname1";
+        final String type1 = "Type 1";
         final String type2 = "Type 2";
         final String type3 = "Type 3";
         final String type4 = "Type 4";
@@ -60,7 +61,7 @@ public class LineChartDemo1 extends ApplicationFrame {
         // create the dataset...
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        dataset.addValue(30.0, series1, type1);
+        dataset.addValue(1.0, series1, type1);
         dataset.addValue(4.0, series1, type2);
         dataset.addValue(3.0, series1, type3);
         dataset.addValue(5.0, series1, type4);
