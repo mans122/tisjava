@@ -21,6 +21,7 @@ import org.jfree.ui.RefineryUtilities;
 public class BookLineChart extends JPanel {
 	String titleName = null;
 	String[] type = new String[12];
+	String[] series = new String[5];
     public BookLineChart() {
         final CategoryDataset dataset = createDataset();
         final JFreeChart chart = createChart(dataset);
@@ -33,9 +34,11 @@ public class BookLineChart extends JPanel {
     private CategoryDataset createDataset() {
     	
         // row keys...
-        final String series1 = "책1";
-        final String series2 = "book2";
-        final String series3 = "book3";
+    	series[0] = "책1";
+    	series[1] = "책2";
+//        final String series1 = "책1";
+//        final String series2 = "book2";
+//        final String series3 = "book3";
 //        final String series4 = "book4";
 //        final String series5 = "book5";
         
@@ -61,24 +64,23 @@ public class BookLineChart extends JPanel {
         // create the dataset..r.
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        dataset.addValue(30.0, series1, type1);
-        dataset.addValue(4.0, series1, type2);
-        dataset.addValue(3.0, series1, type3);
-        dataset.addValue(5.0, series1, type4);
-        dataset.addValue(5.0, series1, type5);
-        dataset.addValue(7.0, series1, type6);
-        dataset.addValue(7.0, series1, type7);
-        dataset.addValue(8.0, series1, type8);
-        dataset.addValue(8.0, series1, type9);
-        dataset.addValue(8.0, series1, type10);
-        dataset.addValue(8.0, series1, type11);
-        dataset.addValue(8.0, series1, type12);
+        dataset.addValue(30.0, series[0], type1);
+        dataset.addValue(4.0, series[0], type2);
+        dataset.addValue(3.0, series[0], type3);
+        dataset.addValue(5.0, series[0], type4);
+        dataset.addValue(5.0, series[0], type5);
+        dataset.addValue(7.0, series[0], type6);
+        dataset.addValue(7.0, series[0], type7);
+        dataset.addValue(8.0, series[0], type8);
+        dataset.addValue(8.0, series[0], type9);
+        dataset.addValue(8.0, series[0], type10);
+        dataset.addValue(8.0, series[0], type11);
+        dataset.addValue(8.0, series[0], type12);
         
         for(int i=0;i<12;i++) {
-        	dataset.addValue(5.0, series2, type[i]);
+        	dataset.addValue(5.0, series[1], type[i]);
         }
 
-        dataset.addValue(4.0, series3, type1);
         return dataset;
     }
 
@@ -86,7 +88,8 @@ public class BookLineChart extends JPanel {
         // create the chart...
         final JFreeChart chart = ChartFactory.createLineChart(
             "상위5개 도서 월별 변화량",       // chart title
-            "월",                    // domain axis label
+//            "월",                    // domain axis label
+            "",
             "권",                   // range axis label
             dataset,                   // data
             PlotOrientation.VERTICAL,  // orientation
@@ -94,10 +97,6 @@ public class BookLineChart extends JPanel {
             true,                      // tooltips
             false                      // urls
         );
-//        chart.getPlot().labet
-//        chart.getTitle().setFont(new Font("고딕", Font.BOLD, 15));
-////		plot.setLabelFont(new Font("고딕", Font.PLAIN, 10));
-//		chart.getLegend().setItemFont(new Font("고딕", Font.PLAIN, 10));
         chart.setBackgroundPaint(Color.white);
         chart.getTitle().setFont(new Font("굴림",Font.BOLD,15));
         chart.getLegend().setItemFont(new Font("고딕", Font.PLAIN, 13));
@@ -120,7 +119,7 @@ public class BookLineChart extends JPanel {
         
         // customise the renderer...
         final LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer();
-//        renderer.setDrawShapes(true);
+        renderer.setDrawOutlines(true);
 
         renderer.setSeriesStroke(
             0, new BasicStroke(
