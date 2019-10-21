@@ -197,3 +197,16 @@ select count(*) as count from student where id='1111111';
 commit;
 
 update bookrent2 set bookno='000007' where rentno='20191014004';
+
+select dept, count(*) as count,rdate from (select s.dept, br.rdate from student s, books2 b, bookRent2 br
+where br.id=s.id and br.bookNo=b.no) group by dept,rdate order by count desc;
+
+
+select  * from(select substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from student s, books2 b, bookRent2 br where br.id=s.id(+) and br.bookNo=b.no);
+
+--ID,NAME,DEPT,TITLE,BOOKNO,YEAR,MONTH³ª¿È
+select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,
+    (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk
+where s.id = b.id
+and b.bookno = bk.no;
+

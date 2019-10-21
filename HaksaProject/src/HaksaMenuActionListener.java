@@ -15,6 +15,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.JFreeChart;
 import org.jfree.ui.RefineryUtilities;
 
 	public class HaksaMenuActionListener implements ActionListener{
@@ -63,6 +65,15 @@ import org.jfree.ui.RefineryUtilities;
 				Haksa.f.setPreferredSize(new Dimension(610,500));
 				Haksa.panel.setLayout(null);
 				Haksa.f.pack();
+				break;
+				
+			case "연간현황":
+				BarChartBean bcb = new BarChartBean();
+		        JFreeChart chart = bcb.getBarChart();
+		        ChartFrame frame1 = new ChartFrame("차트",chart);
+		        frame1.setSize(700,250);  
+		        frame1.setVisible(true);
+		        frame1.setLocation(100, 200);
 				break;
 			}
 		}

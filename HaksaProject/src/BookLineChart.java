@@ -3,6 +3,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -19,10 +21,38 @@ import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
 public class BookLineChart extends JPanel {
+	static ArrayList<String> deptName = new ArrayList<>();
+	static ArrayList<Integer> deptCount = new ArrayList<>();
+	static int sum;
+
+	static ArrayList<String> studentId = new ArrayList<>();
+	static ArrayList<String> studentName = new ArrayList<>();
+	static ArrayList<Integer> studentCount = new ArrayList<>();
+	static int sum2;
+
+	static ArrayList<String> bookName = new ArrayList<>();
+	static ArrayList<Integer> bookCount = new ArrayList<>();
+	static int sum3;
+	
+	static ArrayList<String> dateYear = new ArrayList<>();
+	static ArrayList<String> dateMonth = new ArrayList<>();
+	static ArrayList<Integer> dateCount = new ArrayList<>();
+	static int sum4;
+	ResultSet rs = null;
 	String titleName = null;
 	String[] type = new String[12];
 	String[] series = new String[5];
+	String query;
     public BookLineChart() {
+		try {
+			query = "select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,"
+				    +" (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk"
+				    +" where s.id = b.id"
+				    +" and b.bookno = bk.no"; 
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+    	
         final CategoryDataset dataset = createDataset();
         final JFreeChart chart = createChart(dataset);
         final ChartPanel chartPanel = new ChartPanel(chart);
@@ -77,6 +107,11 @@ public class BookLineChart extends JPanel {
         dataset.addValue(8.0, series[0], type11);
         dataset.addValue(8.0, series[0], type12);
         
+        dataset.addValue(8.0, series[1], type1);
+        dataset.addValue(8.0, series[1], type2);
+        dataset.addValue(8.0, series[1], type3);
+        
+        
         for(int i=0;i<12;i++) {
         	dataset.addValue(5.0, series[1], type[i]);
         }
@@ -111,7 +146,7 @@ public class BookLineChart extends JPanel {
         
         //ÁÂÃø º§·ù°ª
         final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setLabelAngle(20);
+        rangeAxis.setLabelAngle(1.6);
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         rangeAxis.setLabelFont(new Font("°íµñ", Font.BOLD, 18));
         rangeAxis.setAutoRangeIncludesZero(true);

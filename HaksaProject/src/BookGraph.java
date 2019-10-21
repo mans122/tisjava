@@ -168,7 +168,12 @@ public class BookGraph extends JPanel {
 		public NorthPanel() {
 			MyActionListener ma = new MyActionListener();
 			ButtonGroup bg = new ButtonGroup();
-			JButton bt = new JButton("3D로 보기");
+			JButton bt = new JButton("3D");
+			JButton bt22 = new JButton("월별");
+			JButton bt33 = new JButton("연도별");
+			bt.setPreferredSize(new Dimension(50,25));
+			bt22.setPreferredSize(new Dimension(50,25));
+			bt33.setPreferredSize(new Dimension(100,25));
 			//			라디오 버튼을 생성하고 버튼그룹 bg에 모두 올려서 이쁘게 정렬
 			bg.add(studentRb);
 			bg.add(deptRb);
