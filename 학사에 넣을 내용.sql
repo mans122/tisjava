@@ -207,6 +207,40 @@ select  * from(select substr(br.rentno,0,4) year,substr(br.rentno,5,2) month fro
 --ID,NAME,DEPT,TITLE,BOOKNO,YEAR,MONTH³ª¿È
 select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,
     (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk
-where s.id = b.id
-and b.bookno = bk.no;
+where s.id = b.id and b.bookno = bk.no;
 
+insert into bookrent2 values('20180101001','000002','1354651','20180101',null);
+insert into bookrent2 values('20180201001','000002','1354651','20180201',null);
+insert into bookrent2 values('20180301001','000002','1354651','20180301',null);
+insert into bookrent2 values('20180401001','000002','1354651','20180401',null);
+insert into bookrent2 values('20180501001','000002','1354651','20180501',null);
+insert into bookrent2 values('20180601001','000002','1354651','20180601',null);
+insert into bookrent2 values('20180701001','000002','1354651','20180701',null);
+insert into bookrent2 values('20180801001','000002','1354651','20180801',null);
+insert into bookrent2 values('20180901001','000002','1354651','20180901',null);
+insert into bookrent2 values('20181001001','000002','1354651','20181001',null);
+insert into bookrent2 values('20181101001','000002','1354651','20181101',null);
+insert into bookrent2 values('20181201001','000002','1354651','20181201',null);
+
+insert into bookrent2 values('20190101001','000001','1354651','20190101',null);
+insert into bookrent2 values('20190201001','000003','1354651','20190201',null);
+insert into bookrent2 values('20190301001','000004','1354651','20190301',null);
+insert into bookrent2 values('20190401001','000006','1111111','20190401',null);
+insert into bookrent2 values('20190501001','000002','1111111','20190501',null);
+insert into bookrent2 values('20190601001','000001','1111111','20190601',null);
+insert into bookrent2 values('20190701001','000004','1111111','20190701',null);
+insert into bookrent2 values('20190801001','000003','1111111','20190801',null);
+insert into bookrent2 values('20190901001','000002','1111111','20190901',null);
+commit;
+
+
+commit;
+
+--¿¬,¿ù º° ÃÑ°³¼ö
+select year,month, count(*) count    from
+(select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,
+    (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk
+where s.id = b.id and b.bookno = bk.no) b where year='2019'
+group by year,month  order by year,month;
+
+select * from bookrent2;

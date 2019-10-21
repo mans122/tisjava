@@ -21,6 +21,12 @@ import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
 public class BookLineChart extends JPanel {
+	String[] month = new String[12];
+	Integer[] monthCount =new Integer[12]; 
+	
+	
+	String[] month2 = new String[12];
+	
 	static ArrayList<String> deptName = new ArrayList<>();
 	static ArrayList<Integer> deptCount = new ArrayList<>();
 	static int sum;
@@ -39,16 +45,30 @@ public class BookLineChart extends JPanel {
 	static ArrayList<Integer> dateCount = new ArrayList<>();
 	static int sum4;
 	ResultSet rs = null;
+	String query;
 	String titleName = null;
 	String[] type = new String[12];
 	String[] series = new String[5];
-	String query;
+	
     public BookLineChart() {
 		try {
-			query = "select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,"
-				    +" (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk"
-				    +" where s.id = b.id"
-				    +" and b.bookno = bk.no"; 
+//			query = "select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,"
+//				    +" (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk"
+//				    +" where s.id = b.id and b.bookno = bk.no"; 
+//			³â,¿ùº° ÃÑÇÕ
+			query = "select year,month, count(*) count from (select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,"
+			+" (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk"
+			+" where s.id = b.id and b.bookno = bk.no) b where year='2018' group by year,month order by year,month";
+			rs = DBManager.stmt.executeQuery(query);
+			int i=0;
+			while(rs.next())
+			{
+				month[i] = rs.getString("month");
+				monthCount[i] = rs.getInt("count");
+				System.out.println("2018-"+month[i]+" "+monthCount[i]);
+				i++;
+				
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
