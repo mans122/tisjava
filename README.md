@@ -10,3 +10,6 @@ http://crafuto.io:463/CDN/
 <br>--------------------------<br>
 mizz(Icon)사이트<br>
 http://fizzed.com/oss/font-mfizz
+<br>--------------------------<br>
+Font Awesome <br>
+https://fontawesome.com/
