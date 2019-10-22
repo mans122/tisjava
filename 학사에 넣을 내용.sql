@@ -233,14 +233,23 @@ insert into bookrent2 values('20190801001','000003','1111111','20190801',null);
 insert into bookrent2 values('20190901001','000002','1111111','20190901',null);
 commit;
 
+insert into bookrent2 values('20190101002','000003','8456754','20190101',null);
+insert into bookrent2 values('20190101003','000005','8456754','20190101',null);
+
+insert into bookrent2 values('20190201002','000003','5792015','20190201',null);
+insert into bookrent2 values('20190201003','000005','5792015','20190201',null);
+
+insert into bookrent2 values('20190301002','000002','7426754','20190301',null);
+insert into bookrent2 values('20190301003','000006','7426754','20190301',null);
+
 
 commit;
 
 --연,월 별 총개수
-select year,month, count(*) count    from
+select dept,year,month, count(*) count    from
 (select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,
     (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk
 where s.id = b.id and b.bookno = bk.no) b where year='2019'
-group by year,month  order by year,month;
+group by dept,year,month  order by dept,year,month;
 
 select * from bookrent2;

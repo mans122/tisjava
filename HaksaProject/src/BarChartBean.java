@@ -10,16 +10,22 @@ import java.awt.*;
 import java.sql.ResultSet;
 
 public class BarChartBean {
-	static String[] month = new String[12];
-	static Integer[] monthCount =new Integer[12];
-	static String[] month2 = new String[12];
-	static Integer[] monthCount2 =new Integer[12];
+	static String[] month = new String[13];
+	static Integer[] monthCount =new Integer[13];
+	static String[] month2 = new String[13];
+	static Integer[] monthCount2 =new Integer[13];
 	static ResultSet rs = null;
 	static String query;
 	public static void main(String arg[]){
 	}
 
 	public JFreeChart getBarChart() {
+		for(int i=0;i<13;i++) {
+//			month[i] = null;
+//			month2[i] = null;
+//			monthCount[i]=0;
+//			monthCount2[i]=0;
+		}
 		try {
 			//			query = "select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,"
 			//				    +" (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk"
@@ -29,30 +35,31 @@ public class BarChartBean {
 					+" (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk"
 					+" where s.id = b.id and b.bookno = bk.no) b where year='2018' group by year,month order by year,month";
 			rs = DBManager.stmt.executeQuery(query);
-			int i=0;
 			while(rs.next())
 			{
-				month[i] = rs.getString("month");
-				monthCount[i] = rs.getInt("count");
-				System.out.println("2018-"+month[i]+" "+monthCount[i]);
-				i++;
+				month[rs.getInt("month")] = rs.getString("month");
+//				System.out.println(rs.getInt("month"));
+//				System.out.println(month[rs.getInt("month")]);
+				monthCount[rs.getInt("month")] = rs.getInt("count");
 			}
 
 			query = "select year,month, count(*) count from (select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,"
 					+" (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk"
 					+" where s.id = b.id and b.bookno = bk.no) b where year='2019' group by year,month order by year,month";
 			rs = DBManager.stmt.executeQuery(query);
-			i=0;
 			while(rs.next())
 			{
-				month[i] = rs.getString("month");
-				monthCount2[i] = rs.getInt("count");
-				System.out.println("2018-"+month2[i]+" "+monthCount2[i]);
-				i++;
+				month2[rs.getInt("month")] = rs.getString("month");
+//				System.out.println(rs.getInt("month"));
+//				System.out.println(month2[rs.getInt("month")]);
+				monthCount2[rs.getInt("month")] = rs.getInt("count");
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		
+		
 		String titleStr = "연간 도서 대출 현황";
 
 		// row keys...
@@ -67,9 +74,9 @@ public class BarChartBean {
 
 //dataset =>값 넣기
 		for(int i=0;i<12;i++) {
-			category[i] = i+"월";
-			dataset.addValue(monthCount[i], series1, category[i]);
-			dataset.addValue(monthCount2[i], series2, category[i]);
+			category[i] = (i+1)+"월";
+			dataset.addValue(monthCount[i+1], series1, category[i]);
+			dataset.addValue(monthCount2[i+1], series2, category[i]);
 		}
 
 		JFreeChart chart = ChartFactory.createBarChart(titleStr, "", ""
@@ -98,7 +105,7 @@ public class BarChartBean {
 		barRender.setItemLabelGenerator(stdCateGen); // 그래프별 값 출력
 		plot.setRenderer(barRender);
 
-		plot.setDomainAxis(new CategoryAxis("월별"));
+//		plot.setDomainAxis(new CategoryAxis("월별"));
 		plot.setRangeAxis(new NumberAxis("권수"));
 		plot.getRangeAxis().setLabelAngle(1.6);
 		plot.setOrientation(PlotOrientation.VERTICAL);

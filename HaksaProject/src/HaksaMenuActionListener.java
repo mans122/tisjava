@@ -57,16 +57,6 @@ import org.jfree.ui.RefineryUtilities;
 				Haksa.panel.setLayout(null);
 				Haksa.f.pack();
 				break;
-			case "월별현황":
-				Haksa.panel.removeAll();
-				Haksa.panel.revalidate();
-				Haksa.panel.repaint();
-				Haksa.panel.add(new BookLineChart());
-				Haksa.f.setPreferredSize(new Dimension(610,500));
-				Haksa.panel.setLayout(null);
-				Haksa.f.pack();
-				break;
-				
 			case "연간현황":
 				BarChartBean bcb = new BarChartBean();
 		        JFreeChart chart = bcb.getBarChart();

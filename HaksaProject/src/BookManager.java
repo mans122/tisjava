@@ -155,7 +155,7 @@ public class BookManager extends JPanel {
 				//동적쿼리를 만들기 위한 기본적인 틀
 				if(deptIndex==0){ // 전체
 					query="select br.rentno rn,b.title title, b.no no, b.author, br.id id, br.rdate rdate, br.returndate redate" + 
-							" from books2 b, (select * from bookRent2) br where b.no(+) = br.bookno order by rn";
+							" from books2 b, (select * from bookRent2) br where b.no(+) = br.bookno order by rn desc";
 					ch.setVisible(true);
 					show();
 				}else { //Index 에 맞는 dept이름으로 필터링

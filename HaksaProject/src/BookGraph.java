@@ -10,7 +10,13 @@ import javax.swing.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot3D;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.util.Rotation;
@@ -172,7 +178,7 @@ public class BookGraph extends JPanel {
 			JButton bt22 = new JButton("월별");
 			JButton bt33 = new JButton("연도별");
 			bt.setPreferredSize(new Dimension(50,25));
-			bt22.setPreferredSize(new Dimension(50,25));
+			bt22.setPreferredSize(new Dimension(60,25));
 			bt33.setPreferredSize(new Dimension(100,25));
 			//			라디오 버튼을 생성하고 버튼그룹 bg에 모두 올려서 이쁘게 정렬
 			bg.add(studentRb);
@@ -202,7 +208,9 @@ public class BookGraph extends JPanel {
 
 			ButtonListener bt2 = new ButtonListener();
 			add(bt);
+			add(bt22);
 			bt.addActionListener(bt2);
+			bt22.addActionListener(bt2);
 			setOpaque(false); // NorthPanel 투명하게해서 뒷배경보이게
 
 		}
@@ -328,27 +336,52 @@ public class BookGraph extends JPanel {
 			cp.removeAll();
 			cp.revalidate();
 			cp.repaint();
-
-			if(deptRb.isSelected()) {
-				dept.setSelected(true);
-				cp.add(new PieChart3D());
-			}
-			if(studentRb.isSelected()) {
-				student.setSelected(true);
-				cp.add(new PieChart3D());
-			}
-			if(bookRb.isSelected()) {
-				book.setSelected(true);
-				cp.add(new PieChart3D());
-			}
-			if(dateRb.isSelected()) {
-				date.setSelected(true);
-				//				cp.setSize(600,400);
-				//				cp.removeAll();
-				//				cp.revalidate();
-				//				cp.repaint();
-				//				cp.setLayout(null);
-				cp.add(new PieChart3D());
+			String cmd = e.getActionCommand();
+			switch(cmd) {
+			case "3D":
+				if(deptRb.isSelected()) {
+					dept.setSelected(true);
+					cp.add(new PieChart3D());
+				}
+				if(studentRb.isSelected()) {
+					student.setSelected(true);
+					cp.add(new PieChart3D());
+				}
+				if(bookRb.isSelected()) {
+					book.setSelected(true);
+					cp.add(new PieChart3D());
+				}
+				if(dateRb.isSelected()) {
+					date.setSelected(true);
+					//				cp.setSize(600,400);
+					//				cp.removeAll();
+					//				cp.revalidate();
+					//				cp.repaint();
+					//				cp.setLayout(null);
+					cp.add(new PieChart3D());
+				}
+				break;
+				
+			case "월별":
+				if(deptRb.isSelected()) {
+					dept.setSelected(true);
+					System.out.println("deptRb 누름~~");
+					cp.add(new BookLineChart());
+				}
+				if(studentRb.isSelected()) {
+					student.setSelected(true);
+					cp.add(new BookLineChart());
+				}
+				if(bookRb.isSelected()) {
+					book.setSelected(true);
+					cp.add(new BookLineChart());
+				}
+				if(dateRb.isSelected()) {
+					date.setSelected(true);
+					cp.add(new BookLineChart());
+				}
+				break;
+				
 			}
 		}
 	}
@@ -356,7 +389,7 @@ public class BookGraph extends JPanel {
 	public static void main(String args[]) {
 	}
 	//===============================================================================================================================
-	//=======3D 파이차트 만들어주는 코드=================================================================================================
+	//=======3D 파이차트 만들어주는 코드===
 	class PieChart3D extends JPanel {
 		String titleName = null;
 		public PieChart3D() {
@@ -415,5 +448,154 @@ public class BookGraph extends JPanel {
 			chart.getLegend().setItemFont(new Font("고딕", Font.PLAIN, 10));
 			return chart;
 		}
+	}
+//==============================================================================================================================================
+	//=======1년간 각 종류별 차트 만들어주는 코드===
+	class BookLineChart extends JPanel {
+		String[] deptMonth = new String[13];
+		Integer[] deptMonthCount =new Integer[13]; 
+		
+		String[] deptMonth2 = new String[13];
+		Integer[] deptMonthCount2 =new Integer[13];
+		
+		String[] deptMonth3 = new String[13];
+		Integer[] deptMonthCount3 =new Integer[13];
+		
+		String[] deptMonth4 = new String[13];
+		Integer[] deptMonthCount4 =new Integer[13];
+		
+		String[] deptMonth5 = new String[13];
+		Integer[] deptMonthCount5 =new Integer[13];
+		
+		ResultSet rs = null;
+		String query;
+		String titleName = null;
+		String[] type = new String[13];
+		String[] series = new String[5];
+		
+	    public BookLineChart() {
+			for(int i=0;i<13;i++) {
+				deptMonthCount[i] = 0;
+				deptMonthCount2[i] = 0;
+				deptMonthCount3[i] = 0;
+				deptMonthCount4[i] = 0;
+				deptMonthCount5[i] = 0;
+			}
+			
+	    	
+	        final CategoryDataset dataset = createDataset();
+	        final JFreeChart chart = createChart(dataset);
+	        final ChartPanel chartPanel = new ChartPanel(chart);
+	        chartPanel.setPreferredSize(new Dimension(600, 430));
+	        setSize(new Dimension(610,440));
+	        add(chartPanel);
+	        setVisible(true);
+	    }
+	    private CategoryDataset createDataset() {
+	    	
+	        // row keys...
+	    	  
+	    	if(dept.isSelected()) {
+				titleName = "상위5개 학과 19년도 대출현황";
+				try {
+//					년,월별 총합
+					query = "select dept,year,month, count(*) count from (select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,"
+					+" (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk"
+					+" where s.id = b.id and b.bookno = bk.no) b where year='2019' group by dept,year,month order by dept,year,month";
+					rs = DBManager.stmt.executeQuery(query);
+					while(rs.next())
+					{
+							if(rs.getString("dept").equals(deptName.get(0))) {
+								deptMonth[rs.getInt("month")] = rs.getString("month");
+								deptMonthCount[rs.getInt("month")] = rs.getInt("count");
+							}
+							if(rs.getString("dept").equals(deptName.get(1))) {
+								deptMonth2[rs.getInt("month")] = rs.getString("month");
+								deptMonthCount2[rs.getInt("month")] = rs.getInt("count");
+							}
+							if(rs.getString("dept").equals(deptName.get(2))) {
+								deptMonth3[rs.getInt("month")] = rs.getString("month");
+								deptMonthCount3[rs.getInt("month")] = rs.getInt("count");
+							}
+							if(rs.getString("dept").equals(deptName.get(3))) {
+								deptMonth4[rs.getInt("month")] = rs.getString("month");
+								deptMonthCount4[rs.getInt("month")] = rs.getInt("count");
+							}
+							if(rs.getString("dept").equals(deptName.get(4))) {
+								deptMonth5[rs.getInt("month")] = rs.getString("month");
+								deptMonthCount5[rs.getInt("month")] = rs.getInt("count");
+							}
+					}
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+	    	}
+	        // column keys...
+
+	        // create the dataset..r.
+	        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+	    		for(int i=1;i<13;i++) {
+	    			type[i] = (i)+"월";
+	    			dataset.addValue(deptMonthCount[i], deptName.get(0), type[i]);
+	    			dataset.addValue(deptMonthCount2[i], deptName.get(1), type[i]);
+	    			dataset.addValue(deptMonthCount3[i], deptName.get(2), type[i]);
+	    			dataset.addValue(deptMonthCount4[i], deptName.get(3), type[i]);
+	    			dataset.addValue(deptMonthCount5[i], deptName.get(4), type[i]);
+	    		}
+	        
+	        
+	        return dataset;
+	    }
+
+	    private JFreeChart createChart(final CategoryDataset dataset) {
+	        // create the chart...
+	        final JFreeChart chart = ChartFactory.createLineChart(
+	            titleName,"","",dataset,PlotOrientation.VERTICAL,true,true,false
+	        );
+	        chart.setBackgroundPaint(Color.white);
+	        chart.getTitle().setFont(new Font("굴림",Font.BOLD,15));
+	        chart.getLegend().setItemFont(new Font("고딕", Font.PLAIN, 13));
+	        
+	        final CategoryPlot plot = (CategoryPlot) chart.getPlot();
+	        plot.setBackgroundPaint(Color.lightGray);
+	        plot.setRangeGridlinePaint(Color.white);
+	        //맨밑 가로 카테고리 (월) 칸
+	        plot.getDomainAxis().setLabelFont(new Font("굴림",Font.BOLD,15));
+	        //1~12월 칸
+	        plot.getDomainAxis().setTickLabelFont(new Font("굴림",Font.BOLD,10));
+	        
+	        //좌측 벨류값
+	        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+	        rangeAxis.setLabelAngle(1.6);
+	        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+	        rangeAxis.setLabelFont(new Font("고딕", Font.BOLD, 18));
+	        rangeAxis.setAutoRangeIncludesZero(true);
+
+	        
+	        // customise the renderer...
+	        final LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer();
+	        renderer.setDrawOutlines(true);
+
+	        renderer.setSeriesStroke(
+	            0, new BasicStroke(
+	                2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+	                1.0f, new float[] {10.0f, 6.0f}, 0.0f
+	            )
+	        );
+	        renderer.setSeriesStroke(
+	            1, new BasicStroke(
+	                2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+	                1.0f, new float[] {6.0f, 6.0f}, 0.0f
+	            )
+	        );
+	        renderer.setSeriesStroke(
+	            2, new BasicStroke(
+	                2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+	                1.0f, new float[] {2.0f, 6.0f}, 0.0f
+	            )
+	        );
+	        // OPTIONAL CUSTOMISATION COMPLETED.
+	        return chart;
+	    }
 	}
 }

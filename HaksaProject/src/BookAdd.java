@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.ResultSet;
 
 import javax.swing.JButton;
@@ -17,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 public class BookAdd extends JFrame {
+	BookManager bm = new BookManager();
 	DefaultTableModel model;
 	JTable table;
 	static JTextField[] tf_add = new JTextField[4];
@@ -89,7 +92,11 @@ public class BookAdd extends JFrame {
 
 		});
 		bookList();
-
+		f.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				bm.show();
+			}
+		});
 		f.add(author);
 		f.add(submit);
 		f.add(update);
@@ -199,15 +206,14 @@ public class BookAdd extends JFrame {
 						}
 					}
 					else {
-						JOptionPane.showMessageDialog(null,"삭제할 학번을 입력해주세요","경고",JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(null,"삭제할 도서번호를 입력해주세요","경고",JOptionPane.WARNING_MESSAGE);
 					}
 				}
 				bookList();
 				break;
 			}
-
+			bm.show();
 		}
-
 	}
 	public static boolean isStringInt(String s) {
 		try {
