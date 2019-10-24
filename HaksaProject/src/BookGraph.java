@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -176,8 +177,8 @@ public class BookGraph extends JPanel {
 			MyActionListener ma = new MyActionListener();
 			ButtonGroup bg = new ButtonGroup();
 			JButton bt = new JButton("3D");
-			JButton bt22 = new JButton("월별");
-			JButton bt33 = new JButton("연도별");
+			JButton bt22 = new JButton("연간");
+			JButton bt33 = new JButton("연도 별");
 			bt.setPreferredSize(new Dimension(50,25));
 			bt22.setPreferredSize(new Dimension(60,25));
 			bt33.setPreferredSize(new Dimension(100,25));
@@ -210,8 +211,10 @@ public class BookGraph extends JPanel {
 			ButtonListener bt2 = new ButtonListener();
 			add(bt);
 			add(bt22);
+			add(bt33);
 			bt.addActionListener(bt2);
 			bt22.addActionListener(bt2);
+			bt33.addActionListener(bt2);
 			setOpaque(false); // NorthPanel 투명하게해서 뒷배경보이게
 
 		}
@@ -366,10 +369,9 @@ public class BookGraph extends JPanel {
 				}
 				break;
 				
-			case "월별":
+			case "연간":
 				if(deptRb.isSelected()) {
 					dept.setSelected(true);
-					System.out.println("deptRb 누름~~");
 					cp.add(new BookLineChart());
 				}
 				if(studentRb.isSelected()) {
@@ -382,10 +384,18 @@ public class BookGraph extends JPanel {
 				}
 				if(dateRb.isSelected()) {
 					date.setSelected(true);
-					cp.add(new BookLineChart());
+					JOptionPane.showMessageDialog(null,"연간은 연도별에서 확인하세요.","알림",JOptionPane.INFORMATION_MESSAGE);
 				}
+
 				break;
-				
+			case "연도 별":
+				BarChartBean bcb = new BarChartBean();
+		        JFreeChart chart = bcb.getBarChart();
+		        ChartFrame frame1 = new ChartFrame("차트",chart);
+		        frame1.setSize(700,250);  
+		        frame1.setVisible(true);
+		        frame1.setLocation(100, 200);
+				break;
 			}
 		}
 	}
@@ -460,9 +470,12 @@ public class BookGraph extends JPanel {
 		String[][] deptMonth = new String[5][13];
 		Integer[][] deptMonthCount = new Integer[5][13];
 		//---------------------------------------
-		
-		
-		
+		String[][] studentMonth = new String[5][13];
+		Integer[][] studentMonthCount = new Integer[5][13];		
+		//---------------------------------------
+		String[][] bookMonth = new String[5][13];
+		Integer[][] bookMonthCount = new Integer[5][13];
+		//---------------------------------------
 		ResultSet rs = null;
 		String query;
 		String titleName = null;
@@ -473,6 +486,8 @@ public class BookGraph extends JPanel {
 	    	for(int i=0;i<5;i++) {
 	    		for(int j=0;j<13;j++) {
 	    			deptMonthCount[i][j] = 0;
+	    			studentMonthCount[i][j] = 0;
+	    			bookMonthCount[i][j] = 0;
 	    		}
 	    	}
 	    	
@@ -497,45 +512,52 @@ public class BookGraph extends JPanel {
 	    			rs = DBManager.stmt.executeQuery(query);
 	    			while(rs.next())
 	    			{
-	    				if(rs.getString("dept").equals(deptName.get(0))) {
-	    					deptMonth[0][rs.getInt("month")] = rs.getString("month");
-	    					deptMonthCount[0][rs.getInt("month")] = rs.getInt("count");
+	    				for(int i=0;i<5;i++) {
+	    					if(rs.getString("dept").equals(deptName.get(i))) {
+		    					deptMonth[i][rs.getInt("month")] = rs.getString("month");
+		    					deptMonthCount[i][rs.getInt("month")] = rs.getInt("count");
+	    					}
 	    				}
-	    				if(rs.getString("dept").equals(deptName.get(1))) {
-	    					deptMonth[1][rs.getInt("month")] = rs.getString("month");
-	    					deptMonthCount[1][rs.getInt("month")] = rs.getInt("count");
-	    				}
-						if(rs.getString("dept").equals(deptName.get(2))) {
-							deptMonth[2][rs.getInt("month")] = rs.getString("month");
-							deptMonthCount[2][rs.getInt("month")] = rs.getInt("count");
-						}
-						if(rs.getString("dept").equals(deptName.get(3))) {
-							deptMonth[3][rs.getInt("month")] = rs.getString("month");
-							deptMonthCount[3][rs.getInt("month")] = rs.getInt("count");
-						}
-						if(rs.getString("dept").equals(deptName.get(4))) {
-							deptMonth[4][rs.getInt("month")] = rs.getString("month");
-							deptMonthCount[4][rs.getInt("month")] = rs.getInt("count");
-						}
-
-						for(int i=1;i<13;i++) {
-							type[i] = (i)+"월";
-							dataset.addValue(deptMonthCount[0][i], deptName.get(0), type[i]);
-							dataset.addValue(deptMonthCount[1][i], deptName.get(1), type[i]);
-							dataset.addValue(deptMonthCount[2][i], deptName.get(2), type[i]);
-							dataset.addValue(deptMonthCount[3][i], deptName.get(3), type[i]);
-							dataset.addValue(deptMonthCount[4][i], deptName.get(4), type[i]);
-						}
+					}	
+	    			for(int i=1;i<13;i++) {
+						type[i] = (i)+"월";
+						dataset.addValue(deptMonthCount[0][i], deptName.get(0), type[i]);
+						dataset.addValue(deptMonthCount[1][i], deptName.get(1), type[i]);
+						dataset.addValue(deptMonthCount[2][i], deptName.get(2), type[i]);
+						dataset.addValue(deptMonthCount[3][i], deptName.get(3), type[i]);
+						dataset.addValue(deptMonthCount[4][i], deptName.get(4), type[i]);
 					}
 				}catch(Exception e){
 					e.printStackTrace();
 				}
 	    	}
 	    	//==============================================================================================================================================
+	    	
 	    	// ===== 상위 5명 연간수치 =====
 	    	else if(student.isSelected()) {
 	    		titleName = "상위5명 19년도 대출현황";
 	    		try {
+	    			query = "select id,name,year,month, count(*) count from (select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,"
+	    					+" (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk where s.id = b.id and b.bookno = bk.no) b" 
+	    					+" where year='2019' group by id,name,year,month order by id,year,month";
+	    			rs = DBManager.stmt.executeQuery(query);
+	    			while(rs.next())
+	    			{
+	    				for(int i=0;i<5;i++) {
+	    					if(rs.getString("id").equals(studentId.get(i))) {
+	    						studentMonth[i][rs.getInt("month")] = rs.getString("month");
+		    					studentMonthCount[i][rs.getInt("month")] = rs.getInt("count");
+	    					}
+	    				}
+	    			}
+	    			for(int i=1;i<13;i++) {
+						type[i] = (i)+"월";
+						dataset.addValue(studentMonthCount[0][i], studentId.get(0)+"-"+studentName.get(0), type[i]);
+						dataset.addValue(studentMonthCount[1][i], studentId.get(1)+"-"+studentName.get(1), type[i]);
+						dataset.addValue(studentMonthCount[2][i], studentId.get(2)+"-"+studentName.get(2), type[i]);
+						dataset.addValue(studentMonthCount[3][i], studentId.get(3)+"-"+studentName.get(3), type[i]);
+						dataset.addValue(studentMonthCount[4][i], studentId.get(4)+"-"+studentName.get(4), type[i]);
+					}
 	    			
 	    		}catch(Exception sE){
 	    			sE.printStackTrace();
@@ -547,6 +569,28 @@ public class BookGraph extends JPanel {
 	    	else if(book.isSelected()) {
 	    		titleName = "상위5개 도서 19년도 대출현황";
 	    		try {
+	    			query = "select title,year,month, count(*) count from (select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,"
+	    					+" (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk where s.id = b.id and b.bookno = bk.no) b" 
+	    					+" where year='2019' group by title,year,month order by title,year,month";
+	    			rs = DBManager.stmt.executeQuery(query);
+	    			while(rs.next())
+	    			{
+	    				for(int i=0;i<5;i++) {
+	    					if(rs.getString("title").equals(bookName.get(i))) {
+	    						bookMonth[i][rs.getInt("month")] = rs.getString("month");
+		    					bookMonthCount[i][rs.getInt("month")] = rs.getInt("count");
+	    					}
+	    				}
+	    			}
+	    			for(int i=1;i<13;i++) {
+						type[i] = (i)+"월";
+						dataset.addValue(bookMonthCount[0][i], bookName.get(0), type[i]);
+						dataset.addValue(bookMonthCount[1][i], bookName.get(1), type[i]);
+						dataset.addValue(bookMonthCount[2][i], bookName.get(2), type[i]);
+						dataset.addValue(bookMonthCount[3][i], bookName.get(3), type[i]);
+						dataset.addValue(bookMonthCount[4][i], bookName.get(4), type[i]);
+					}
+	    			
 	    			
 	    		}catch(Exception bE) {
 	    			bE.printStackTrace();
@@ -554,21 +598,9 @@ public class BookGraph extends JPanel {
 
 	    	}
 	    	//==============================================================================================================================================
-
 	    	// column keys...
-
 	    	// create the dataset..r.
-	    	//	        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-	    	//	    		for(int i=1;i<13;i++) {
-	    	//	    			type[i] = (i)+"월";
-	    	//	    			dataset.addValue(deptMonthCount[0][i], deptName.get(0), type[i]);
-	    	//	    			dataset.addValue(deptMonthCount[1][i], deptName.get(1), type[i]);
-	    	//	    			dataset.addValue(deptMonthCount[2][i], deptName.get(2), type[i]);
-	    	//	    			dataset.addValue(deptMonthCount[3][i], deptName.get(3), type[i]);
-	    	//	    			dataset.addValue(deptMonthCount[4][i], deptName.get(4), type[i]);
-	    	//	    		}
 
-	        
 	        return dataset;
 	    }
 

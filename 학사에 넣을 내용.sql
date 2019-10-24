@@ -253,3 +253,8 @@ where s.id = b.id and b.bookno = bk.no) b where year='2019'
 group by dept,year,month  order by dept,year,month;
 
 select * from bookrent2;
+select * from student;
+
+select title,year,month, count(*) count from (select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,
+(select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk where s.id = b.id and b.bookno = bk.no) b 
+where year='2019' group by title,year,month order by title,year,month;
