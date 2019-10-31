@@ -27,9 +27,6 @@ public class BarChartBean {
 //			monthCount2[i]=0;
 		}
 		try {
-			//			query = "select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,"
-			//				    +" (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk"
-			//				    +" where s.id = b.id and b.bookno = bk.no"; 
 			//			년,월별 총합
 			query = "select year,month, count(*) count from (select s.id,s.name,s.dept, bk.title, b.bookno,b.year, b.month from student s,"
 					+" (select id,bookno,substr(br.rentno,0,4) year,substr(br.rentno,5,2) month from bookrent2 br) b ,books2 bk"
@@ -38,8 +35,6 @@ public class BarChartBean {
 			while(rs.next())
 			{
 				month[rs.getInt("month")] = rs.getString("month");
-//				System.out.println(rs.getInt("month"));
-//				System.out.println(month[rs.getInt("month")]);
 				monthCount[rs.getInt("month")] = rs.getInt("count");
 			}
 
@@ -50,8 +45,6 @@ public class BarChartBean {
 			while(rs.next())
 			{
 				month2[rs.getInt("month")] = rs.getString("month");
-//				System.out.println(rs.getInt("month"));
-//				System.out.println(month2[rs.getInt("month")]);
 				monthCount2[rs.getInt("month")] = rs.getInt("count");
 			}
 		}catch(Exception e){
@@ -72,7 +65,7 @@ public class BarChartBean {
 		// create the dataset...
 		final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-//dataset =>값 넣기
+		//	dataset =>값 넣기
 		for(int i=0;i<12;i++) {
 			category[i] = (i+1)+"월";
 			dataset.addValue(monthCount[i+1], series1, category[i]);
@@ -91,7 +84,7 @@ public class BarChartBean {
 		chart.getCategoryPlot().setNoDataMessageFont(new Font("sansserif", Font.BOLD, 15));
 		chart.getPlot().setNoDataMessageFont(new Font("sansserif", Font.BOLD, 15));
 
-		System.out.println(chart.getPlot().getNoDataMessageFont().getName());
+//		System.out.println(chart.getPlot().getNoDataMessageFont().getName());
 
 		chart.setBackgroundPaint(Color.WHITE);
 		chart.getTitle().setPaint(Color.orange);

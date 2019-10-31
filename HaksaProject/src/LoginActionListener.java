@@ -22,7 +22,6 @@ public class LoginActionListener implements ActionListener{
 					rs.next();
 					if(id.equals("test") || rs.getString("id").isEmpty()==false && pwd.equals(rs.getString("birth")) ) {
 						loginId = id;
-						System.out.println("로그인");
 						Student.id.setText(loginId+"님");
 						JOptionPane.showMessageDialog(null,"로그인 성공","알림",JOptionPane.INFORMATION_MESSAGE);
 						Login.main.showFrameTest(); // 메인창 메소드를 이용해 띄우기
@@ -40,9 +39,9 @@ public class LoginActionListener implements ActionListener{
 			Login.pwdField.setText("");
 			break;
 
-		case "회원가입":
-			System.out.println(pwd);
-			break;
+//		case "회원가입":
+//			System.out.println(pwd);
+//			break;
 		}
 	}
 
